@@ -4,11 +4,16 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include <stdio.h>
-#include "parsing/gnl/get_next_line.h"
+// #include "parsing/gnl/get_next_line.h"
+#include "execution/libftt/libft.h"
 #include <stdlib.h>
 #include <fcntl.h>
 #include <string.h>
 #include <stdbool.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+
+#include <limits.h>
 #include <signal.h>
 #include <unistd.h>
 
@@ -119,9 +124,9 @@ void	add_token(Token **tokens, TokenType type, const char *value);
 // void	print_tokens(Token *tokens);
 
 			//**libft**/
-char	**ft_split(char *s, char c);
+// char	**ft_split(char *s, char c);
 char	*ft_strjoin(char const *s1, char const *s2);
-char	*ft_strtrim(char *s1, char *set);
+// char	*ft_strtrim(char *s1, char *set);
 
 		    //pipex_utils
 char	*get_executable(char *command);
@@ -217,5 +222,5 @@ int	f__plus(char *r);
 int	ft_export(char **ptr, t_envi *env);
 int  ft_pwd(char **av);
 int	ft_exit(t_shell *shell);
-int *ft_env(t_envi *env);
+int ft_env(t_envi *env);
 #endif

@@ -1,5 +1,4 @@
-#include "../minishell.h"
-#include "../minishell.h"
+#include "../../minishell.h"
 
 int count_arguments(char **arguments)
 {

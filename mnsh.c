@@ -8,6 +8,7 @@ int	main()
     t_ast       *ast;
     t_parser    *parsed;
 
+	(void)ast;
 	tokens = NULL;
 	while (1)
 	{

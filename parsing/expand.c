@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 22:25:31 by shebaz            #+#    #+#             */
-/*   Updated: 2024/09/24 21:34:23 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/09/25 15:40:25 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,10 +125,10 @@ char *get_word(char **string, int *counter)
 {
 	char	*result;
 	int		i;
-	int		k;
+	// int		k;
 
 	i = 0;
-	k = 0;
+	// k = 0;
 	if ((*counter) > 1)
 	{
 		while ((*string)[i] && ((*string)[i] == ' ' || (*string)[i] == '\t'))
@@ -319,10 +319,10 @@ char **unquoted_result(char **input)
 
 char	**result_traitement(char *input)
 {
-	int		i;
+	// int		i;
 	char	**result;
 
-	i = 0;
+	// i = 0;
 	if (!strchr (input, '"') && !strchr(input, '\''))
 		result = ft_split(input,' ');
 	else
