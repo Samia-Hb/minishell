@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 22:25:31 by shebaz            #+#    #+#             */
-/*   Updated: 2024/09/26 16:44:51 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/09/26 20:25:30 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -352,10 +352,7 @@ void	expand(Token *tokens)
 				else if (tokens->value[i] == '~')
 					result = ft_strjoin(result, tidle_expansion(&i));
 				else if (tokens->value[i] == '$')
-				{
-					if(tokens->expanded_value[i + 1] == '+' || )
 					result = ft_strjoin(result, dollar_expand(tokens->value, &i));	
-				}
 				else
 				{
 					result = ft_strjoin(result, char_to_string(tokens->value[i],

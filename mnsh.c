@@ -20,6 +20,12 @@ int	main()
             main();
         add_history(input);
 		tokens = tokenize(input);
+		while (*tokens)
+		{
+			printf("tokens = %s\n", (*tokens)->value);
+			(*tokens) = (*tokens)->next;
+		}
+		exit(1);
         expand (*tokens);
 		Token *token = *tokens;
 		printf("======== expanded result =======\n");
