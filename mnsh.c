@@ -20,11 +20,44 @@ int	main()
             main();
         add_history(input);
 		tokens = tokenize(input);
-        expand(*tokens);
+        expand (*tokens);
+		Token *token = *tokens;
+		printf("======== expanded result =======\n");
+		int i;
+		while (token)
+		{
+			i = 0;
+			printf("token = %s\n", token->value);
+			if (token->expanded_value)
+			{
+				while (token->expanded_value[i])
+				{
+					printf("expanded_arg[%d] = %s\n",i, token->expanded_value[i]);
+					i++;
+				}
+			}
+			token = token->next;
+		}
 		parsed = analyse_tokens(tokens);
+		printf("======== Analysed result =======\n");
+		while (parsed)
+		{
+			i = 0;
+			printf ("token = %s\n", parsed->token->value);
+			if(parsed->arguments)
+			{
+				while (parsed->arguments[i])
+				{
+					printf("       arg[%d] = %s\n",i, parsed->arguments[i]);
+					i++;
+				}
+			}
+			parsed = parsed->next;
+		}
+		main();
 		queue = generate_postfix(parsed);
 		ast = generate_ast_from_postfix(queue);
-		// print_ast(ast,5);
+		print_ast(ast,5);
 	}
 	return (0);
 }

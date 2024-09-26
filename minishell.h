@@ -88,7 +88,7 @@ typedef enum
 typedef struct parse
 {
 	Token		*token;
-	char		**arguments;
+	char			**arguments;
 	int         input_fd;
 	int         output_fd;
 	struct parse *next;
@@ -223,4 +223,5 @@ int	ft_export(char **ptr, t_envi *env);
 int  ft_pwd(char **av);
 int	ft_exit(t_shell *shell);
 int ft_env(t_envi *env);
+void print_ast(t_ast *ast, int depth);
 #endif
