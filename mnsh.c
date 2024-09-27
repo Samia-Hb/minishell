@@ -6,9 +6,9 @@ int	main()
     Token	    **tokens;
     t_queue     *queue;
     t_ast       *ast;
+	int			errno;
     t_parser    *parsed;
 
-	(void)ast;
 	tokens = NULL;
 	while (1)
 	{
@@ -20,50 +20,49 @@ int	main()
             main();
         add_history(input);
 		tokens = tokenize(input);
-		while (*tokens)
-		{
-			printf("tokens = %s\n", (*tokens)->value);
-			(*tokens) = (*tokens)->next;
-		}
-		exit(1);
-        expand (*tokens);
-		Token *token = *tokens;
-		printf("======== expanded result =======\n");
-		int i;
-		while (token)
-		{
-			i = 0;
-			printf("token = %s\n", token->value);
-			if (token->expanded_value)
-			{
-				while (token->expanded_value[i])
-				{
-					printf("expanded_arg[%d] = %s\n",i, token->expanded_value[i]);
-					i++;
-				}
-			}
-			token = token->next;
-		}
+		errno = check_syntax_errors(*tokens);
+        if (errno)
+            main();
+        expand(*tokens);
 		parsed = analyse_tokens(tokens);
-		printf("======== Analysed result =======\n");
-		while (parsed)
-		{
-			i = 0;
-			printf ("token = %s\n", parsed->token->value);
-			if(parsed->arguments)
-			{
-				while (parsed->arguments[i])
-				{
-					printf("       arg[%d] = %s\n",i, parsed->arguments[i]);
-					i++;
-				}
-			}
-			parsed = parsed->next;
-		}
-		main();
 		queue = generate_postfix(parsed);
 		ast = generate_ast_from_postfix(queue);
+		// execute_ast(ast);
 		print_ast(ast,5);
 	}
 	return (0);
 }
+
+		// printf("======== Analysed result =======\n");
+		// while (parsed)
+		// {
+		// 	i = 0;
+		// 	printf ("token = %s\n", parsed->token->value);
+		// 	if(parsed->arguments)
+		// 	{
+		// 		while (parsed->arguments[i])
+		// 		{
+		// 			printf("       arg[%d] = %s\n",i, parsed->arguments[i]);
+		// 			i++;
+		// 		}
+		// 	}
+		// 	parsed = parsed->next;
+		// }
+		// main();
+
+		/// ///////////////////////////////////
+		// int i;
+		// while (token)
+		// {
+		// 	i = 0;
+		// 	printf("token = %s\n", token->value);
+		// 	if (token->expanded_value)
+		// 	{
+		// 		while (token->expanded_value[i])
+		// 		{
+		// 			printf("expanded_arg[%d] = %s\n",i, token->expanded_value[i]);
+		// 			i++;
+		// 		}
+		// 	}
+		// 	token = token->next;
+		// }

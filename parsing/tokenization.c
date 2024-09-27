@@ -82,57 +82,31 @@ char *handle_Parentheses(char *str, char c)
     return word;
 }
 
-// char *handle_quote(char *str)
-// {
-//     int     i;
-//     char    *word;
-
-//     i = 0;
-//     while (str[i])
-//     {
-//         if (str[++i] == '"')
-//         {
-//             while (str[i] && str[i] != '"')
-//                 i++;
-//             if (str[i] == '"')
-//                 i++;
-//         }
-//         else if (str[++i] == '\'')
-//         {
-//             while (str[i] && str[i] != '\'')
-//                 i++;
-//             if (str[i] == '\'')
-//                 i++; 
-//         }
-//         else
-//         {
-//             while (str[i] && !ft_is_separator(str[i]))
-//                 i++;
-//         }
-//     }
-//     word = strndup(str, i);
-//     return word;
-// }
-char *handle_quote(char *str, char c)
+char *handle_quote(char *str)
 {
-	int		i;
+    int		i;
+    char    c;
+    int		j;
     char	*word;
 
-	i = 1;
-	if (strchr(str + 1, c))
-	{
-		while (str[i] && str[i] != c)
-			i++;
-		while (!ft_is_separator(str[i]))
-			i++;
-		word = strndup(str, i + 1);
-	}
-	else
-	{
-		while (!ft_is_separator(str[i]))
-			i++;
-		word = strndup(str, i + 1);
-	}
+    i = 0;
+    j = 0;
+    word = malloc(strlen(str) + 1);
+    c = str[i];
+    while (str[i] && !ft_is_separator(str[i]))
+    {
+        if (str[i] == c)
+        {
+            word[j++] = str[i++];
+            while (str[i] && str[i] != c)
+                word[j++] = str[i++];
+            if (str[i] == c)
+                word[j++] = str[i++];
+        }
+        else
+            word[j++] = str[i++];
+    }
+    word[j] = '\0';
     return word;
 }
 
@@ -376,17 +350,6 @@ char *handle_dollar(char *str)
     return word;
 }
 
-// int ft_strlen(char *str)
-// {
-// 	int i;
-
-// 	i = 0;
-// 	while (str[i])
-// 		i++;
-// 	return (i);
-// }
-
-
 void handle_operators(char *input, Token **tokens, int *j, int *k)
 {
 	int i;
@@ -417,7 +380,7 @@ void handle_word(char *input, Token **tokens, int *j, int *k)
     {
         if (input[i] == '"' || input[i]== '\'')
         {
-            str = handle_quote(input + i, input[i]);
+            str = handle_quote(input + i);
             i += strlen(str);
         }
         i++;
@@ -458,7 +421,7 @@ Token **tokenize(char *input)
             i++;
         else if ((input[i] == '\\' && (input[i + 1] == '"' || input[i] == '\''))||(input[i] == '"' || input[i] == '\''))
         {
-            word = handle_quote(input + i, input[i]);
+            word = handle_quote(input + i);
             add_token(tokens, get_token_type(word, input[i]), word);
             i += strlen(word);
             free (word);

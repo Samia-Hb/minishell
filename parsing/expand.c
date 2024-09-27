@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 22:25:31 by shebaz            #+#    #+#             */
-/*   Updated: 2024/09/26 20:25:30 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/09/27 20:23:24 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,28 +141,28 @@ char *get_word(char **string, int *counter)
 	(*counter)--;
 	return result;
 }
-char *handle_quote_up(char *str, char c)
-{
-	int		i;
-    char	*word;
+// char *handle_quote_up(char *str, char c)
+// {
+// 	int		i;
+//     char	*word;
 
-	i = 1;
-	if (strchr(str + 1, c))
-	{
-		while (str[i] && str[i] != c)
-			i++;
-		while (str[i] && !ft_is_separator(str[i]))
-			i++;
-		word = strndup(str, i + 1);
-	}
-	else
-	{
-		while (str[i] && !ft_is_separator(str[i]))
-			i++;
-		word = strndup(str, i + 1);
-	}
-    return word;
-}
+// 	i = 1;
+// 	if (strchr(str + 1, c))
+// 	{
+// 		while (str[i] && str[i] != c)
+// 			i++;
+// 		while (str[i] && !ft_is_separator(str[i]))
+// 			i++;
+// 		word = strndup(str, i + 1);
+// 	}
+// 	else
+// 	{
+// 		while (str[i] && !ft_is_separator(str[i]))
+// 			i++;
+// 		word = strndup(str, i + 1);
+// 	}
+//     return word;
+// }
 
 
 char *get_output(char *input)
@@ -183,7 +183,7 @@ char *get_output(char *input)
     {
         if (input[i] == '"' || input[i]== '\'')
         {
-            str = handle_quote_up(input + i, input[i]);
+            str = handle_quote(input + i);
             i += strlen(str);
         }
         i++;
@@ -198,7 +198,7 @@ char *get_string(char *input, int *i)
 
 	if (input[*i] == '"' || input[*i] == '\'')
 	{
-		word = handle_quote_up(input + (*i), input[*i]);
+		word = handle_quote(input + (*i));
 		*i += strlen(word);
 	}
 	else

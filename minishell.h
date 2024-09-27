@@ -172,7 +172,7 @@ Token *get_last_token(Token *token);
 // void print_queue(t_queue *queue);
 int	ft_counter(char *str, char c);
 int ft_is_separator(char c);
-
+char *handle_quote(char *str);
 
 ///////////////////// execution /////////////////////////
 
