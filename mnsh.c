@@ -20,6 +20,23 @@ int	main()
             main();
         add_history(input);
 		tokens = tokenize(input);
+		Token *token = *tokens;
+		int i ;
+		while (token)
+		{
+			i = 0;
+			printf("token = %s\n", token->value);
+			if (token->expanded_value)
+			{
+				while (token->expanded_value[i])
+				{
+					printf("expanded_arg[%d] = %s\n",i, token->expanded_value[i]);
+					i++;
+				}
+			}
+			token = token->next;
+		}
+		exit(1);
 		errno = check_syntax_errors(*tokens);
         if (errno)
             main();
@@ -52,17 +69,3 @@ int	main()
 
 		/// ///////////////////////////////////
 		// int i;
-		// while (token)
-		// {
-		// 	i = 0;
-		// 	printf("token = %s\n", token->value);
-		// 	if (token->expanded_value)
-		// 	{
-		// 		while (token->expanded_value[i])
-		// 		{
-		// 			printf("expanded_arg[%d] = %s\n",i, token->expanded_value[i]);
-		// 			i++;
-		// 		}
-		// 	}
-		// 	token = token->next;
-		// }

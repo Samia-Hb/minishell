@@ -4,7 +4,7 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include <stdio.h>
-// #include "parsing/gnl/get_next_line.h"
+#include "parsing/gnl/get_next_line.h"
 #include "execution/libftt/libft.h"
 #include <stdlib.h>
 #include <fcntl.h>
