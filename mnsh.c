@@ -31,7 +31,7 @@ int	main()
 	tokens = NULL;
 	while (1)
 	{
-		handle_signal();
+		// handle_signal();
 		input = readline("Minishell$ ");
 		if (!input)
 			break ;

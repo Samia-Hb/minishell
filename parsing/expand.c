@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 22:25:31 by shebaz            #+#    #+#             */
-/*   Updated: 2024/10/03 19:00:53 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/10/03 19:53:19 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,56 +71,65 @@ char	*dollar_expand(char *input, int *i)
 char	*double_quote_expansion(char *input, int *i)
 {
 	char	*expanded_value;
+	char	*result;
 
 	expanded_value = strdup("");
 	if (!expanded_value)
 		return (NULL);
 	if (input[*i] == '"')
 	{
-		expanded_value = ft_strjoin(expanded_value, char_to_string(input[*i], 0));
+		result = char_to_string(input[*i], 0);
+		expanded_value = ft_strjoin(expanded_value, result);
 		(*i)++;
 	}
 	while (input[*i] && input[*i] != '"')
 	{
 		if (input[*i] == '$')
-            expanded_value = ft_strjoin(expanded_value, dollar_expand(input, i));
+			result = dollar_expand(input, i);
 		else 
 		{
-            expanded_value = ft_strjoin(expanded_value, char_to_string(input[*i], 0));
+			result = char_to_string(input[*i], 0) ;
             (*i)++;
         }
+        expanded_value = ft_strjoin(expanded_value, result);
 	}
 	if (input[*i] == '"')
 	{
-		expanded_value = ft_strjoin(expanded_value, char_to_string(input[*i], 0));
+		result = char_to_string(input[*i], 0);
+		expanded_value = ft_strjoin(expanded_value, result);
 		(*i) ++;
 	}
+	free(result);
 	return (expanded_value);
 }
 
 char	*single_quote_expansion(char *input, int *i)
 {
 	char	*expanded_value;
+	char	*result;
 
 	expanded_value = strdup("");
 	if (!expanded_value)
 		return (NULL);
 	if (input[*i] == '\'')
 	{
-		expanded_value = ft_strjoin(expanded_value, char_to_string(input[*i], 0));
+		result = char_to_string(input[*i], 0);
+		expanded_value = ft_strjoin(expanded_value, result);
 		(*i) ++;
 	}
 	while (input[*i] && input[*i] != '\'')
 	{
-		expanded_value = ft_strjoin(expanded_value, char_to_string(input[*i],
-					0));
+		result = char_to_string(input[*i], 0);
+		expanded_value = ft_strjoin(expanded_value, result);
 		(*i)++;
 	}
 	if (input[*i] == '\'')
 	{
-		expanded_value = ft_strjoin(expanded_value, char_to_string(input[*i], 0));
+		result = char_to_string(input[*i], 0);
+		expanded_value = ft_strjoin(expanded_value, result);
 		(*i) ++;
 	}
+	free(result);
 	return (expanded_value);
 }
 
@@ -315,6 +324,7 @@ void	expand(Token *tokens)
 {
 	char	*result;
 	int		i;
+	char 	*tmp;
 
 	
 	while (tokens)
@@ -329,21 +339,20 @@ void	expand(Token *tokens)
 			while (tokens->value[i])
 			{
 				if (tokens->value[i] == '"')
-					result = ft_strjoin(result,
-							double_quote_expansion(tokens->value, &i));
+					tmp = double_quote_expansion(tokens->value, &i);
 				else if (tokens->value[i] == '\'')
-					result = ft_strjoin(result,
-							single_quote_expansion(tokens->value, &i));
+					tmp = single_quote_expansion(tokens->value, &i);
 				else if (tokens->value[i] == '~')
-					result = ft_strjoin(result, tidle_expansion(&i));
+					tmp = tidle_expansion(&i);
 				else if (tokens->value[i] == '$')
-					result = ft_strjoin(result, dollar_expand(tokens->value, &i));	
+					tmp = dollar_expand(tokens->value, &i);
 				else
 				{
-					result = ft_strjoin(result, char_to_string(tokens->value[i],
-								0));
+					tmp = char_to_string(tokens->value[i], 0);
 					i++;
 				}
+				result = ft_strjoin(result, tmp);
+				free(tmp);
 			}
 			tokens->expanded_value = result_traitement(result);
 			free(result);
