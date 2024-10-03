@@ -224,4 +224,6 @@ int  ft_pwd(char **av);
 int	ft_exit(t_shell *shell);
 int ft_env(t_envi *env);
 void print_ast(t_ast *ast, int depth);
+
+void free_tokens(Token *tokens);
 #endif

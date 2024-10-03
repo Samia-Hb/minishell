@@ -41,7 +41,6 @@ void create_node_arguments(t_parser **node, Token **tokens)
 
     i = 0;
     num_args = nbr_argument(*tokens);
-	printf("arg_nbr = %d\n", num_args);
     (*node)->arguments = malloc((num_args + 1) * sizeof(Token *));
     if (!(*node)->arguments)
     {
@@ -65,7 +64,20 @@ void create_node_arguments(t_parser **node, Token **tokens)
     		}
     (*node)->arguments[i] = NULL;
 }
+void free_tokens(Token *tokens)
+{
+    Token *current;
+    Token *next;
 
+	current = tokens;
+    while (current)
+	{
+        next = current->next;
+        free(current->value);
+        free(current);
+        current = next;
+	}
+}
 t_parser *analyse_tokens(Token **tokens)
 {
     t_parser *new;
@@ -80,7 +92,7 @@ t_parser *analyse_tokens(Token **tokens)
             printf("allocation failed\n");
             exit(1);
         }
-        node->token = malloc (sizeof(Token));
+        node->token = malloc(sizeof(Token));
         node->token = (*tokens);
         node->next = NULL;
         node->arguments = NULL;
@@ -92,6 +104,6 @@ t_parser *analyse_tokens(Token **tokens)
             (*tokens) = (*tokens)->next;
         push_back(&new, node);
     }
-    free(tokens);
+    // free_tokens(*tokens);
     return new;
 }

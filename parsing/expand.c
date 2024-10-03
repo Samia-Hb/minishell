@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 22:25:31 by shebaz            #+#    #+#             */
-/*   Updated: 2024/09/27 20:23:24 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/10/03 19:00:53 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,10 @@ char	*dollar_expand(char *input, int *i)
 		return (strdup(""));
 	result = getenv(word);
 	if (!result)
+	{
+		free(word);
 		result = strdup("");
+	}
 	*i += strlen(word) + 1;
 	free(word);
 	return (strdup(result));
@@ -136,43 +139,20 @@ char *get_word(char **string, int *counter)
 		result = strndup(*string, i);
 		(*string) += i;
 	}
-	else //last word in the string
+	else
 		result = strndup((*string) , strlen(*string));
 	(*counter)--;
 	return result;
 }
-// char *handle_quote_up(char *str, char c)
-// {
-// 	int		i;
-//     char	*word;
-
-// 	i = 1;
-// 	if (strchr(str + 1, c))
-// 	{
-// 		while (str[i] && str[i] != c)
-// 			i++;
-// 		while (str[i] && !ft_is_separator(str[i]))
-// 			i++;
-// 		word = strndup(str, i + 1);
-// 	}
-// 	else
-// 	{
-// 		while (str[i] && !ft_is_separator(str[i]))
-// 			i++;
-// 		word = strndup(str, i + 1);
-// 	}
-//     return word;
-// }
-
 
 char *get_output(char *input)
 {
-	char *word;
 	char *str;
 	int i;
 	int k = 0;
 
 	i = 0;
+	str = NULL;
 	while (input[i] == ' ' || input[i] == '\t')
 	{
 		i++;
@@ -188,8 +168,9 @@ char *get_output(char *input)
         }
         i++;
     }
-    word = strndup(input, i);
-	return word;
+	if (str)
+		free(str);
+	return (strndup(input, i));
 }
 
 char *get_string(char *input, int *i)
@@ -222,7 +203,10 @@ int get_size_arr(char *input)
 		word = ft_strtrim(get_string(input, &i), " ");
 		if (strlen(word) > 0)
 			size++;
+		free(word);
 	}
+	if(word)
+		free(word);
 	return (size);
 }
 
@@ -286,7 +270,7 @@ char **unquoted_result(char **input)
 
 	i = 0;
 	j = 0;
-	output = malloc(get_size(input));
+	output = malloc((get_size(input) + 1) * sizeof(char *));
 	while (input[i])
 	{
 		j = 0;
@@ -312,6 +296,7 @@ char **unquoted_result(char **input)
 		}
 		i++;
 	}
+	output[i] = NULL;
 	return (output);
 }
 
@@ -361,6 +346,7 @@ void	expand(Token *tokens)
 				}
 			}
 			tokens->expanded_value = result_traitement(result);
+			free(result);
 		}
 		tokens = tokens->next;
 	}

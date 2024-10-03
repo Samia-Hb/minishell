@@ -31,6 +31,22 @@ void check_single_quote(char **str)
         *str = ft_strtrim(*str, "'");
 }
 
+void clean_arr(char **arr)
+{
+	int i;
+
+	i = 0;
+	if (arr)
+	{
+		while(arr[i])
+		{
+			free(arr[i]);
+			i++;
+		}
+		free(arr);
+	}
+}
+
 char	*get_executable(char *command)
 {
 	char	*command_path;
@@ -48,10 +64,14 @@ char	*get_executable(char *command)
 	}
 	dir = ft_split(path, ':');
 	command_path = find_command_path(dir, command);
+	clean_arr(dir);
+	clean_arr(arr);
 	return (command_path);
 }
 // int main(int argc, char **argv)
 // {
 //     (void)argc;
-//     printf("executable of %s is: %s", argv[1], get_executable(argv[1]));
+// 	char *path = get_executable(argv[1]);
+//     printf("executable of %s is: %s\n", argv[1], path);
+// 	free(path);
 // }

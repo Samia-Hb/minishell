@@ -16,38 +16,64 @@ Token *create_token(TokenType type, const char *value)
     return token;
 }
 
+void free_token(Token *token)
+{
+    int i;
+
+    if (token)
+    {
+        printf("yes\n");
+        while(token)
+        {
+            if (token->value)
+                free(token->value);
+            if (token->expanded_value)
+            {
+                i = 0;
+                while (token->expanded_value[i])
+                {
+                    free(token->expanded_value[i]);
+                    i++;
+                }
+                free(token->expanded_value);
+            }
+            token = token->next;
+        }
+    }
+}
+// void free_tokens(Token *tokens)
+// {
+//     Token *current;
+//     Token *next;
+
+// 	current = tokens;
+//     while (current)
+// 	{
+//         next = current->next;
+//         free(current->value);
+//         free(current);
+//         current = next;
+// 	}
+// }
 void add_token(Token **tokens, TokenType type, const char *value)
 {
 	Token	*new_node;
 	Token	*ptr;
 
+    ptr = *tokens;
 	new_node = create_token(type, value);
     if (!(*tokens))
         *tokens = new_node;
     else
 	{
-        ptr = *tokens;
         while (ptr->next)
-            ptr = ptr->next;
+        	ptr = ptr->next;
         new_node->previous = ptr;
         ptr->next = new_node;
     }
+	// free_tokens(ptr);
 }
 
-void free_tokens(Token *tokens)
-{
-    Token *current;
-    Token *next;
-
-	current = tokens;
-    while (current)
-	{
-        next = current->next;
-        free(current->value);
-        free(current);
-        current = next;
-	}
-}
 
 int ft_is_separator(char c)
 {
@@ -120,6 +146,9 @@ int built_in_checker(const char *str)
 
 int get_token_type(const char *token, char c)
 {
+	char *path;
+
+	path = get_executable((char *)token);
     if (c)
     {
         if (c == '"')
@@ -128,8 +157,8 @@ int get_token_type(const char *token, char c)
     }
     if (built_in_checker(token))
         return TOKEN_BUILT_IN;
-    if (get_executable((char *)token))
-        return TOKEN_COMMAND;
+    if (path)
+        return (free(path), TOKEN_COMMAND);
     if (!strcmp(token, "~"))
         return TOKEN_TILDLE;
     if (!strcmp(token, "<<"))
@@ -431,13 +460,14 @@ Token **tokenize(char *input)
             word = handle_quote(input + i);
             add_token(tokens, get_token_type(word, input[i]), word);
             i += strlen(word);
-            free (word);
+            free(word);
         }
         else if (input[i] == '<' && input[i + 1] && input[i+1] == '<')
         {
             word = handle_heredoc(input + i, &k);
             add_token(tokens, TOKEN_REDIR_HERE_DOC, word);
             i += strlen(word);
+            free(word);
         }
 		else if (input[i] == '>' || input[i] == '<' || input[i] == '|' ||
 			(input[i] == '>' && input[i + 1] && input[i + 1] == '>'))
