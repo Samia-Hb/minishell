@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/11 13:03:44 by shebaz            #+#    #+#             */
-/*   Updated: 2024/08/10 12:18:47 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/10/06 10:15:12 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,4 +127,24 @@ char	**ft_split(char *s, char c)
 		return (NULL);
 	strings = ft_copy(strings, s, c);
 	return (strings);
+}
+#include <stdio.h>
+
+int main(int argc, char **argv)
+{
+	(void)argc;
+	int		i;
+	char **result = ft_split(argv[1], ' ');	
+	i = 0;
+	while (result[i])
+	{
+		printf("result[%d] = %s\n", i,result[i]);
+		i++;
+	}
+	i = 0;
+	while (result[i])
+	{
+		free(result[i]);
+		i++;
+	}
 }

@@ -60,6 +60,7 @@ char	*get_executable(char *command)
 	if (access(arr[0], X_OK) == 0)
 	{
 		command_path = strdup(arr[0]);
+		clean_arr(arr);
 		return (command_path);
 	}
 	dir = ft_split(path, ':');

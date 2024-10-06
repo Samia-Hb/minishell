@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 22:25:31 by shebaz            #+#    #+#             */
-/*   Updated: 2024/10/03 19:53:19 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/10/06 11:29:36 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -204,24 +204,26 @@ int get_size_arr(char *input)
 	int		i;
 	char	*word;
 	int		size;
+	char	*n_strimmed;
 
 	i = 0;
 	size = 0;
 	while (input[i])
 	{
-		word = ft_strtrim(get_string(input, &i), " ");
+		n_strimmed = get_string(input, &i);
+		word = ft_strtrim(n_strimmed, " ");
 		if (strlen(word) > 0)
 			size++;
 		free(word);
+		free(n_strimmed);
 	}
-	if(word)
-		free(word);
 	return (size);
 }
 
 char	**handle_that_shit(char *input)
 {
 	char	**result;
+	char	*n_strimmed;
 	int		size;
 	int		i;
 	int		j;
@@ -234,32 +236,34 @@ char	**handle_that_shit(char *input)
 		printf("Allocation Failed\n");
 	while (input[i])
 	{
-		result[j] = ft_strtrim(get_string(input, &i), " ");
+		n_strimmed = get_string(input, &i);
+		result[j] = ft_strtrim(n_strimmed, " ");
+		free(n_strimmed);
 		j++;
 	}
 	result[size] = NULL;
 	return (result);
 }
 
-char *check_input(char *input)
-{
-	int		i;
-	char	*output;
+// char *check_input(char *input)
+// {
+// 	int		i;
+// 	char	*output;
 
-	i = 0;
-	output = strdup("");
-	while (input[i])
-	{
-		if (input[i] == '$')
-			output = ft_strjoin(output, dollar_expand(input + i, &i));
-		else
-		{	
-			output = ft_strjoin(output, char_to_string(input[i], 0));
-			i++;
-		}
-	}
-	return (output);
-}
+// 	i = 0;
+// 	output = strdup("");
+// 	while (input[i])
+// 	{
+// 		if (input[i] == '$')
+// 			output = ft_strjoin(output, dollar_expand(input + i, &i));
+// 		else
+// 		{	
+// 			output = ft_strjoin(output, char_to_string(input[i], 0));
+// 			i++;
+// 		}
+// 	}
+// 	return (output);
+// }
 int get_size(char **arr)
 {
 	int size;
@@ -273,6 +277,7 @@ int get_size(char **arr)
 char **unquoted_result(char **input)
 {
 	char	**output;
+	char	*str;
 	int		i;
 	int		j;
 	char	c;
@@ -292,19 +297,22 @@ char **unquoted_result(char **input)
 				j++;
 				while (input[i][j] != c)
 				{
-					output[i] = ft_strjoin(output[i], char_to_string(input[i][j], 0));
+					str = char_to_string(input[i][j], 0);
+					output[i] = ft_strjoin(output[i], str);
 					j++;
 				}
 				j++;
 			}
 			else
 			{
-				output[i] = ft_strjoin(output[i], char_to_string(input[i][j], 0));
+				str = char_to_string(input[i][j], 0);
+				output[i] = ft_strjoin(output[i], str);
 				j++;
 			}
 		}
 		i++;
 	}
+	free(str);
 	output[i] = NULL;
 	return (output);
 }
@@ -313,12 +321,12 @@ char	**result_traitement(char *input)
 {
 	char	**result;
 
-	if (!strchr (input, '"') && !strchr(input, '\''))
+	if (!ft_strchr (input, '"') && !ft_strchr(input, '\''))
 		result = ft_split(input,' ');
 	else
 		result = handle_that_shit(input);
 	result = unquoted_result(result);
-	return result;
+	return (result);
 }
 void	expand(Token *tokens)
 {
@@ -326,7 +334,6 @@ void	expand(Token *tokens)
 	int		i;
 	char 	*tmp;
 
-	
 	while (tokens)
 	{
 		i = 0;
@@ -355,8 +362,8 @@ void	expand(Token *tokens)
 				free(tmp);
 			}
 			tokens->expanded_value = result_traitement(result);
-			free(result);
 		}
+		free(result);
 		tokens = tokens->next;
 	}
 }

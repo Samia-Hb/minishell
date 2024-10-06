@@ -66,17 +66,30 @@ void create_node_arguments(t_parser **node, Token **tokens)
 }
 void free_tokens(Token *tokens)
 {
-    Token *current;
-    Token *next;
 
-	current = tokens;
-    while (current)
-	{
-        next = current->next;
-        free(current->value);
-        free(current);
-        current = next;
-	}
+    Token *tmp;
+    while (tokens)
+    {
+        tmp = tokens;
+        tokens = tokens->next;
+        
+        // Free the `value` (assuming it's dynamically allocated)
+        if (tmp->value)
+            free(tmp->value);
+
+        // Free the `expanded_value` array (if not NULL)
+        if (tmp->expanded_value)
+        {
+            for (int i = 0; tmp->expanded_value[i]; i++)
+            {
+                free(tmp->expanded_value[i]);  // Free each string in the array
+            }
+            free(tmp->expanded_value);  // Free the array itself
+        }
+
+        // Free the token itself
+        free(tmp);
+    }
 }
 t_parser *analyse_tokens(Token **tokens)
 {

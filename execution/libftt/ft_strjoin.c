@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: szeroual <szeroual@student.42.fr>          +#+  +:+       +#+        */
+/*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/17 13:16:22 by szeroual          #+#    #+#             */
-/*   Updated: 2023/12/08 16:30:42 by szeroual         ###   ########.fr       */
+/*   Updated: 2024/10/06 11:29:18 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,3 +59,13 @@ char	*ft_strjoin(const char *s1, const char *s2)
 	}
 	return (result);
 }
+
+// #include <stdio.h>
+
+// int main(int argc, char **argv)
+// {
+// 	(void)argc;
+// 	char *result = ft_strjoin(argv[1], argv[2]);
+// 	printf("result = %s\n", result);
+// 	free(result);
+// }

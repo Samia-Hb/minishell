@@ -1,20 +1,5 @@
 #include "../minishell.h"
 
-Token *create_token(TokenType type, const char *value)
-{
-    Token *token;
-	
-	token = malloc(sizeof(Token));
-    if (!token)
-	{
-        printf("Error: Memory allocation failed\n");
-        exit(EXIT_FAILURE);
-    }
-    token->type = type;
-    token->value = strdup(value);
-    token->next = NULL;
-    return token;
-}
 
 void free_token(Token *token)
 {
@@ -55,6 +40,22 @@ void free_token(Token *token)
 //         current = next;
 // 	}
 // }
+
+Token *create_token(TokenType type, const char *value)
+{
+    Token *token;
+	
+	token = malloc(sizeof(Token));
+    if (!token)
+	{
+        printf("Error: Memory allocation failed\n");
+        exit(EXIT_FAILURE);
+    }
+    token->type = type;
+    token->value = strdup(value);
+    token->next = NULL;
+    return token;
+}
 void add_token(Token **tokens, TokenType type, const char *value)
 {
 	Token	*new_node;
@@ -71,9 +72,9 @@ void add_token(Token **tokens, TokenType type, const char *value)
         new_node->previous = ptr;
         ptr->next = new_node;
     }
-	// free_tokens(ptr);
 }
 
+	// free_tokens(new_node);
 
 int ft_is_separator(char c)
 {
@@ -388,19 +389,28 @@ char *handle_dollar(char *str)
 
 void handle_operators(char *input, Token **tokens, int *j, int *k)
 {
-	int i;
+    char	*str1;
+    char	*str2;
+	int		i;
 
 	i = 0;
+	str2 = NULL;
+	str1 = char_to_string(input[i], 0);
 	if(input[i] == '>' || input[i] == '<' || input[i] == '|')
 	{
-		add_token(tokens, get_token_type(char_to_string(input[i], 0), 0), char_to_string(input[i], 0));
+		add_token(tokens, get_token_type(str1, 0), str1);
         (*j)++;
     }
     else if (input[i] == '>' && input[i + 1] && input[i + 1] == '>')
 	{
-		add_token(tokens, get_token_type(char_to_string(input[i], 0), 0), char_to_string(input[i], 1));
+		str2 = char_to_string(input[i], 1);
+		add_token(tokens, get_token_type(str1, 0), str2);
         (*j) +=2;
 	}
+	if(str1)
+		free(str1);
+	if (str2)
+		free(str2);
     *k = 0;
 }
 

@@ -226,4 +226,8 @@ int ft_env(t_envi *env);
 void print_ast(t_ast *ast, int depth);
 
 void free_tokens(Token *tokens);
+
+
+					//clear_functions
+void clean_arr(char **arr);
 #endif

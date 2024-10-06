@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: szeroual <szeroual@student.42.fr>          +#+  +:+       +#+        */
+/*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 19:09:51 by szeroual          #+#    #+#             */
-/*   Updated: 2023/12/08 16:30:23 by szeroual         ###   ########.fr       */
+/*   Updated: 2024/10/06 10:15:44 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,3 +101,24 @@ char	**ft_split(char const *s, char c)
 	ar[wc] = 0;
 	return (ar);
 }
+// #include <stdio.h>
+
+// int main(int argc, char **argv)
+// {
+// 	(void)argc;
+// 	int		i;
+// 	char **result = ft_split(argv[1], ' ');	
+// 	i = 0;
+// 	while (result[i])
+// 	{
+// 		printf("result[%d] = %s\n", i,result[i]);
+// 		i++;
+// 	}
+// 	i = 0;
+// 	while (result[i])
+// 	{
+// 		free(result[i]);
+// 		i++;
+// 	}
+// 	free(result);
+// }
