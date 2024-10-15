@@ -44,11 +44,13 @@ int	main()
 		errno = check_syntax_errors(*tokens);
         if (errno)
             main();
-		free(input);
         expand(*tokens);
 		parsed = analyse_tokens(tokens);
 		queue = generate_postfix(parsed);
 		ast = generate_ast_from_postfix(queue);
+		// printf("======>%s\n",ast->data->arguments[0]);
+		// printf("======>%s\n",ast->data->arguments[1]);
+		// printf("======>%s\n",ast->data->arguments[2]);
 		// rl_clear_history();
 		// exit(1);
 	}
