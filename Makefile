@@ -30,7 +30,8 @@ SRCS =  mnsh.c \
         execution/utils.c \
         execution/postorde.c \
         $(wildcard libft/*.c) \
-        $(wildcard execution/libftt/*.c)
+        $(wildcard execution/libftt/*.c) \
+        $(wildcard parsing/gnl/*.c)
 
 # Generate object file names from source file names
 OBJS = $(SRCS:.c=.o)

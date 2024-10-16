@@ -1,32 +1,5 @@
 #include "../minishell.h"
 
-// int	handle_heredoc(char *delim, int flg)
-// {
-//     t_pipe *pipe_fd;
-// 	char	*input;
-// 	char	*save;
-
-// 	if (pipe_sc(pipe_fd) < 0)
-// 		return (-1);
-// 	while (1)
-// 	{
-// 		input = readline("> ");
-// 		if (!input || !ft_memcmp(input, delim, ft_strlen(input) + 1))
-// 		{
-// 			free(input);
-// 			break ;
-// 		}
-// 		if (flg)
-// 			input = expand_in_doc(input);
-// 		save = ft_strjoin(input, "\n");
-// 		(free(input), input = save);
-// 		if (_write_(pipe_fd->write_end, input, ft_strlen(input)) < 0)
-// 			return (free(input), -1);
-// 		(free(input), input = NULL);
-// 	}
-// 	return (close(pipe_fd->write_end), (pipe_fd->read_end));
-// }
-
 int redir_fd_in(t_ast *cmd) 
 {
     t_ast *node = cmd->left;
@@ -82,82 +55,6 @@ int redir_fd_out(t_ast *cmd)
     return 0;
 }
 
-// int handle_redirections(t_ast *cmd)
-// {
-//     if((redir_fd_in(cmd) < 0) || (redir_fd_out < 0))
-//         return -1;
-//     return 0;
-// }
-
-// int is_valid(int c)
-// {
-// 	return ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')
-// 		|| (c >= '0' && c <= '9') || c == '_');
-// }
-
-// static	ssize_t	calc_ll(char *s)
-// {
-// 	ssize_t	l;
-// 	ssize_t	i;
-// 	char	*var;
-
-// 	l = 0;
-// 	i = 0;
-// 	while (s[i])
-// 	{
-// 		if (s[i] == '$' && is_valid(s[i + 1]))
-// 		{
-// 			i++;
-// 			var = expand_var(s, &i);
-// 			if (!var || !*var)
-// 				continue ;
-// 			l += ft_strlen(var);
-// 		}
-// 		else
-// 		{
-// 			i++;
-// 			l++;
-// 		}
-// 	}
-// 	return (l);
-// }
- 
-//  int handle_redirections(t_ast *cmd)
-//  {
-//     if(redir_fd_in(cmd) < 0 || redir_fd_out(cmd))
-//         return -1;
-//     return 0;
-//  }
-
-// char	*expand_in_doc(char *s)
-// {
-// 	char	*ret;
-// 	char	*save;
-// 	char	*var;
-// 	ssize_t	i;
-
-// 	ret = malloc(sizeof(char) * (calc_ll(s) + 1));
-// 	if (!ret)
-// 		printf("hello");
-// 	i = 0;
-// 	save = ret;
-// 	while (s[i])
-// 	{
-// 		if (s[i] == '$' && is_valid(s[i + 1]))
-// 		{
-// 			i++;
-// 			var = expand_var(s, &i);
-// 			if (!var || !*var)
-// 				continue ;
-// 			while (*var)
-// 				*ret++ = *var++;
-// 		}
-// 		else
-// 			*ret++ = s[i++];
-// 	}
-// 	return (*ret = '\0', free(s), save);
-// }
-
 void execute_command(t_ast *cmd, t_mini *box)
 {
     pid_t pid = fork();
@@ -187,4 +84,3 @@ void execute_command(t_ast *cmd, t_mini *box)
            close(cmd->data->output_fd);
     }
 }
-

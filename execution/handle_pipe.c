@@ -67,9 +67,12 @@ void execute_pipeline(t_ast *cmd, t_mini *box)
         return;
     pid_t left_pid = left_pipe(cmd->left, pipe_fds, box);
     pid_t right_pid = right_pipe(cmd->right, pipe_fds, box);
+    // if(left_pid > 0)
+    //     printf("%d", pipe_fds->read_end);
+    // if(right_pid > 0)
+        printf("%d", pipe_fds->read_end);
     close(pipe_fds->read_end);
     close(pipe_fds->write_end);
     waitpid(left_pid, NULL, 0);
     waitpid(right_pid, NULL, 0);
-    
 }
