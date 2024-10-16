@@ -3,148 +3,101 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
+/*   By: szeroual <szeroual@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/11 13:03:44 by shebaz            #+#    #+#             */
-/*   Updated: 2024/10/06 10:15:12 by shebaz           ###   ########.fr       */
+/*   Created: 2023/11/23 19:09:51 by szeroual          #+#    #+#             */
+/*   Updated: 2023/12/08 16:30:23 by szeroual         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "libft.h"
 
-static int	count_len(char const *s, char c, int *i)
-{
-	int	count;
-
-	count = 0;
-	while (s[*i] == c)
-		*i = *i + 1;
-	while (s[*i])
-	{
-		if (s[*i] != c)
-			count ++;
-		if (s[*i] == c)
-			return (count);
-		*i = *i + 1;
-	}
-	return (count);
-}
-
-int	ft_counter(char *str, char c)
+static int	separate_string(char const *s, char c)
 {
 	int	i;
-	int	word_counter;
+	int	wc;
 
 	i = 0;
-	word_counter = 0;
+	wc = 0;
+	while (s[i])
+	{
+		if (s[i] != c && (i == 0 || s[i - 1] == c))
+			wc++;
+		i++;
+	}
+	return (wc);
+}
+
+static int	ft_free(char **ptr, int size)
+{
+	int	i;
+
+	i = 0;
+	while (i < size)
+	{
+		free(ptr[i]);
+		i++;
+	}
+	free(ptr);
+	return (0);
+}
+
+static void	str_cpy(char *d, const char *src, char c)
+{
+	int	i;
+
+	i = 0;
+	while (src[i] != c && src[i])
+	{
+		d[i] = src[i];
+		i++;
+	}
+	d[i] = '\0';
+}
+
+static int	allocate_substr(char **ar, const char *str, char c)
+{
+	int	i;
+	int	j;
+	int	k;
+
+	i = 0;
+	k = 0;
 	while (str[i])
 	{
 		if (str[i] == c)
-		{
-			word_counter++;
-			while (str[i + 1] == c)
-			{
-				i++;
-			}
-		}
-		i++;
-	}
-	if (str[0] != c && str[strlen(str) - 1] != c)
-		word_counter++;
-	if (str[0] == c && str[strlen(str) - 1] == c)
-		word_counter--;
-	return (word_counter);
-}
-
-static char	**ft_allocation(char *s, char c)
-{
-	int		i;
-	int		k;
-	char	**strings;
-
-	i = 0;
-	k = 0;
-	strings = (char **)malloc((ft_counter(s, c) + 1) * sizeof(char *));
-	if (!strings)
-		return (NULL);
-	while (k < ft_counter(s, c))
-	{
-		strings[k] = malloc((count_len(s, c, &i) + 1) * sizeof(char));
-		if (!strings[k])
-		{
-			while (k > 0)
-				free(strings[--k]);
-			free(strings);
-			return (NULL);
-		}
-		k++;
-	}
-	return (strings);
-}
-
-static char	**ft_copy(char **strings, char *s, char c)
-{
-	int	k;
-	int	i;
-	int	j;
-
-	k = 0;
-	i = 0;
-	while (s[i] && k < ft_counter(s, c))
-	{
-		j = 0;
-		while (s[i] == c)
 			i++;
-		while (s[i] != c && s[i])
+		else
 		{
-			strings[k][j] = s[i];
-			i++;
-			j++;
+			j = 0;
+			while (str[i + j] != c && str[i + j])
+				j++;
+			ar[k] = malloc(j + 1);
+			if (!ar[k])
+				return (ft_free(ar, k));
+			str_cpy(ar[k], str + i, c);
+			i += j;
+			k++;
 		}
-		strings[k][j] = '\0';
-		k++;
 	}
-	strings[k] = NULL;
-	return (strings);
+	return (1);
 }
 
-char	**ft_split(char *s, char c)
+char	**ft_split(char const *s, char c)
 {
-	char	**strings;
-
-	if (s == NULL)
-		return (NULL);
-	if (strlen(s) == 0)
-	{
-		strings = malloc(1 * sizeof(char *));
-		if (!strings)
-			return (NULL);
-		strings[0] = NULL;
-		return (strings);
-	}
-	strings = ft_allocation(s, c);
-	if (!strings)
-		return (NULL);
-	strings = ft_copy(strings, s, c);
-	return (strings);
-}
-#include <stdio.h>
-
-int main(int argc, char **argv)
-{
-	(void)argc;
+	char	**ar;
+	int		wc;
 	int		i;
-	char **result = ft_split(argv[1], ' ');	
+
 	i = 0;
-	while (result[i])
-	{
-		printf("result[%d] = %s\n", i,result[i]);
-		i++;
-	}
-	i = 0;
-	while (result[i])
-	{
-		free(result[i]);
-		i++;
-	}
+	if (!s)
+		return (NULL);
+	wc = separate_string(s, c);
+	ar = malloc(sizeof(char *) * (wc + 1));
+	if (!ar)
+		return (NULL);
+	if (allocate_substr(ar, s, c) == 0)
+		return (NULL);
+	ar[wc] = 0;
+	return (ar);
 }

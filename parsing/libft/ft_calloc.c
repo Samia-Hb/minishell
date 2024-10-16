@@ -1,29 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strchr.c                                        :+:      :+:    :+:   */
+/*   ft_calloc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: szeroual <szeroual@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/13 18:51:30 by szeroual          #+#    #+#             */
-/*   Updated: 2023/12/08 16:30:27 by szeroual         ###   ########.fr       */
+/*   Created: 2023/11/14 12:15:32 by szeroual          #+#    #+#             */
+/*   Updated: 2023/12/08 16:31:38 by szeroual         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-//#include <stdio.h>
 #include "libft.h"
 
-char	*ft_strchr(const char *s, int c)
+void	*ft_calloc(size_t count, size_t size)
 {
-	while (*s)
+	size_t	total_size;
+	void	*result;
+
+	if (size != 0 && count > SIZE_MAX / size)
+		return (NULL);
+	total_size = count * size;
+	result = malloc(total_size);
+	if (result != NULL)
 	{
-		if (*s == (char)c)
-		{
-			return ((char *)s);
-		}
-		s++;
+		ft_memset(result, 0, total_size);
 	}
-	if ((char)c == '\0')
-		return ((char *)s);
-	return (NULL);
+	return (result);
 }

@@ -1,102 +1,76 @@
 #include "minishell.h"
-
-
-void ft_clean(Token **tokens, t_parser *parsed, t_queue *queue)
+t_envi *create_env_var(const char *name, const char *value)
 {
-	int i;
-
-	i = 0;
-	if(tokens)
-	{
-		while(*tokens)
-		{
-			free(tokens[i]->value);
-			i++;
-			(*tokens) = (*tokens)->next;
-		}
-		free(tokens);
-	}
-	if (parsed)
-		free(parsed);
-	if (queue)
-		free(queue);
+    t_envi *new_env = (t_envi *)malloc(sizeof(t_envi));
+    if (!new_env) exit(EXIT_FAILURE);
+    new_env->name = strdup(name);
+    new_env->vale = strdup(value);
+    new_env->next = NULL;
+    return new_env;
 }
-int	main()
+
+t_envi *int_env(char **envp)
 {
+    t_envi *env_list = NULL;
+    t_envi *new_node;
+    int i = 0;
+
+    while (envp[i])
+    {
+        new_node = malloc(sizeof(t_envi));
+        if (!new_node)
+            return NULL;
+        char *equal_sign = strchr(envp[i], '=');
+        if (equal_sign)
+        {
+            new_node->name = strndup(envp[i], equal_sign - envp[i]);
+            new_node->vale = strdup(equal_sign + 1); 
+        }
+        new_node->next = env_list;
+        env_list = new_node;
+        i++;
+    }
+    return env_list;
+}
+
+
+t_mini *initialize_mini(char **env)
+{
+    t_mini *box = (t_mini *)malloc(sizeof(t_mini));
+    if (!box) exit(EXIT_FAILURE);
+    box->env = int_env(env);
+    box->ptr = NULL;
+    box->arr = NULL;
+    return box;
+}
+
+int	main(int argc, char **argv, char **envp)
+{
+    (void)argc;
+    (void)argv;
     char	    *input;
     Token	    **tokens;
     t_queue     *queue;
     t_ast       *ast;
-	int			errno;
     t_parser    *parsed;
-
-	tokens = NULL;
-	while (1)
-	{
-		handle_signal();
-		input = readline("Minishell$ ");
-		if (!input)
-			break ;
+    t_mini *box = initialize_mini(envp);
+    (void)ast;
+    tokens = NULL;
+    while (1)
+    {
+        handle_signal();
+        input = readline("Minishell$ ");
+        if (!input)
+            break ;
         if (!strlen(input))
-            main();
+            continue;
         add_history(input);
-		tokens = tokenize(input);
-		errno = check_syntax_errors(*tokens);
-        if (errno)
-            main();
+        tokens = tokenize(input);
         expand(*tokens);
-		parsed = analyse_tokens(tokens);
-		queue = generate_postfix(parsed);
-		ast = generate_ast_from_postfix(queue);
-		// printf("======>%s\n",ast->data->arguments[0]);
-		// printf("======>%s\n",ast->data->arguments[1]);
-		// printf("======>%s\n",ast->data->arguments[2]);
-		// rl_clear_history();
-		// exit(1);
-	}
-	return (0);
+        parsed = analyse_tokens(tokens);
+        queue = generate_postfix(parsed);
+        ast = generate_ast_from_postfix(queue);
+        postorder_execution(ast, box);
+    }
+    return (0);
 }
-
-
-
-		// Token *token = *tokens;
-		// int i ;
-		// while (token)
-		// {
-		// 	i = 0;
-		// 	printf("token = %s\n", token->value);
-		// 	if (token->expanded_value)
-		// 	{
-		// 		while (token->expanded_value[i])
-		// 		{
-		// 			printf("expanded_arg[%d] = %s\n",i, token->expanded_value[i]);
-		// 			i++;
-		// 		}
-		// 	}
-		// 	token = token->next;
-		// }
-		// exit(1);
-
-
-
-
-
-		// printf("======== Analysed result =======\n");
-		// while (parsed)
-		// {
-		// 	i = 0;
-		// 	printf ("token = %s\n", parsed->token->value);
-		// 	if(parsed->arguments)
-		// 	{
-		// 		while (parsed->arguments[i])
-		// 		{
-		// 			printf("       arg[%d] = %s\n",i, parsed->arguments[i]);
-		// 			i++;
-		// 		}
-		// 	}
-		// 	parsed = parsed->next;
-		// }
-		// main();
-
-		/// ///////////////////////////////////
-		// int i;
