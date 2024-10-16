@@ -4,7 +4,7 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include <stdio.h>
-#include "parsing/gnl/get_next_line.h"
+// #include "parsing/gnl/get_next_line.h"
 #include "execution/libftt/libft.h"
 #include <stdlib.h>
 #include <fcntl.h>
@@ -120,8 +120,7 @@ typedef struct stack
 			//**Tokenization**/
 Token	**tokenize(char *input);
 void	add_token(Token **tokens, TokenType type, const char *value);
-char *handle_quote(char *str);
-
+// char	*handle_quote(char *str, int c);
 // void	print_tokens(Token *tokens);
 
 			//**libft**/
@@ -254,5 +253,5 @@ void process_node(t_ast *cmd, t_pipe *pipe_fds);
 int handle_redirections(t_ast *cmd);
 void postorder_execution(t_ast *root, t_mini *box);
 void postorder_algo(t_ast *cmd, t_mini *box);
-// int	handle_heredoc(char *delim, int flg);
+int	handle_heredoc(char *delim, int flg);
 #endif

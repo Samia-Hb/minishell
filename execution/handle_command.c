@@ -4,19 +4,18 @@ void executing(t_ast *node, t_mini *box)
 {
     if (node->type == COMMAND)
     {
-        // printf("check here\n");
-        // int j = 0;
-        if (!node->data->arguments)
-              return;
-        // while(node->data->arguments[j])
-        // {
-        //     printf("%s", node->data->arguments[j]);
-        //     j++;
-        // }
-        // printf("%s", node->data->arguments[0]);
+        t_parser *av = node->data;
+        if (!av->arguments)
+            return;
+        int j = 0;
+        while(av->arguments[j])
+        {
+            printf("%s", av->arguments[j]);
+            j++;
+        }
         if(is_builtin(node->data->token->value))
         {
-            int status = builtins(node->data->arguments, box);
+            int status = builtins(av->arguments, box);
             exit(status);
         }
         else
@@ -24,13 +23,13 @@ void executing(t_ast *node, t_mini *box)
             char **command_path = get_path();
             if (!command_path)
             {
-                free(node->data->arguments);
+                free(av->arguments);
                 return;
             }
             char **env_array = separate_env(box->env);
             if (!env_array)
             {
-                free(node->data->arguments);
+                free(av->arguments);
                 free(command_path);
                 return;
             }
@@ -51,11 +50,11 @@ void executing(t_ast *node, t_mini *box)
                 char *temp = ft_strjoin(command_path[i], "/");
                 if(!temp)
                     return ;
-                full_path = ft_strjoin(temp, node->data->arguments[0]);
+                full_path = ft_strjoin(temp, av->arguments[0]);
                 free(temp);
                 if (access(full_path, X_OK) == 0) 
                 {
-                    execve(full_path, node->data->arguments, env_array);
+                    execve(full_path, av->arguments, env_array);
                     perror("execve error");
                     exit(EXIT_FAILURE); 
                 }
@@ -63,7 +62,7 @@ void executing(t_ast *node, t_mini *box)
                 i++;
             }
             perror("command not found");
-            free(node->data->arguments);
+            free(av->arguments);
             i = 0;
             while (command_path[i])
             {

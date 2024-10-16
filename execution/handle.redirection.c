@@ -188,25 +188,3 @@ void execute_command(t_ast *cmd, t_mini *box)
     }
 }
 
-void pipeline(t_ast *cmd, t_mini *box)
-{
-    if(!cmd)
-        return;
-    pipeline(cmd->left, box);
-    pipeline(cmd->right, box);
-    if(cmd->type == COMMAND)
-    {
-        if(is_builtin(cmd))
-        {
-            int status = builtins(cmd->data->arguments, box);
-            exit(status);
-        }
-        else 
-        {
-            char *path = get_path();
-            if(!path)
-                return ;
-            
-        }
-    }
-}
