@@ -1,44 +1,50 @@
-#include "../minishell.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_strtrim.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: szeroual <szeroual@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/11/17 13:20:58 by szeroual          #+#    #+#             */
+/*   Updated: 2023/12/08 16:31:17 by szeroual         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-static int	check(char *set, char s)
+#include "libft.h"
+
+static int	ft_check(const char *s, char c)
 {
 	int	i;
 
 	i = 0;
-	while (set[i])
+	while (s[i])
 	{
-		if (set[i] == s)
+		if (s[i] == c)
 			return (1);
 		i++;
 	}
 	return (0);
 }
 
-char	*ft_strtrim(char *s1, char *set)
+char	*ft_strtrim(char const *s1, char const *set)
 {
-	size_t	start;
-	size_t	end;
-	int				i;
-	char			*trimmed;
+	char	*p;
+	int		start;
+	int		end;
 
-	if (!s1 || !set)
+	if (!s1)
 		return (NULL);
-	i = 0;
-	end = strlen(s1);
+	if (!set)
+		return ((char *)s1);
 	start = 0;
-	while (check(set, s1[start]))
+	end = ft_strlen(s1) - 1;
+	while (ft_check(set, s1[start]))
 		start++;
-	while (end > start && check(set, s1[end - 1]))
+	while ((end > start) && ft_check(set, s1[end]))
 		end--;
-	trimmed = (char *)malloc(((end - start) + 1) * sizeof(char));
-	if (!trimmed)
+	p = malloc(end - start + 2);
+	if (!p)
 		return (NULL);
-	while (start < end)
-	{
-		trimmed[i] = s1[start];
-		i++;
-		start++;
-	}
-	trimmed[i] = '\0';
-	return (trimmed);
+	ft_strlcpy(p, s1 + start, end - start + 2);
+	return (p);
 }

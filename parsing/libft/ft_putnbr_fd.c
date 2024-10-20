@@ -1,29 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strchr.c                                        :+:      :+:    :+:   */
+/*   ft_putnbr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: szeroual <szeroual@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/13 18:51:30 by szeroual          #+#    #+#             */
-/*   Updated: 2023/12/08 16:30:27 by szeroual         ###   ########.fr       */
+/*   Created: 2023/11/17 22:12:25 by szeroual          #+#    #+#             */
+/*   Updated: 2023/12/08 16:30:14 by szeroual         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-//#include <stdio.h>
 #include "libft.h"
 
-char	*ft_strchr(const char *s, int c)
+void	ft_putnbr_fd(int nb, int fd)
 {
-	while (*s)
+	if (fd < 0)
+		return ;
+	if (nb == -2147483648)
 	{
-		if (*s == (char)c)
-		{
-			return ((char *)s);
-		}
-		s++;
+		write(fd, "-2147483648", 11);
 	}
-	if ((char)c == '\0')
-		return ((char *)s);
-	return (NULL);
+	else if (nb < 0)
+	{
+		ft_putchar_fd('-', fd);
+		nb = -nb;
+		ft_putnbr_fd(nb, fd);
+	}
+	else if (nb >= 0 && nb <= 9)
+	{
+		ft_putchar_fd(nb + '0', fd);
+	}
+	else if (nb > 9)
+	{
+		ft_putnbr_fd(nb / 10, fd);
+		ft_putnbr_fd(nb % 10, fd);
+	}
 }

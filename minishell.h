@@ -88,7 +88,7 @@ typedef enum
 typedef struct parse
 {
 	Token		*token;
-	char			**arguments;
+	char		**arguments;
 	int         input_fd;
 	int         output_fd;
 	struct parse *next;
@@ -120,7 +120,8 @@ typedef struct stack
 			//**Tokenization**/
 Token	**tokenize(char *input);
 void	add_token(Token **tokens, TokenType type, const char *value);
-// char	*handle_quote(char *str, int c);
+char *handle_quote(char *str);
+
 // void	print_tokens(Token *tokens);
 
 			//**libft**/
@@ -172,7 +173,7 @@ Token *get_last_token(Token *token);
 // void print_queue(t_queue *queue);
 int	ft_counter(char *str, char c);
 int ft_is_separator(char c);
-char *handle_quote(char *str);
+
 
 ///////////////////// execution /////////////////////////
 
@@ -183,6 +184,12 @@ typedef struct s_env
 	struct s_env			*next;
     struct s_env             *prv;
 }							t_envi;
+
+typedef struct  s_pipe
+{
+	int write_end;
+	int read_end;
+}						t_pipe;
 
 // typedef struct  s_exec
 // {
@@ -196,7 +203,6 @@ typedef struct s_shell
 {
     int exit_status;
     char **args;
-    int in_child;
 } t_shell;
 
 typedef struct s_mini
@@ -207,7 +213,21 @@ typedef struct s_mini
     char **arr;
 }t_mini;
 
-int builtins(char **av, t_mini *box, int val);
+		//redirections
+
+int redir_fd_in(t_ast *cmd);
+// void execute_command(t_ast *cmd);
+int redir_fd_out(t_ast *cmd);
+
+		//pipeline
+
+pid_t right_pipe(t_ast *cmd, t_pipe *pipe_fds, t_mini *box);
+pid_t left_pipe(t_ast *cmd, t_pipe *pipe_fds, t_mini *box);
+void execute_pipeline(t_ast *cmd, t_mini *box);
+
+		//builtins
+		
+int builtins(char **av, t_mini *box);
 int is_builtin(char *cmd);
 void ft_putstr_fd(char *str, int fd);
 int	ft_cd(char **ptr, t_envi *envi);
@@ -220,14 +240,19 @@ int	ft_unset(char **ptr, t_mini *box);
 void ft_remove(t_mini *box);
 int	f__plus(char *r);
 int	ft_export(char **ptr, t_envi *env);
-int  ft_pwd(char **av);
+int ft_pwd( t_envi *env);
 int	ft_exit(t_shell *shell);
 int ft_env(t_envi *env);
-void print_ast(t_ast *ast, int depth);
 
-void free_tokens(Token *tokens);
-
-
-					//clear_functions
-void clean_arr(char **arr);
+		//extenal command
+char **separate_env(t_envi *env);
+char **get_command(t_ast *cmd);
+char **get_path();
+int count_arguments(char **arguments);
+void executing(t_ast *node, t_mini *box);
+void process_node(t_ast *cmd, t_pipe *pipe_fds);
+int handle_redirections(t_ast *cmd);
+void postorder_execution(t_ast *root, t_mini *box);
+void postorder_algo(t_ast *cmd, t_mini *box);
+// int	handle_heredoc(char *delim, int flg);
 #endif

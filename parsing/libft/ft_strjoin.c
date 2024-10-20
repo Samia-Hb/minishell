@@ -1,38 +1,61 @@
-#include "../minishell.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_strjoin.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: szeroual <szeroual@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/11/17 13:16:22 by szeroual          #+#    #+#             */
+/*   Updated: 2023/12/08 16:30:42 by szeroual         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-static char	*check_str(char const *s1, char const *s2)
+//#include <stdio.h>
+//#include <string.h>
+// #include <stdlib.h>
+#include "libft.h"
+
+static void	ft_strcpy(char *destination, const char *source)
 {
-	if (!s1 && s2)
-		return (strdup(s2));
-	if (s1 && !s2)
-		return (strdup(s1));
-	return (NULL);
+	while (*source != '\0')
+	{
+		*destination = *source;
+		source++;
+		destination++;
+	}
+	*destination = '\0';
 }
 
-char	*ft_strjoin(char const *s1, char const *s2)
+static void	ft_strcat(char *dest, const char *src)
 {
-	int		len;
-	int		i;
-	char	*new;
-	int		j;
+	while (*dest != '\0')
+	{
+		dest++;
+	}
+	while (*src != '\0')
+	{
+		*dest = *src;
+		dest++;
+		src++;
+	}
+	*dest = '\0';
+}
 
-	i = 0;
-	j = 0;
-	if (s1 == NULL || s2 == NULL)
-		return (check_str(s1, s2));
-	len = strlen(s1) + strlen(s2);
-	new = (char *) malloc(len + 1);
-	if (!new)
+char	*ft_strjoin(const char *s1, const char *s2)
+{
+	char	*result;
+
+	if (!s1 && !s2)
 		return (NULL);
-	while (s1[i])
+	if (!s1)
+		return (ft_strdup(s2));
+	else if (!s2)
+		return (ft_strdup(s1));
+	result = (char *)malloc((ft_strlen(s2) + ft_strlen(s1) + 1) * sizeof(char));
+	if (result != NULL)
 	{
-		new[i] = s1[i];
-		i++;
+		ft_strcpy(result, s1);
+		ft_strcat(result, s2);
 	}
-	while (s2[j])
-	{
-		new[i++] = s2[j++];
-	}
-	new[i] = '\0';
-	return (new);
+	return (result);
 }

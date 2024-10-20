@@ -1,29 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strchr.c                                        :+:      :+:    :+:   */
+/*   ft_strdup.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: szeroual <szeroual@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/13 18:51:30 by szeroual          #+#    #+#             */
-/*   Updated: 2023/12/08 16:30:27 by szeroual         ###   ########.fr       */
+/*   Created: 2023/11/14 12:28:54 by szeroual          #+#    #+#             */
+/*   Updated: 2023/12/08 16:30:32 by szeroual         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-//#include <stdio.h>
 #include "libft.h"
 
-char	*ft_strchr(const char *s, int c)
+char	*ft_strdup(const char *s1)
 {
-	while (*s)
+	char	*s2;
+	size_t	i;
+
+	i = 0;
+	s2 = (char *)malloc(ft_strlen(s1) + 1);
+	if (s2 == NULL)
 	{
-		if (*s == (char)c)
-		{
-			return ((char *)s);
-		}
-		s++;
+		return (NULL);
 	}
-	if ((char)c == '\0')
-		return ((char *)s);
-	return (NULL);
+	while (s1[i] != '\0')
+	{
+		s2[i] = s1[i];
+		i++;
+	}
+	s2[i] = '\0';
+	return (s2);
 }

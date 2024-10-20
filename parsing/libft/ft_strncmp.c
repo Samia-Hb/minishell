@@ -1,29 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strchr.c                                        :+:      :+:    :+:   */
+/*   ft_strncmp.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: szeroual <szeroual@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/13 18:51:30 by szeroual          #+#    #+#             */
-/*   Updated: 2023/12/08 16:30:27 by szeroual         ###   ########.fr       */
+/*   Created: 2023/11/13 20:01:38 by szeroual          #+#    #+#             */
+/*   Updated: 2023/12/08 16:31:01 by szeroual         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-//#include <stdio.h>
 #include "libft.h"
 
-char	*ft_strchr(const char *s, int c)
+int	ft_strncmp(const char *s1, const char *s2, size_t n)
 {
-	while (*s)
+	size_t			i;
+	unsigned char	*p1;
+	unsigned char	*p2;
+
+	p1 = (unsigned char *)s1;
+	p2 = (unsigned char *)s2;
+	i = 0;
+	while ((p1[i] != '\0' || p2[i] != '\0') && i < n)
 	{
-		if (*s == (char)c)
+		if (p1[i] != p2[i])
 		{
-			return ((char *)s);
+			return (p1[i] - p2[i]);
 		}
-		s++;
+		i++;
 	}
-	if ((char)c == '\0')
-		return ((char *)s);
-	return (NULL);
+	return (0);
 }
