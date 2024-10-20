@@ -70,7 +70,7 @@ int	main(int argc, char **argv, char **envp)
         parsed = analyse_tokens(tokens);
         queue = generate_postfix(parsed);
         ast = generate_ast_from_postfix(queue);
-        postorder_execution(ast, box);
+        algo_execution(ast, box);
     }
     return (0);
 }

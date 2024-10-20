@@ -59,7 +59,6 @@ int create_pipe(t_pipe *pipe_fds)
     return 0;
 }
 
-
 void execute_pipeline(t_ast *cmd, t_mini *box)
 {
     t_pipe *pipe_fds = malloc(sizeof(t_pipe));

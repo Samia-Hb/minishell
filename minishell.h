@@ -216,7 +216,6 @@ typedef struct s_mini
 		//redirections
 
 int redir_fd_in(t_ast *cmd);
-// void execute_command(t_ast *cmd);
 int redir_fd_out(t_ast *cmd);
 
 		//pipeline
@@ -252,7 +251,7 @@ int count_arguments(char **arguments);
 void executing(t_ast *node, t_mini *box);
 void process_node(t_ast *cmd, t_pipe *pipe_fds);
 int handle_redirections(t_ast *cmd);
-void postorder_execution(t_ast *root, t_mini *box);
+void algo_execution(t_ast *cmd, t_mini *box);
 void postorder_algo(t_ast *cmd, t_mini *box);
 // int	handle_heredoc(char *delim, int flg);
 #endif

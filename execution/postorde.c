@@ -1,17 +1,17 @@
 #include "../minishell.h"
 
-void postorder_execution(t_ast *root, t_mini *box)
+void algo_execution(t_ast *cmd, t_mini *box)
 {
-    if(!root)
+    if(!cmd)
         return;
-    postorder_execution(root->left, box);
-    postorder_execution(root->right, box);
-    if(root->type == REDERECTION_IN || root->type == REDERECTION_HEREDOC) 
-        redir_fd_in(root);
-    else if(root->type == REDERECTION_OUT || root->type == REDERECTION_APPEND)
-        redir_fd_out(root);
-    else if(root->type == PIPELINE)
-        execute_pipeline(root, box);
-    if(root->type == COMMAND)
-        executing(root, box);
+    if(cmd->type == COMMAND)
+        executing(cmd, box);
+    else if(cmd->type == PIPELINE)
+        execute_pipeline(cmd, box);
+    else if(cmd->type == REDERECTION_IN)
+        redir_fd_in(cmd);
+    else if(cmd->type == REDERECTION_OUT)
+        redir_fd_out(cmd);
+    algo_execution(cmd->left, box);
+    algo_execution(cmd->right, box);
 }
