@@ -15,3 +15,5 @@ void algo_execution(t_ast *cmd, t_mini *box)
     algo_execution(cmd->left, box);
     algo_execution(cmd->right, box);
 }
+
+//nothing
