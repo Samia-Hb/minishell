@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: szeroual <szeroual@student.42.fr>          +#+  +:+       +#+        */
+/*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 01:45:43 by szeroual          #+#    #+#             */
-/*   Updated: 2024/10/15 23:05:58 by szeroual         ###   ########.fr       */
+/*   Updated: 2024/10/20 03:42:56 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 # include <stdlib.h>
 # include <fcntl.h>
 # include <limits.h>
-# include "../libft/libft.h"
+# include "../../execution/libftt/libft.h"
 # include <unistd.h>
 # define MAX_FD 1024
 # ifndef BUFFER_SIZE
