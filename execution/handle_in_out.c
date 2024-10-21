@@ -10,11 +10,6 @@ int rfd_in(t_ast *cmd)
         {
             if (fd > 0)
                 close(fd);
-            fd = open(n->data->token->value, O_RDONLY);
-            if (fd < 0)
-                return -1;
-            if (dup2(fd, STDIN_FILENO) < 0)
-                return -1;
         }
         n = n->right;
     }
@@ -32,21 +27,6 @@ int rfd_out(t_ast *cmd)
         {
             if (fd > 0)
                 close(fd);
-            fd = open(n->data->token->value, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-            if (fd < 0)
-                return -1;
-            if (dup2(fd, STDOUT_FILENO) < 0)
-                return -1;
-        }
-        else if (n->type == REDERECTION_APPEND)
-        {
-            if (fd > 0)
-                close(fd);
-            fd = open(n->data->token->value, O_WRONLY | O_CREAT | O_APPEND, 0644);
-            if (fd < 0)
-                return -1;
-            if (dup2(fd, STDOUT_FILENO) < 0)
-                return -1;
         }
         n = n->right;
     }
