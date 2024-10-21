@@ -54,7 +54,6 @@ int	main(int argc, char **argv, char **envp)
     t_ast       *ast;
     t_parser    *parsed;
     t_mini *box = initialize_mini(envp);
-    (void)ast;
     tokens = NULL;
     while (1)
     {
