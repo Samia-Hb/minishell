@@ -26,9 +26,10 @@ SRCS =  mnsh.c \
 		execution/builtins/export/export.c \
         execution/handle_command.c \
         execution/handle_pipe.c \
-        execution/handle.redirection.c \
+        execution/herdoc_.c \
         execution/utils.c \
         execution/postorde.c \
+        execution/handle_in_out.c \
         $(wildcard libft/*.c) \
         $(wildcard execution/libftt/*.c) \
         $(wildcard parsing/gnl/*.c)

@@ -2,18 +2,20 @@
 
 void algo_execution(t_ast *cmd, t_mini *box)
 {
-    if(!cmd)
+    if (!cmd)
         return;
-    if(cmd->type == COMMAND)
+    if (cmd->type == COMMAND)
+    {
+        if (rfd_in(cmd) < 0)
+            return;
+        if (rfd_out(cmd) < 0)
+            return;
         executing(cmd, box);
-    else if(cmd->type == PIPELINE)
+    }
+    else if (cmd->type == PIPELINE)
         execute_pipeline(cmd, box);
-    else if(cmd->type == REDERECTION_IN)
-        redir_fd_in(cmd);
-    else if(cmd->type == REDERECTION_OUT)
-        redir_fd_out(cmd);
     algo_execution(cmd->left, box);
     algo_execution(cmd->right, box);
 }
 
-//nothing
+

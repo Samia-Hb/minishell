@@ -69,9 +69,25 @@ void execute_pipeline(t_ast *cmd, t_mini *box)
     // if(left_pid > 0)
     //     printf("%d", pipe_fds->read_end);
     // if(right_pid > 0)
-        printf("%d", pipe_fds->read_end);
+        // printf("%d", pipe_fds->read_end);
     close(pipe_fds->read_end);
     close(pipe_fds->write_end);
     waitpid(left_pid, NULL, 0);
     waitpid(right_pid, NULL, 0);
 }
+
+// preorde_algo(t_ast *cmd, t_mini *box)
+// {
+//     if(!cmd)
+//         return ;
+//     if(cmd->type == COMMAND)
+//         executing(cmd, box);
+//     else if(cmd->type == PIPELINE)
+//         execute_pipeline(cmd, box);
+//     else if(cmd->type == REDERECTION_IN || cmd->type == REDERECTION_APPEND)
+//         redir_fd_in(cmd);
+//     else if(cmd->type == REDERECTION_OUT || cmd->type == REDERECTION_HEREDOC)
+//         redir_fd_out(cmd);
+//     preorde_algo(cmd->left, box);
+//     preorde_algo(cmd->right ,box);
+// }
