@@ -52,7 +52,7 @@ void exec_command_with_redirection(t_ast *cmd)
 {
     int in_fd = rfd_in(cmd);
     int out_fd = cmd->data->output_fd;
-    pid_t pid = fork(); 
+    pid_t pid = fork();
     if (pid < 0)
     {
         perror("Fork failed");
@@ -60,54 +60,29 @@ void exec_command_with_redirection(t_ast *cmd)
     }
     if (pid == 0)
     {  
-        // if (in_fd >= 0)
-        // {
-        //     int save_out = dup(STDOUT_FILENO);
-        //     if(dup2(save_out, STDOUT_FILENO) < 0)
-        //     {
-        //         printf("ghalat hdshi\n");
-        //         return;
-        //     }
-        //     dup2(save_out, STDIN_FILENO);
-        //     close(in_
-        // }
+        if (in_fd >= 0)
+        {
+            if (dup2(in_fd, STDIN_FILENO) < 0)
+            {
+                perror("Failed to redirect input");
+                _exit(EXIT_FAILURE);
+            }
+            close(in_fd);
+        }
         if (out_fd >= 0)
         {
-        // printf("child proccess\n");
-        // exit(1);
-        //     printf("hda red_out\n");
-        //     exit(1);
-            // int saved_out = dup(STDOUT_FILENO);
-            // if(dup2(saved_out, STDOUT_FILENO) )
-         {
-        // printf("heeey there\n");
-        // // exit(1);
-        // rfd_out(cmd);
-        // int saved_stdou = dup(STDOUT_FILENO);
-        printf("command\n");
-        exit(1);
-        if(dup2(cmd->data->output_fd, STDOUT_FILENO) < 0)
-        {
-            printf("ERROR");
-            return ;
+            if (dup2(out_fd, STDOUT_FILENO) < 0)
+            {
+                perror("Failed to redirect output");
+                _exit(EXIT_FAILURE);
+            }
+            close(out_fd);
         }
-        dup2(out_fd, STDOUT_FILENO);
-        close(out_fd);
-    }
-            // if (dup2(out_fd, STDOUT_FILENO) < 0)
-            // {
-            //     printf("error\n");
-            //     // perror("Failed to redirect output");
-            //     _exit(1);
-            // }
-            // printf("sucess\n");
-            // exit(1);
-            // // dup2(out_fd, STDOUT_FILENO);
-            // dup2(out_fd, STDOUT_FILENO);
-            // close (out_fd);
-        // execvp(cmd->data->arguments[0], cmd->data->arguments);
-        // perror("Execution failed");
-        // _exit(1); 
+        if (cmd->data->arguments != NULL)
+        {
+            execvp(cmd->data->arguments[0], cmd->data->arguments);
+            perror("Execution failed");
+            _exit(EXIT_FAILURE);
         }
     } 
     else
@@ -117,5 +92,3 @@ void exec_command_with_redirection(t_ast *cmd)
         if (out_fd >= 0) close(out_fd);
     }
 }
-
-

@@ -1,30 +1,47 @@
 #include "../minishell.h"
-
 void algo_execution(t_ast *cmd, t_mini *box)
 {
     if (!cmd)
         return;
+    
     if (cmd->type == PIPELINE)
-    {
-        // printf("the pipe is the root\n");
         execute_pipeline(cmd, box);
-    }
     else if (cmd->type == COMMAND)
-    {
-        // printf("take the command as a root\n");
-        // exit(1);
-        executing(cmd,box);
-    }
+        executing(cmd, box);
     else if (cmd->type == REDERECTION_OUT || cmd->type == REDERECTION_IN)
-      {
-        printf("will execute first\n");
-        // printf("redirection \n");
-        // exit(1);
-        exec_command_with_redirection(cmd);
-      }  // printf("sanaa\n");
-    algo_execution(cmd->left, box);
+    {
+        if (cmd->left && cmd->left->type == COMMAND)
+        {
+            pid_t pid = fork();
+            if (pid < 0)
+            {
+                perror("Fork failed");
+                return;
+            }
+            if (pid == 0)
+            {
+               int out_fd = cmd->data->output_fd; 
+                if (out_fd >= 0)
+                {
+                    if (dup2(out_fd, STDOUT_FILENO) < 0) 
+                    {
+                        perror("dup2 failed");
+                        exit(EXIT_FAILURE);
+                    }
+                    close(out_fd); 
+                }
+                executing(cmd->left, box); 
+                exit(0); 
+            }
+            else
+                waitpid(pid, NULL, 0);
+        }
+        exec_command_with_redirection(cmd); 
+    }
+    // algo_execution(cmd->left, box);
     algo_execution(cmd->right, box);
 }
+
 // void algo_execution(t_ast *cmd, t_mini *box)
 // {
 //     if (!cmd)
