@@ -1,5 +1,5 @@
 #include "../../../minishell.h"
-#include "../../../externel_folder/libftt/libft.h"
+#include "../../libftt/libft.h"
 
 
 // void ft_putstr_fd(char *str, int fd)
