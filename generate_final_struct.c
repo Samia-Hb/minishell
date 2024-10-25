@@ -1,8 +1,9 @@
-#include "../minishell.h"
+#include "minishell.h"
 
-void push_back(t_parser **lst, t_parser *node)
+
+void push_back(t_cmd **lst, t_cmd *node)
 {
-    t_parser *tmp;
+    t_cmd *tmp;
 
     if (!*lst)
         *lst = node;
@@ -14,6 +15,7 @@ void push_back(t_parser **lst, t_parser *node)
         tmp->next = node;
     }
 }
+
 int nbr_argument(Token *tokens)
 {
     int nbr;
@@ -33,7 +35,18 @@ int nbr_argument(Token *tokens)
     return (nbr);
 }
 
-void create_node_arguments(t_parser **node, Token **tokens)
+void red_process(Token **tokens, t_cmd **node)
+{
+    if ((*tokens)->type == TOKEN_REDIR_IN)
+        (*node)->file->type = RE_IN;
+    else if ((*tokens)->type == TOKEN_REDIR_OUT)
+        (*node)->file->type = RE_OUT;
+    else if ((*tokens)->type == TOKEN_REDIR_APPEND)
+        (*node)->file->type = RE_APPEND;
+    (*node)->file = (*tokens)->next->value;
+    (*tokens) = (*tokens)->next;
+}
+void create_node_arguments(t_cmd **node, Token **tokens)
 {
     int i;
 	int j;
@@ -50,7 +63,7 @@ void create_node_arguments(t_parser **node, Token **tokens)
     (*node)->arguments[0] = (*tokens)->expanded_value[0];
     (*tokens) = (*tokens)->next;
     i++;
-    while (*tokens && !is_operator(*tokens) &&
+    while (*tokens && (*tokens)->type != TOKEN_PIPE &&
            (*tokens)->type != TOKEN_COMMAND && (*tokens)->type != TOKEN_BUILT_IN)
            {
 				j = 0;
@@ -60,6 +73,11 @@ void create_node_arguments(t_parser **node, Token **tokens)
 					i++;
 					j++;
 				}
+                if ((*tokens)->type == TOKEN_REDIR_APPEND || (*tokens)->type == TOKEN_REDIR_IN || (*tokens)->type == TOKEN_REDIR_OUT)
+                {
+                    rede_process(tokens, node);
+				    (*tokens) = (*tokens)->next;
+                }                
 				(*tokens) = (*tokens)->next;
     		}
     (*node)->arguments[i] = NULL;
@@ -85,31 +103,24 @@ void free_tokens(Token *tokens)
         free(tmp);
     }
 }
-t_parser *analyse_tokens(Token **tokens)
-{
-    t_parser *new;
-    t_parser *node;
 
-    new = NULL;
+t_cmd *analyse_tokens(Token **tokens)
+{
+    t_cmd *node;
+
     while (*tokens)
     {
-        node = malloc(sizeof(t_parser));
+        node = malloc(sizeof(t_cmd));
         if (!node)
         {
             printf("allocation failed\n");
             exit(1);
         }
-        node->token = malloc(sizeof(Token));
-        node->token = (*tokens);
-        node->next = NULL;
-        node->arguments = NULL;
         if ((*tokens)->type == TOKEN_COMMAND || (*tokens)->type == TOKEN_BUILT_IN)
-            create_node_arguments(&node, tokens);
-		else if (!is_operator(*tokens))
             create_node_arguments(&node, tokens);
 		else
             (*tokens) = (*tokens)->next;
-        push_back(&new, node);
+        push_back(&node, node);
     }
-    return new;
+    return node;
 }

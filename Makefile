@@ -10,8 +10,8 @@ SRCS =  mnsh.c parsing/main.c parsing/analyse_tokens.c parsing/expand.c \
 		parsing/pipex_utils.c parsing/parser.c \
 		execution/libftt/ft_strjoin.c execution/libftt/ft_split.c execution/libftt/ft_strtrim.c \
 		execution/libftt/ft_strdup.c execution/libftt/ft_strchr.c execution/libftt/ft_strlen.c execution/libftt/ft_strlcpy.c \
-		parsing/gnl/get_next_line.c parsing/gnl/get_next_line_utils.c
-
+		parsing/gnl/get_next_line.c parsing/gnl/get_next_line_utils.c \
+		generate_final_struct.c
 
 OBJS = $(SRCS:.c=.o)
 

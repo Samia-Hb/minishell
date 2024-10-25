@@ -1,34 +1,32 @@
 #include "minishell.h"
 
 
-void ft_clean(Token **tokens, t_parser *parsed, t_queue *queue)
-{
-	int i;
+// void ft_clean(Token **tokens, t_parser *parsed, t_queue *queue)
+// {
+// 	int i;
 
-	i = 0;
-	if(tokens)
-	{
-		while(*tokens)
-		{
-			free(tokens[i]->value);
-			i++;
-			(*tokens) = (*tokens)->next;
-		}
-		free(tokens);
-	}
-	if (parsed)
-		free(parsed);
-	if (queue)
-		free(queue);
-}
+// 	i = 0;
+// 	if(tokens)
+// 	{
+// 		while(*tokens)
+// 		{
+// 			free(tokens[i]->value);
+// 			i++;
+// 			(*tokens) = (*tokens)->next;
+// 		}
+// 		free(tokens);
+// 	}
+// 	if (parsed)
+// 		free(parsed);
+// 	if (queue)
+// 		free(queue);
+// }
 int	main()
 {
     char	    *input;
     Token	    **tokens;
-    t_queue     *queue;
-    t_ast       *ast;
 	int			errno;
-    t_parser    *parsed;
+    t_cmd    	*cmd;
 
 	tokens = NULL;
 	while (1)
@@ -45,9 +43,11 @@ int	main()
         if (errno)
             main();
         expand(*tokens);
-		parsed = analyse_tokens(tokens);
-		queue = generate_postfix(parsed);
-		ast = generate_ast_from_postfix(queue);
+		// cmd = generate_final_struct(toknes);
+		cmd = analyse_tokens(tokens);
+		(void)cmd;
+		// queue = generate_postfix(parsed);
+		// ast = generate_ast_from_postfix(queue);
 		// rl_clear_history();
 		// exit(1);
 	}

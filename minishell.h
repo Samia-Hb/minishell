@@ -4,7 +4,7 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include <stdio.h>
-#include "parsing/gnl/get_next_line.h"
+#include "parsing/get_next_line/get_next_line.h"
 #include "execution/libftt/libft.h"
 #include <stdlib.h>
 #include <fcntl.h>
@@ -74,48 +74,48 @@ typedef struct token
 	struct token	*previous;
 }					Token;
 
+
+typedef struct s_file
+{
+    char            *filename;
+    int                type;
+    struct s_file    *next;
+}    t_file;
+
+typedef struct s_cmd
+{
+    char            **arguments;
+    t_file            *file;
+    struct s_cmd    *prev;
+    struct s_cmd    *next;
+}    t_cmd;
+
 typedef enum 
 {
-	COMMAND,
-	PIPELINE,
-	REDERECTION_IN,
-	REDERECTION_OUT,
-	REDERECTION_APPEND,
-	REDERECTION_HEREDOC,
-	REDERECTION_SEMICOLON,
-}AST_TYPE;
-
-typedef struct parse
-{
-	Token		*token;
-	char			**arguments;
-	int         input_fd;
-	int         output_fd;
-	struct parse *next;
-}t_parser;
+	PIPE,
+	RE_IN,
+	RE_OUT,
+	RE_APPEND,
+	RE_HEREDOC,
+}t_type;
 
 
-typedef struct s_ast
-{
-	t_parser		*data;
-	AST_TYPE		type;
-	struct s_ast	*left;
-	struct s_ast	*right;
-	struct s_ast	*next;
-}					t_ast;
 
-typedef struct queue
-{
-	Token			*node;
-	char				**arg;
-	struct queue	*next;
-}					t_queue;
 
-typedef struct stack
-{
-	t_parser			*node;   // Changed to t_ast pointer
-	struct stack		*next;
-}					t_stack;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 			//**Tokenization**/
 Token	**tokenize(char *input);
@@ -132,28 +132,28 @@ char	*ft_strjoin(char const *s1, char const *s2);
 char	*get_executable(char *command);
 
 			//generate_postfix
-t_queue *generate_postfix(t_parser *tokens);
+// t_queue *generate_postfix(t_parser *tokens);
 int		get_precedence(int token_type);
-void	transfer_tokens_to_stack(t_parser *token_list, t_stack **stack);
-int		check_precedence(t_stack *stack, int token_type);
-void	push_back_stack(t_stack **src, t_stack **dest);
+// void	transfer_tokens_to_stack(t_parser *token_list, t_stack **stack);
+// int		check_precedence(t_stack *stack, int token_type);
+// void	push_back_stack(t_stack **src, t_stack **dest);
 
 			//abstract syntax tree
-t_ast	*generate_ast_from_postfix(t_queue *postfix_output);
-t_stack *pop_stack(t_stack **stack);
-t_ast	*pop_ast_stack(t_ast **ast_stack);
+// t_ast	*generate_ast_from_postfix(t_queue *postfix_output);
+// t_stack *pop_stack(t_stack **stack);
+// t_ast	*pop_ast_stack(t_ast **ast_stack);
 int		is_operator(Token *node);
 int		is_operand(Token *node);
-t_ast	*push_to_ast_stack(t_ast *ast_stack, t_ast *ast_node);
+// t_ast	*push_to_ast_stack(t_ast *ast_stack, t_ast *ast_node);
 
 			//mini_utils
-t_stack	*new_stack_node(t_parser *token);
+// t_stack	*new_stack_node(t_parser *token);
 int		check_syntax_errors(Token *tokens);
 char	quote_type(const char *str);
 Token	*create_token(TokenType type, const char *value);
 char	*char_to_string(char c, char c2);
 int		get_token_type(const char *token, char c);
-void print_tokens(t_parser *tokens);
+// void print_tokens(t_parser *tokens);
 
 			//signals
 void handle_signal();
@@ -161,7 +161,7 @@ void handle_signal();
 void expand(Token *tokens);
 
 				//analyse_tokens
-t_parser *analyse_tokens(Token **tokens);
+// t_parser *analyse_tokens(Token **tokens);
 
 				//signals
 void handle_ctrl_c();
@@ -223,8 +223,8 @@ int	ft_export(char **ptr, t_envi *env);
 int  ft_pwd(char **av);
 int	ft_exit(t_shell *shell);
 int ft_env(t_envi *env);
-void print_ast(t_ast *ast, int depth);
-
+// void print_ast(t_ast *ast, int depth);
+t_cmd *analyse_tokens(Token **tokens);
 void free_tokens(Token *tokens);
 
 
