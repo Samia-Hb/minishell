@@ -1,75 +1,67 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   mnsh.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/10/23 15:53:32 by shebaz            #+#    #+#             */
+/*   Updated: 2024/11/02 16:24:54 by shebaz           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
-t_envi *create_env_var(const char *name, const char *value)
+
+void	print_cmd(t_cmd *cmd)
 {
-    t_envi *new_env = (t_envi *)malloc(sizeof(t_envi));
-    if (!new_env) exit(EXIT_FAILURE);
-    new_env->name = strdup(name);
-    new_env->vale = strdup(value);
-    new_env->next = NULL;
-    return new_env;
+	int	i;
+
+	i = 0;
+	while (cmd)
+	{
+		printf("=======Arguments=======\n");
+		if (cmd->arguments)
+		{
+			i = 0;
+			while (cmd->arguments[i])
+			{
+				printf("arg[%d] == %s\n", i, cmd->arguments[i]);
+				i++;
+			}
+		}
+		if (cmd->file)
+		{
+			while (cmd->file)
+			{
+				printf("filename == %s\n", cmd->file->filename);
+				cmd->file = cmd->file->next;
+			}
+		}
+		cmd = cmd->next;
+	}
 }
 
-t_envi *int_env(char **envp)
+int	main()
 {
-    t_envi *env_list = NULL;
-    t_envi *new_node;
-    int i = 0;
+	char	*input;
+	Token	**tokens;
+	t_cmd	*cmd;
 
-    while (envp[i])
-    {
-        new_node = malloc(sizeof(t_envi));
-        if (!new_node)
-            return NULL;
-        char *equal_sign = strchr(envp[i], '=');
-        if (equal_sign)
-        {
-            new_node->name = strndup(envp[i], equal_sign - envp[i]);
-            new_node->vale = strdup(equal_sign + 1); 
-        }
-        new_node->next = env_list;
-        env_list = new_node;
-        i++;
-    }
-    return env_list;
-}
-
-
-t_mini *initialize_mini(char **env)
-{
-    t_mini *box = (t_mini *)malloc(sizeof(t_mini));
-    if (!box) exit(EXIT_FAILURE);
-    box->env = int_env(env);
-    box->ptr = NULL;
-    box->arr = NULL;
-    return box;
-}
-
-int	main(int argc, char **argv, char **envp)
-{
-    (void)argc;
-    (void)argv;
-    char	    *input;
-    Token	    **tokens;
-    t_queue     *queue;
-    t_ast       *ast;
-    t_parser    *parsed;
-    t_mini *box = initialize_mini(envp);
-    tokens = NULL;
-    while (1)
-    {
-        handle_signal();
-        input = readline("Minishell$ ");
-        if (!input)
-            break ;
-        if (!strlen(input))
-            continue;
-        add_history(input);
-        tokens = tokenize(input);
-        expand(*tokens);
-        parsed = analyse_tokens(tokens);
-        queue = generate_postfix(parsed);
-        ast = generate_ast_from_postfix(queue);
-        algo_execution(ast, box);
-    }
-    return (0);
+	tokens = NULL;
+	while (1)
+	{
+		handle_signal();
+		input = readline("minishell > ");
+		if (!input)
+			break ;
+		add_history(input);
+		tokens = tokenize(input);
+		if (check_syntax_errors(*tokens))
+			main();
+		if (!expand(*tokens))
+			return (0);
+		cmd = analyse_tokens(tokens);
+		print_cmd(cmd);
+	}
+	return (0);
 }

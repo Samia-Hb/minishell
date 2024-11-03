@@ -1,94 +1,49 @@
-#include <fcntl.h>
-#include <unistd.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include "../minishell.h"
+#include"../minishell.h"
 
 int rfd_in(t_ast *cmd)
 {
     t_ast *n = cmd->left;
-    int fd = -1;
+    int fd = 0;
     while (n)
     {
         if (n->type == REDERECTION_IN)
         {
-            if (fd > 0) close(fd);
-            // fd = open(n->data->arguments[1], O_RDONLY);
-            if (fd < 0)
-            {
-                perror("Error opening input file");
-                return -1;
-            }
+            if (fd > 0)
+                close(fd);
         }
         n = n->right;
     }
     cmd->data->input_fd = fd;
-    return fd;  
+    return 0;
 }
 
 int rfd_out(t_ast *cmd)
 {
     t_ast *n = cmd->left;
-    int fd = -1;
+    int fd = 0;
     while (n)
     {
         if (n->type == REDERECTION_OUT)
         {
-            if (fd > 0) close(fd);
-            // fd = open(n->data->arguments[1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
-            if (fd < 0)
-            {
-                perror("Error opening output file");
-                return -1;
-            }
+            if (fd > 0)
+                close(fd);
         }
         n = n->right;
     }
     cmd->data->output_fd = fd;
-    return fd;  
+    return 0;
 }
 
-void exec_command_with_redirection(t_ast *cmd)
+void exec_cmd(t_ast *cmd, t_mini *box)
 {
-    int in_fd = rfd_in(cmd);
-    int out_fd = cmd->data->output_fd;
     pid_t pid = fork();
     if (pid < 0)
-    {
-        perror("Fork failed");
         return;
-    }
     if (pid == 0)
-    {  
-        if (in_fd >= 0)
-        {
-            if (dup2(in_fd, STDIN_FILENO) < 0)
-            {
-                perror("Failed to redirect input");
-                _exit(EXIT_FAILURE);
-            }
-            close(in_fd);
-        }
-        if (out_fd >= 0)
-        {
-            if (dup2(out_fd, STDOUT_FILENO) < 0)
-            {
-                perror("Failed to redirect output");
-                _exit(EXIT_FAILURE);
-            }
-            close(out_fd);
-        }
-        if (cmd->data->arguments != NULL)
-        {
-            execvp(cmd->data->arguments[0], cmd->data->arguments);
-            perror("Execution failed");
-            _exit(EXIT_FAILURE);
-        }
-    } 
-    else
     {
-        waitpid(pid, NULL, 0);
-        if (in_fd >= 0) close(in_fd);
-        if (out_fd >= 0) close(out_fd);
+        algo_execution(cmd, box);
+        exit(0);
     }
+    else
+        waitpid(pid, NULL, 0);
 }
