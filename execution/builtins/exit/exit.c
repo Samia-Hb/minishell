@@ -1,5 +1,5 @@
 #include "../../../minishell.h"
-#include "../../libftt/libft.h"
+#include "../../../externel_folder/libftt/libft.h"
 
 
 // void ft_putstr_fd(char *str, int fd)
@@ -31,7 +31,11 @@ int	ft_exit(t_shell *shell)
     int exit_status = shell->exit_status;
 	ft_putstr_fd("exit\n", 1);
 	if (shell->args[1])
-		exit_status = atoi(shell->args[1]);
+	{
+		if(!is_numeric(shell->args[1]))
+			return 1;
+		exit_status = atoll(shell->args[1]);
+	}
 	else
     {
 		exit_status = 0;
@@ -51,6 +55,7 @@ int	ft_exit(t_shell *shell)
 	exit(exit_status);
 	return (0);
 }
+
 
 // int main(int argc, char *argv[])
 // {

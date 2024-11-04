@@ -1,0 +1,6 @@
+Line 1
+Line 1
+Line 1
+Line 1
+Line 1 | sort | uniq
+Line 1 | sort | uniq
