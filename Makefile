@@ -1,6 +1,6 @@
 CFLAGS = -Wall -Wextra -Werror 
 
-CC = cc #-fsanitize=address -g3
+CC = cc #-fs+anitize=address -g3
 LFLAGS = -lreadline
 NAME = minishell
 
@@ -17,9 +17,10 @@ SRCS  = $(wildcard externel_folder/libftt/*.c) \
         execution/builtins/exit/exit.c \
         execution/builtins/pwd/pwd.c \
         execution/builtins/unset/unset.c \
-        execution/builtins/builtins.c \
 	  	execution/builtins/export/export.c \
         mnsh.c \
+        execution/executing.c \
+        execution/builtins/builtins.c \
         # $(wildcard execution/*.c) \
 
 OBJS = $(SRCS:.c=.o)

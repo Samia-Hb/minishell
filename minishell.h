@@ -32,6 +32,14 @@
 # define SIGQUIT 3
 # define SIGTERM 15
 
+// typedef struct s_mini
+// {
+//     t_envi *env;
+//     t_shell *shell;
+//     char **ptr;
+//     char **arr;
+// }t_mini;
+
 typedef enum
 {
 	TOKEN_TILDLE,
@@ -50,7 +58,17 @@ typedef enum
 	TOKEN_BUILT_IN,
 	TOKEN_ARGUMENT,
 	TOKEN_UNKNOWN
-}					TokenType;
+}
+					TokenType;
+typedef enum
+{
+	PIPE,
+	RE_OUT,
+	RE_IN,
+	RE_HEREDOC,
+	RE_APPEND,
+	UNKOWN
+}					t_type;
 
 typedef struct token
 {
@@ -70,21 +88,13 @@ typedef struct s_file
 
 typedef struct s_cmd
 {
+	t_type			type;
 	char			**arguments;
 	t_file			*file;
 	struct s_cmd	*prev;
 	struct s_cmd	*next;
 }					t_cmd;
 
-typedef enum
-{
-	PIPE,
-	RE_OUT,
-	RE_IN,
-	RE_HEREDOC,
-	RE_APPEND,
-	UNKOWN
-}					t_type;
 
 Token				**tokenize(char *input);
 char				*handle_quote(char *str);
@@ -137,6 +147,11 @@ void				push_t_file(t_file **head, t_file *node);
 void				free_token(Token *token);
 
 ///////////////////// execution /////////////////////////
+typedef struct s_shell
+{
+	int				exit_status;
+	char			**args;
+}					t_shell;
 
 typedef struct s_env
 {
@@ -146,25 +161,6 @@ typedef struct s_env
 	struct s_env	*prv;
 }					t_envi;
 
-typedef struct s_pipe
-{
-	int				write_end;
-	int				read_end;
-}					t_pipe;
-
-// typedef struct  s_exec
-// {
-//     char **args;
-//     char
-
-// }       t_exec;
-
-// exit
-typedef struct s_shell
-{
-	int				exit_status;
-	char			**args;
-}					t_shell;
 
 typedef struct s_mini
 {
@@ -172,9 +168,10 @@ typedef struct s_mini
 	t_shell			*shell;
 	char			**ptr;
 	char			**arr;
+	int				last_exit_status;
 }					t_mini;
 
-int					builtins(char **av, t_mini *box);
+// int					builtins(char **av, t_mini *box);
 int					is_builtin(char *cmd);
 void				ft_putstr_fd(char *str, int fd);
 int					ft_cd(char **ptr, t_envi *envi);
@@ -190,8 +187,42 @@ int					ft_export(char **ptr, t_envi *env);
 int					ft_pwd(t_envi *env);
 int					ft_exit(t_shell *shell);
 int					ft_env(t_envi *env);
+/////////////////////////////builtins///////////////////////////
+
+int	ft_cd(char **ptr, t_envi *envi);
+void	update_env(t_envi *envi);
+t_envi	*search_env(t_envi *envi, char *name);
+int ft_echo(char **args);
+int first_non_option(char **args);
+int is_n_option(char *arg);
+int	ft_export(char **ptr, t_envi *env);
+int	add_one(char **ptr, t_envi *env);
+int	process_single_env(char *ptr_i, t_envi *env);
+int	process_single_env(char *ptr_i, t_envi *env);
+int	process_single_env(char *ptr_i, t_envi *env);
+int	ft_unset(char **ptr, t_mini *box);
+void	ft_remove(t_mini *box);
+// int	ft_pwd(t_envi *env);
+int	ft_exit(t_shell *shell);
+int	ft_env(t_envi *env);
+int count_pipes(t_cmd *cmd_list);
 
 // extenal command
+void check_pipeline(t_cmd *cmd);
+int exec_builtin(int builtin_index, char **arguments, t_mini *box);
+int check_builtin(char *cmd);
+char *get_cmd_path(char *cmd, t_envi *env);
+int count_env_vars(t_envi *env);
+void handle_redirections(t_cmd *cmd);
+char **convert_env_to_array(t_envi *env);
+void execute_single_builtin(t_cmd *cmd, t_mini *box, int builtin_index);
+int count_env_vars(t_envi *env);
+
+void execute_pipeline(t_cmd *cmd_list, t_mini *box);
+void execute_single_command(t_cmd *cmd);
+void	execute_command(t_cmd *cmd, t_mini *box);
+void	execute_single_builtin(t_cmd *cmd, t_mini *box, int builtin_index);
+char *get_cmd_path(char *cmd, t_envi *env);
 char				**separate_env(t_envi *env);
 char				**get_path(void);
 int					count_arguments(char **arguments);
@@ -201,5 +232,5 @@ ssize_t				calc_len(char *s, t_mini *box);
 char				*expand_var(char *s, ssize_t *i, t_mini *box);
 int					is_identifier(int c);
 int					is_identifier(int c);
-
+void execute_pipe(t_cmd *cmd, t_mini *box);
 #endif
