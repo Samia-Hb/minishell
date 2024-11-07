@@ -255,7 +255,7 @@ void execute_command(t_cmd *cmd, t_mini *box)
         char *path = get_cmd_path(cmd->arguments[0], box->env);
         if (!path)
         {
-            fprintf(stderr, "Command not found: %s\n", cmd->arguments[0]);
+           perror("error");
             return;
         }
         if (pid == 0)
