@@ -6,13 +6,13 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 13:36:37 by shebaz            #+#    #+#             */
-/*   Updated: 2024/10/31 19:06:07 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/07 13:44:39 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-void	handle_operators(char *input, Token **tokens, int *j, int *k)
+void	handle_operators(char *input, t_token **tokens, int *j, int *k)
 {
 	char	*str1;
 	char	*str2;
@@ -28,14 +28,10 @@ void	handle_operators(char *input, Token **tokens, int *j, int *k)
 	}
 	else
 		add_token(tokens, get_token_type(str1, 0), str1, j);
-	if (str1)
-		free(str1);
-	if (str2)
-		free(str2);
 	*k = 0;
 }
 
-void	handle_word(char *input, Token **tokens, int *j, int *k)
+void	handle_word(char *input, t_token **tokens, int *j, int *k)
 {
 	int		token_type;
 	char	*word;
@@ -48,8 +44,6 @@ void	handle_word(char *input, Token **tokens, int *j, int *k)
 		if (input[i] == '"' || input[i] == '\'')
 		{
 			str = handle_quote(input + i);
-			if (!str)
-				return ;
 			i += ft_strlen(str);
 		}
 		i++;
@@ -64,7 +58,6 @@ void	handle_word(char *input, Token **tokens, int *j, int *k)
 	}
 	else
 		add_token(tokens, TOKEN_ARGUMENT, word, j);
-	free(word);
 }
 
 int	is_ope(char *input)
@@ -78,7 +71,7 @@ int	is_ope(char *input)
 	return (0);
 }
 
-void	processing_data(Token **tokens, char *input, int *i, int *k)
+void	processing_data(t_token **tokens, char *input, int *i, int *k)
 {
 	char	*word;
 
@@ -98,19 +91,17 @@ void	processing_data(Token **tokens, char *input, int *i, int *k)
 		handle_operators(input + (*i), tokens, i, k);
 	else
 		handle_word(input + (*i), tokens, i, k);
-	if (word)
-		free(word);
 }
 
-Token	**tokenize(char *input)
+t_token	**tokenize(char *input)
 {
-	Token	**tokens;
+	t_token	**tokens;
 	int		i;
 	int		k;
 
 	i = 0;
 	k = 0;
-	tokens = (Token **)malloc(sizeof(Token *));
+	tokens = (t_token **)ft_malloc(sizeof(t_token *), 1);
 	if (!tokens)
 	{
 		printf("Error: Memory allocation failed\n");

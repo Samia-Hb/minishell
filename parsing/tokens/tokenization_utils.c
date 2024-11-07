@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 13:36:28 by shebaz            #+#    #+#             */
-/*   Updated: 2024/10/31 15:37:34 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/06 16:06:07 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	get_token_type(const char *token, char c)
 	if (built_in_checker(token))
 		return (TOKEN_BUILT_IN);
 	if (path)
-		return (free(path), TOKEN_COMMAND);
+		return (TOKEN_COMMAND);
 	if (!ft_strcmp(token, "<<"))
 		return (TOKEN_REDIR_HERE_DOC);
 	if (!ft_strcmp(token, ">"))
@@ -55,7 +55,7 @@ char	*char_to_string(char c, char c2)
 
 	if (!c2)
 	{
-		string = malloc(2 * sizeof(char));
+		string = ft_malloc(sizeof(char), 2);
 		if (!string)
 		{
 			printf("Error: memory allocation failed\n");
@@ -65,7 +65,7 @@ char	*char_to_string(char c, char c2)
 		string[1] = '\0';
 		return (string);
 	}
-	string = malloc(3 * sizeof(char));
+	string = ft_malloc(sizeof(char), 3);
 	if (!string)
 	{
 		printf("Error: memory allocation failed\n");
@@ -107,7 +107,7 @@ char	*handle_dollar(char *str)
 	i = 0;
 	while (str[i] && !isspace(str[i]))
 		i++;
-	word = (char *)malloc(i + 1);
+	word = ft_malloc(sizeof(char), i + 1);
 	if (!word)
 		return (NULL);
 	word = strncpy(word, str, i);

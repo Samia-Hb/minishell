@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 20:24:14 by shebaz            #+#    #+#             */
-/*   Updated: 2024/10/26 20:33:41 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/06 21:32:26 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	error_handling(int exit_status)
 	exit(exit_status);
 }
 
-Token	*get_last_token(Token *token)
+t_token	*get_last_token(t_token *token)
 {
 	if (token == NULL)
 		return (NULL);
@@ -48,7 +48,7 @@ int	check_quote(char *str, char c)
 	return (0);
 }
 
-int	handle_quotes(Token *tokens)
+int	handle_quotes(t_token *tokens)
 {
 	while (tokens)
 	{
@@ -63,9 +63,9 @@ int	handle_quotes(Token *tokens)
 	return (0);
 }
 
-int	handle_paren(Token *token)
+int	handle_paren(t_token *token)
 {
-	Token	*current;
+	t_token	*current;
 	int		open_parentheses;
 
 	current = token;

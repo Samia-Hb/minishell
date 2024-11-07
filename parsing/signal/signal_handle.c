@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 20:40:55 by shebaz            #+#    #+#             */
-/*   Updated: 2024/10/26 20:40:56 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/06 21:21:56 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ void	handle_ctrl_c(void)
 
 void	handle_ctrl_d(void)
 {
+	clean_gc();
 	exit(127);
 }
 

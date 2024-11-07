@@ -6,17 +6,17 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 13:37:34 by shebaz            #+#    #+#             */
-/*   Updated: 2024/10/28 12:07:48 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/06 21:28:57 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-Token	*create_token(TokenType type, const char *value)
+t_token	*create_token(TokenType type, const char *value)
 {
-	Token	*token;
+	t_token	*token;
 
-	token = malloc(sizeof(Token));
+	token = ft_malloc(sizeof(t_token), 1);
 	if (!token)
 	{
 		printf("Error: Memory allocation failed\n");
@@ -28,10 +28,10 @@ Token	*create_token(TokenType type, const char *value)
 	return (token);
 }
 
-void	add_token(Token **tokens, TokenType type, char *value, int *k)
+void	add_token(t_token **tokens, TokenType type, char *value, int *k)
 {
-	Token	*new_node;
-	Token	*ptr;
+	t_token	*new_node;
+	t_token	*ptr;
 
 	ptr = *tokens;
 	new_node = create_token(type, value);
@@ -71,7 +71,7 @@ char	*handle_parentheses(char *str, char c)
 			i++;
 		j++;
 	}
-	word = malloc(j + 1);
+	word = ft_malloc(sizeof(char), j + 1);
 	if (!word)
 	{
 		printf("Error: memory allocation failed\n");
@@ -92,7 +92,7 @@ char	*handle_quote(char *str)
 
 	i = 0;
 	j = 0;
-	word = malloc(ft_strlen(str) + 1);
+	word = ft_malloc(sizeof(char), ft_strlen(str) + 1);
 	quote = str[i];
 	while (str[i] && !ft_is_separator(str[i]))
 	{

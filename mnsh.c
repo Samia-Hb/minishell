@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 15:53:32 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/02 16:24:54 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/07 15:55:20 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 
 t_shell *init_shell()
 {
-    t_shell *shell = malloc(sizeof(t_shell));
+    t_shell *shell = ft_malloc(sizeof(t_shell), 1);
     if (!shell)
     {
         perror("malloc");
@@ -52,8 +52,7 @@ t_envi *init_env(char **envp)
             i++;
             continue;
         }
-
-        new_node = malloc(sizeof(t_envi));
+        new_node = ft_malloc(sizeof(t_envi), 1);
         if (!new_node)
         {
             perror("malloc");
@@ -81,78 +80,46 @@ t_envi *init_env(char **envp)
     }
     return env_list;
 }
-// void	print_cmd(t_cmd *cmd)
-// {
-// 	int	i;
+void	print_cmd(t_cmd *cmd)
+{
+	int	i;
 
-// 	i = 0;
-// 	while (cmd)
-// 	{
-// 		printf("=======Arguments=======\n");
-// 		if (cmd->arguments)
-// 		{
-// 			i = 0;
-// 			while (cmd->arguments[i])
-// 			{
-// 				printf("arg[%d] == %s\n", i, cmd->arguments[i]);
-// 				i++;
-// 			}
-// 		}
-// 		if (cmd->file)
-// 		{
-// 			while (cmd->file)
-// 			{
-// 				printf("filename == %s\n", cmd->file->filename);
-// 				cmd->file = cmd->file->next;
-// 			}
-// 		}
-// 		cmd = cmd->next;
-// 	}
-// }
-
-
-
-// #include "minishell.h"
-
-// int main()
-// {
-//     char *input;
-//     Token **tokens;
-//     t_cmd *cmd;
-
-//     tokens = NULL;
-//     while (1)
-//     {
-//         handle_signal();
-//         input = readline("minishell > ");
-//         if (!input)
-//             break;
-//         add_history(input);
-//         tokens = tokenize(input);
-//         if (check_syntax_errors(*tokens))
-//             continue;
-//         if (!expand(*tokens))
-//             return 0;
-//         cmd = analyse_tokens(tokens);
-//         if (cmd)
-//             execute_command(cmd, box); // Pass the t_mini variable to execute_commands
-//         // print_cmd(cmd);
-//     }
-//     return 0;
-// }
-
+	i = 0;
+	while (cmd)
+	{
+		printf("=======Arguments=======\n");
+		if (cmd->arguments)
+		{
+			i = 0;
+			while (cmd->arguments[i])
+			{
+				printf("arg[%d] == %s\n", i, cmd->arguments[i]);
+				i++;
+			}
+		}
+		if (cmd->file)
+		{
+			while (cmd->file)
+			{
+				printf("filename == %s\n", cmd->file->filename);
+				cmd->file = cmd->file->next;
+			}
+		}
+		cmd = cmd->next;
+	}
+}
 
 int main(int argc, char **argv, char **envp)
 {
-    (void)argc;
-    (void)argv;
     char *input;
-    Token **tokens;
+    t_token **tokens;
     t_cmd *cmd;
     t_mini *box;
+    (void)argc;
+    (void)argv;
 
     tokens = NULL;
-    box = malloc(sizeof(t_mini));
+    box = ft_malloc(sizeof(t_mini), 1);
     if (!box)
     {
         perror("malloc");
@@ -163,42 +130,24 @@ int main(int argc, char **argv, char **envp)
     box->ptr = NULL;
     box->arr = NULL;
     box->last_exit_status = 0;
-
     while (1)
     {
         handle_signal();
-        input = readline("minishell > ");
-        if (!input)
-            break;
-        add_history(input);
-        tokens = tokenize(input);
-        if (!tokens)
-        {
-            fprintf(stderr, "Tokenization failed\n");
-            free(input);
-            continue;
-        }
-        if (check_syntax_errors(*tokens))
-        {
-            fprintf(stderr, "Syntax errors found\n");
-            free(input);
-            continue;
-        }
-        if (!expand(*tokens))
-        {
-            fprintf(stderr, "Expansion failed\n");
-            free(input);
-            return 0;
-        }
-        cmd = analyse_tokens(tokens);
-        if (!cmd)
-        {
-            fprintf(stderr, "Token analysis failed\n");
-            free(input);
-            continue;
-        }
-        execute_command(cmd, box); // Pass the t_mini variable to execute_commands
+		input = readline("minishell > ");
+		if (!input)
+			break ;
+		if (!ft_strlen(input))
+			continue ;
+		add_history(input);
+		tokens = tokenize(input);
+		if (check_syntax_errors(*tokens))
+			continue ;
+		if (!expand(*tokens))
+			continue;
+		cmd = analyse_tokens(tokens);
+        execute_command(cmd, box);
         free(input);
+        // clean_gc();
     }
     return 0;
 }

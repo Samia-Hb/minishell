@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 19:19:37 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/02 15:33:22 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/07 14:14:16 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,21 +18,22 @@ char	*get_word_to_expand(char *str, int *j)
 	int		i;
 	int		k;
 	int		length;
-	
+
 	i = 0;
 	while (str[*j] == '$')
 		(*j)++;
 	k = *j;
-	while (str[*j] && ((str[*j] <= 'z' && str[*j] >= 'a') || (str[*j] <= 'Z'
-				&& str[*j] >= 'A') || (str[*j] >= '0' && str[*j] <= '9')))
+	while (str[*j] && !is_special(str[*j]))
 		(*j)++;
 	length = (*j) - k;
-	word = malloc(length + 1);
+	word = ft_malloc(sizeof(char), length + 1);
 	if (!word)
 		return (NULL);
 	while (i < length)
 		word[i++] = str[k++];
-	word[i] = '\0';	
+	word[i] = '\0';
+	if (!word)
+		word = ft_strdup("");
 	return (word);
 }
 
@@ -81,8 +82,6 @@ char	*get_output(char *input)
 		}
 		i++;
 	}
-	if (str)
-		free(str);
 	return (ft_strndup(input, i));
 }
 
@@ -111,7 +110,5 @@ void	add_quote(char *input, char **expanded_value, int *j)
 	i = 0;
 	result = char_to_string(input[i], 0);
 	*expanded_value = ft_strjoin(*expanded_value, result);
-	if (result)
-		free(result);
 	(*j)++;
 }

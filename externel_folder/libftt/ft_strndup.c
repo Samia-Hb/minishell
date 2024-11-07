@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 20:54:45 by shebaz            #+#    #+#             */
-/*   Updated: 2024/10/28 10:43:51 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/06 16:09:36 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ char	*ft_strndup(const char *s1, int n)
 	int		i;
 
 	i = 0;
-	s2 = (char *)malloc(n + 1);
+	s2 = (char *)ft_malloc(sizeof(char), n + 1);
 	if (s2 == NULL)
 	{
 		return (NULL);

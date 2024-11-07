@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 19:07:59 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/01 13:04:29 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/06 22:16:06 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,22 +28,21 @@ void	push_back(t_cmd **lst, t_cmd *node)
 	}
 }
 
-int	is_red(Token *token)
+int	is_red(t_token *token)
 {
 	if (token->type == TOKEN_REDIR_APPEND || token->type == TOKEN_REDIR_IN
-		|| token->type == TOKEN_REDIR_OUT || token->type == TOKEN_REDIR_HERE_DOC)
+		|| token->type == TOKEN_REDIR_OUT
+		|| token->type == TOKEN_REDIR_HERE_DOC)
 		return (1);
 	return (0);
 }
 
-int	nbr_argument(Token *tokens)
+int	nbr_argument(t_token *tokens)
 {
 	int	nbr;
 	int	i;
-	int j;
 
 	nbr = 0;
-	j = 0;
 	while (tokens && tokens->type != TOKEN_PIPE)
 	{
 		i = 0;
@@ -54,20 +53,11 @@ int	nbr_argument(Token *tokens)
 				i++;
 				nbr++;
 			}
-			tokens = tokens->next;
 		}
-		if (tokens && is_red(tokens))
-		{
+		else if (tokens && is_red(tokens))
 			tokens = tokens->next;
-			tokens = tokens->next;
-			while(nbr && j < 2)
-			{
-				nbr--;
-				i++;
-			}
-		}
+		tokens = tokens->next;
 	}
-	// printf("nbr = %d \n", nbr);
 	return (nbr);
 }
 
@@ -87,7 +77,7 @@ void	push_t_file(t_file **head, t_file *node)
 	}
 }
 
-int	get_red_type(Token *token)
+int	get_red_type(t_token *token)
 {
 	if (token->type == TOKEN_REDIR_IN)
 		return (RE_IN);

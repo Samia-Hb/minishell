@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 15:39:23 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/02 16:51:37 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/07 14:47:43 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,12 +72,12 @@ typedef enum
 
 typedef struct token
 {
-	TokenType		type;
-	char			*value;
-	char			**expanded_value;
-	struct token	*next;
-	struct token	*previous;
-}					Token;
+	TokenType					type;
+	char						*value;
+	char						**expanded_value;
+	struct token				*next;
+	struct token				*previous;
+}								t_token;
 
 typedef struct s_file
 {
@@ -95,56 +95,80 @@ typedef struct s_cmd
 	struct s_cmd	*next;
 }					t_cmd;
 
+typedef struct garbage_collector
+{
+	void						*ptr;
+	struct garbage_collector	*next;
+}								t_gc;
 
-Token				**tokenize(char *input);
-char				*handle_quote(char *str);
-int					is_quoted(char *input);
-char				*expand_non_operator(char *token);
-int					built_in_checker(const char *str);
-void				add_token(Token **tokens,
-						TokenType type, char *value, int *k);
-char				*get_executable(char *command);
-char				*process_delimiter(char *tmp);
-void				handle_heredoc(Token **tokens, char *input, int *i);
-void				heredoc_process(t_cmd **node, t_file **head ,Token **tokens);
-char				*tidle_expansion(int *i);
-char				*dollar_expand(char *input, int *i);
-char				**result_traitement(char *input);
-char				*get_string(char *input, int *i);
-int					get_size(char **arr);
-int					get_size_arr(char *input);
-char 				*parse_line(char *input);
-char				**handle_that_shit(char *input);
-char				**unquoted_result(char **input);
-char				*get_word_to_expand(char *str, int *j);
-void				add_quote(char *input, char **expanded_value, int *j);
-int					is_operator(Token *node);
-int					is_operand(Token *node);
-int					handle_consecutive_operator(Token *tokens);
-int					handle_paren(Token *token);
-int					handle_quotes(Token *tokens);
-int					check_token(char *str, char c);
-Token				*get_last_token(Token *token);
-int					handle_operators_bg_en(Token *tokens);
-int					check_syntax_errors(Token *tokens);
-char				quote_type(const char *str);
-char				*char_to_string(char c, char c2);
-int					get_token_type(const char *token, char c);
-void				handle_signal(void);
-void				handle_ctrl_d(void);
-void				handle_ctrl_c(void);
-int					expand(Token *tokens);
-t_cmd				*analyse_tokens(Token **tokens);
-void				handle_ctrl_c(void);
-void				handle_ctrl_d(void);
-int					ft_is_separator(char c);
-void				print_cmd(t_cmd *cmd);
-int					is_red(Token *token);
-int					get_red_type(Token *token);
-int					nbr_argument(Token *tokens);
-void				push_back(t_cmd **lst, t_cmd *node);
-void				push_t_file(t_file **head, t_file *node);
-void				free_token(Token *token);
+typedef struct global
+{
+	int 	exit_status;
+	t_gc	*head;
+}globalvar;
+
+extern globalvar var;
+
+t_token							**tokenize(char *input);
+char							*handle_quote(char *str);
+int								is_special(char c);
+int								dollar_counter(char *input);
+char							*single_quote_expansion(char *input, int *i);
+char							*double_quote_expansion(char *input, int *i);
+int								is_quoted(char *input);
+char							*expand_non_operator(char *token);
+int								built_in_checker(const char *str);
+void							add_token(t_token **tokens, TokenType type,
+									char *value, int *k);
+char							*get_executable(char *command);
+char							*get_inside_quote(char *tmp, int *i, int *j);
+char							*process_delimiter(char *tmp);
+void							handle_heredoc(t_token **tokens, char *input,
+									int *i);
+void							heredoc_process(t_cmd **node, t_file **head,
+									t_token **tokens);
+char							*tidle_expansion(int *i);
+void							fill_up_node(t_cmd **node, t_token **tokens, t_file *head);
+char							*dollar_expand(char *input, int *i);
+void							go_to_next(t_token **tokens);
+char							**result_traitement(char *input);
+char							*get_string(char *input, int *i);
+int								get_size(char **arr);
+int								get_size_arr(char *input);
+char							*parse_line(char *input);
+char							**handle_that_shit(char *input);
+char							**unquoted_result(char **input);
+char							*get_word_to_expand(char *str, int *j);
+void							add_quote(char *input, char **expanded_value,
+									int *j);
+int								is_operator(t_token *node);
+int								is_operand(t_token *node);
+int								handle_consecutive_operator(t_token *tokens);
+int								handle_paren(t_token *token);
+int								handle_quotes(t_token *tokens);
+int								check_token(char *str, char c);
+t_token							*get_last_token(t_token *token);
+int								handle_operators_bg_en(t_token *tokens);
+int								check_syntax_errors(t_token *tokens);
+char							quote_type(const char *str);
+char							*char_to_string(char c, char c2);
+int								get_token_type(const char *token, char c);
+void							handle_signal(void);
+void							handle_ctrl_d(void);
+void							handle_ctrl_c(void);
+int								expand(t_token *tokens);
+t_cmd							*analyse_tokens(t_token **tokens);
+void							handle_ctrl_c(void);
+void							handle_ctrl_d(void);
+int								ft_is_separator(char c);
+void							print_cmd(t_cmd *cmd);
+int								is_red(t_token *token);
+int								get_red_type(t_token *token);
+int								nbr_argument(t_token *tokens);
+void							push_back(t_cmd **lst, t_cmd *node);
+void							push_t_file(t_file **head, t_file *node);
+void							*ft_malloc(size_t size, int ele_nbr);
+void							clean_gc(void);
 
 ///////////////////// execution /////////////////////////
 typedef struct s_shell
