@@ -1,365 +1,368 @@
 #include "../minishell.h"
 
-void handle_redirections(t_cmd *cmd)
+void validate_cmd(t_cmd *cmd) 
 {
-    t_file *file = cmd->file;
-    while (file)
-    {
-        int fd;
-        if (file->type == RE_IN)
-            fd = open(file->filename, O_RDONLY);
-        else if (file->type == RE_OUT)
-            fd = open(file->filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-        else if (file->type == RE_APPEND)
-            fd = open(file->filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
-        else
-            file = file->next;
-        if (fd < 0)
-        {
-            perror("Error opening file ");
-            exit(EXIT_FAILURE);
-        }
-        if (file->type == RE_IN)
-            dup2(fd, STDIN_FILENO);
-        else
-            dup2(fd, STDOUT_FILENO);
-
-        close(fd);
-        file = file->next;
-    }
+    if (ft_strchr(cmd->arguments[0], '/'))
+        check_cmd_path(cmd);
+    else
+        check_command_name(cmd);
 }
 
-int count_env_vars(t_envi *env)
+int count_commands(t_cmd *cmd)
 {
     int count = 0;
-    while (env)
+    t_cmd *current = cmd;
+    while(current)
     {
         count++;
-        env = env->next;
+        current = current->next;
     }
     return count;
 }
 
-char **separate_env(t_envi *env)
+char *allocate_folders(char *path, int i) 
 {
-    int count = 0;
-    t_envi *tmp = env;
-    while (tmp)
+    char *folders = malloc(i + 2);
+    if (!folders)
     {
-        count++;
-        tmp = tmp->next;
+        perror("malloc failed");
+        exit(1);
     }
-    char **the_env = malloc(sizeof(char *) * (count + 1));
-    if (!the_env)
+    my_strncpy(folders, path, i + 1);
+    return folders;
+}
+
+void check_cmd_path(t_cmd *cmd) 
+{
+    struct stat statbuf;
+    if (stat(cmd->arguments[0], &statbuf) == 0) 
     {
-        perror("Error allocating memory");
-        return NULL;
-    }
-    int i = 0;
-    while (env)
-    {
-        size_t name_len = ft_strlen(env->name);
-        size_t value_len = ft_strlen(env->vale);
-        the_env[i] = malloc(name_len + value_len + 2);
-        if (!the_env[i])
+        if (S_ISREG(statbuf.st_mode) && (statbuf.st_mode & S_IXUSR)) 
         {
-            perror("Error allocating memory for environment variable string");
-            return NULL;
+            cmd->cmd_path = cmd->arguments[0];
+        } 
+        else 
+        {
+            ft_putstr_fd("minishell: ", 2);
+            ft_putstr_fd(cmd->arguments[0], 2);
+            ft_putstr_fd(": Permission denied\n", 2);
+            g_var.exit_status = 1;
         }
-        strcpy(the_env[i], env->name);
-        the_env[i][name_len] = '=';
-        strcpy(the_env[i] + name_len + 1, env->vale);
-        env = env->next;
+    }
+    else 
+    {
+        ft_putstr_fd("minishell: ", 2);
+        ft_putstr_fd(cmd->arguments[0], 2);
+        ft_putstr_fd(": No such file or directory\n", 2);
+        g_var.exit_status = 1;
+    }
+}
+
+void my_strncpy(char *dest, const char *src, size_t n) 
+{
+    size_t i = 0;
+    while (i < n && src[i] != '\0') 
+    {
+        dest[i] = src[i];
         i++;
     }
-    the_env[i] = NULL;
-    return the_env;
-}
-
-void execute_single_builtin(t_cmd *cmd, t_mini *box, int builtin_index)
-{
-    handle_redirections(cmd);  
-    int status = exec_builtin(builtin_index, cmd->arguments, box);
-    exit(status); 
-}
-
-void execute_pipeline(t_cmd *cmd_list, t_mini *box)
-{
-    int pipe_fd[2], in_fd = STDIN_FILENO;
-    t_cmd *current = cmd_list;
-
-    while (current)
+    while (i < n) 
     {
-        if (current->next)
-        {
-            if (pipe(pipe_fd) < 0)
-            {
-                perror("Pipe error");
-                exit(EXIT_FAILURE);
-            }
-        }
-        pid_t pid = fork();
-        if (pid < 0)
-        {
-            perror("Fork error");
-            exit(EXIT_FAILURE);
-        }
-        else if (pid == 0)
-        {
-            if (in_fd != STDIN_FILENO)
-            {
-                dup2(in_fd, STDIN_FILENO);
-                close(in_fd);
-            }
-            if (current->next)
-            {
-                dup2(pipe_fd[1], STDOUT_FILENO);
-                close(pipe_fd[0]);
-                close(pipe_fd[1]);
-            }
-            handle_redirections(current);
-            execute_command(current, box);
-            exit(EXIT_SUCCESS); 
-        }
-        close(in_fd);
-        if (current->next)
-        {
-            close(pipe_fd[1]);
-            in_fd = pipe_fd[0];
-        }
-        current = current->next;
-    }
-    int status;
-    while (wait(&status) > 0)
-    {
-        if (WIFEXITED(status))
-            box->last_exit_status = WEXITSTATUS(status);
+        dest[i] = '\0';
+        i++;
     }
 }
 
-int check_builtin(char *cmd)
+int check_path(char *path, int builtin)
 {
-    if(strcmp(cmd, "cd") == 0)
-        return 0;
-    else if(strcmp(cmd, "echo") == 0)
+    struct stat statbuf;
+    int i;
+
+    if (builtin) 
         return 1;
-    else if(strcmp(cmd, "pwd") == 0)
+
+    if (!ft_strchr(path, '/'))
+        return 1;
+    i = ft_strlen(path);
+    while (i != 0 && path[i] != '/')
+        i--;
+    char *folders = allocate_folders(path, i);
+    int status = (stat(folders, &statbuf) != -1);
+    free(folders);
+    return status;
+}
+
+void check_command_name(t_cmd *cmd)
+{
+    char *path_env = getenv("PATH");
+    char **path_dirs = ft_split(path_env, ':'); 
+    struct stat statbuf;
+    int i = 0;
+
+    while (path_dirs[i])
+    {
+        char *full_path = malloc(strlen(path_dirs[i]) + strlen(cmd->arguments[0]) + 2);
+        if (!full_path)
+        {
+            perror("malloc failed");
+            return;
+        }
+        strcpy(full_path, path_dirs[i]);
+        strcat(full_path, "/");
+        strcat(full_path, cmd->arguments[0]);
+
+        if (stat(full_path, &statbuf) == 0 && S_ISREG(statbuf.st_mode) && (statbuf.st_mode & S_IXUSR))
+        {
+            cmd->cmd_path = full_path; 
+            free(path_dirs);
+            return;
+        }
+
+        free(full_path);
+        i++;
+    }
+    ft_putstr_fd("minishell: command not found: ", 2);
+    ft_putstr_fd(cmd->arguments[0], 2);
+    ft_putstr_fd("\n", 2);
+    g_var.exit_status = 127;
+    free(path_dirs);
+}
+
+int check_file_errors(char *path, int builtin)
+{
+    if (path && (path[0] == '$' || (path[0] == '"' && path[1] == '$')))
+    {
+        g_var.red_error = 1;
+        g_var.exit_status = 1;
+        ft_putstr_fd("minishell: ", 2);
+        ft_putstr_fd(path, 2);
+        ft_putstr_fd(" ambiguous redirect\n", 2);
+        if (builtin)
+            return 1;
+        else
+            exit(1);
+    }
+    return 0;
+}
+
+void handle_file_redirections(t_cmd *cmd,int btn) 
+{
+    // path = cmd->file->filename;
+    files_redirections(cmd, btn != -1);
+    if (btn == -1)
+        validate_cmd(cmd);
+    else if (g_var.pre_pipe_infd != -1 && !cmd->file->type)
+        dup2(g_var.pre_pipe_infd, STDIN_FILENO);
+}
+
+void files_redirections(t_cmd *cmd, int builtin)
+{
+    t_file *curr_red = cmd->file;
+    // path = *curr_red->filename;
+    while (curr_red) 
+    {
+        if (check_file_errors(curr_red->filename, builtin))
+            return;
+        if (cmd->type == RE_IN)
+        {
+            if(builtin)
+                g_var.in_fd = open(curr_red->filename, O_RDONLY, 0644);
+            else
+                in_file_prep(curr_red->filename);
+        }
+        else if (cmd->type == RE_OUT)
+        {
+            if (builtin)
+                g_var.out_fd = open(curr_red->filename, O_CREAT | O_WRONLY | O_TRUNC, 0777);
+        }
+        else if (cmd->type == RE_APPEND)
+        {
+            if (builtin)
+                g_var.out_fd = open(curr_red->filename, O_CREAT | O_WRONLY | O_APPEND, 0777);
+            else
+                append_file_prep(curr_red->filename);
+        }
+        curr_red = curr_red->next;
+    }
+}
+
+void append_file_prep(char *path) 
+{
+    int fd = open(path, O_CREAT | O_WRONLY | O_APPEND, 0777);
+    if (fd == -1) 
+    {
+        perror(path);
+        exit(1);
+    } 
+    else 
+    {
+        dup2(fd, STDOUT_FILENO);
+        close(fd);
+    }
+}
+
+void in_file_prep(char *path) 
+{
+    int fd = open(path, O_RDONLY);
+    if (fd == -1)
+    {
+        perror(path);
+        exit(1);
+    } 
+    else 
+    {
+        dup2(fd, STDIN_FILENO);
+        close(fd);
+    }
+}
+
+void out_file_prep(char *path) 
+{
+    int fd = open(path, O_CREAT | O_WRONLY | O_TRUNC, 0777);
+    if (fd == -1)
+    {
+        perror(path);
+        exit(1);
+    } 
+    else
+    {
+        dup2(fd, STDOUT_FILENO);
+        close(fd);
+    }
+}
+
+int check_builtin(t_cmd *cmd)
+{
+    if (ft_strcmp(cmd->arguments[0], "cd") == 0)
+        return 1;
+    else if (ft_strcmp(cmd->arguments[0], "echo") == 0)
         return 2;
-    else if(strcmp(cmd, "exit") == 0)
+    else if (ft_strcmp(cmd->arguments[0], "env") == 0)
         return 3;
-    else if(strcmp(cmd, "export") == 0)
+    else if (ft_strcmp(cmd->arguments[0], "exit") == 0)
         return 4;
-    else if(strcmp(cmd, "env") == 0)
+    else if (ft_strcmp(cmd->arguments[0], "export") == 0)
         return 5;
-    else if(strcmp(cmd, "unset") == 0)
+    else if (ft_strcmp(cmd->arguments[0], "pwd") == 0)
         return 6;
     return -1;
 }
 
-char *get_cmd_path(char *cmd, t_envi *env)
+void exec_builtin(int btn, t_cmd *cmd, t_mini *box)
 {
-    char *path_env = NULL;
-    t_envi *current = env;
+    if (btn == 1 && !g_var.red_error)
+        ft_cd(cmd->arguments, box->env);
+    else if (btn == 2 && !g_var.red_error)
+        ft_echo(cmd->arguments);
+    else if (btn == 3 && !g_var.red_error)
+        ft_env(box->env);
+    else if (btn == 4 && !g_var.red_error)
+        ft_exit(box->shell);
+    else if (btn == 5 && !g_var.red_error)
+        ft_export(cmd->arguments, box->env);
+    else if (btn == 6 && !g_var.red_error)
+        ft_pwd(box->env);
 
-    while (current)
+    if (g_var.out_fd > 2)
+        close(g_var.out_fd);
+    g_var.out_fd = 1;
+}
+
+void child_process(t_cmd *cmd,int pipe_nb, int btn, t_mini *box) 
+{
+    // path = cmd->file->filename;
+    g_var.last_child_id = fork();
+    if (g_var.last_child_id == 0) 
     {
-        if (strcmp(current->name, "PATH") == 0)
-        {
-            path_env = current->vale;
-            break;
-        }
-        current = current->next;
+        if (g_var.pre_pipe_infd != -1)
+            dup2(g_var.pre_pipe_infd, STDIN_FILENO);
+        if (pipe_nb < g_var.size - 1 && cmd->pipe_fd[1] > 2)
+            dup2(cmd->pipe_fd[1], STDOUT_FILENO); 
+        handle_file_redirections(cmd,btn); 
+        execs(cmd, btn, box);
+        exit(0);
     }
+}
 
-    if (!path_env)
-        return NULL;
-
-    char **paths = ft_split(path_env, ':');
-    if (!paths)
-        return NULL;
-
-    char *full_path = NULL;
-    int i = 0;
-    while(paths[i])
+void execs(t_cmd *cmd, int btn, t_mini *box) 
+{
+    if (btn != -1)
     {
-        full_path = malloc(strlen(paths[i]) + strlen(cmd) + 2);
-        if (!full_path)
+        exec_builtin(btn, cmd, box);
+        exit(0);
+    }
+    else if (cmd->cmd_path)
+    {
+        execve(cmd->cmd_path, cmd->arguments, g_var.envp);
+        perror(cmd->cmd_path);
+        exit(errno);
+    }
+}
+
+void child(t_cmd *cmd, int pipe_nb,int btn,  t_mini *box)
+{
+    if(g_var.last_child_id == 0)
+    {
+        if(g_var.pre_pipe_infd != - 1)
+            dup2(g_var.pre_pipe_infd, STDIN_FILENO);
+        if(pipe_nb < g_var.size - 1 && cmd->pipe_fd[1] > 2)
+            dup2(cmd->pipe_fd[1], STDOUT_FILENO);
+        handle_file_redirections(cmd, btn);
+        execs(cmd, btn, box);
+        exit(0);        
+    }
+}
+
+void execute_pipes(t_cmd *cmd, int pipe_nb, t_mini *box) 
+{
+    int btn = check_builtin(cmd);
+    if (g_var.size == 1 && btn != -1) 
+    {
+        files_redirections(cmd, 1);
+        exec_builtin(btn, cmd, box);
+    }
+    else 
+    {
+        if (g_var.size != pipe_nb + 1 && pipe(cmd->pipe_fd) == -1) 
         {
-            int j = 0;
-            while(paths[j])
-            {
-                free(paths[j]);
-                j++;
-            }
-            free(paths);
-            return NULL;
+            perror("pipe");
+            exit(1);
         }
-        strcpy(full_path, paths[i]);
-        strcat(full_path, "/");
-        strcat(full_path, cmd);
-        if (access(full_path, X_OK) == 0)
-        {
-            int j = 0;
-            while(paths[j])
-            {
-                free(paths[j]);
-                j++;
-            }
-            free(paths);
-            return full_path;
-        }
-        free(full_path);
+        child_process(cmd, pipe_nb, btn, box); 
+        close(cmd->pipe_fd[1]);
+        g_var.pre_pipe_infd = cmd->pipe_fd[0];
+    }
+}
+
+
+void sig_wait(t_cmd *cmd)
+{
+    int status;
+    while (cmd)
+    {
+        waitpid(cmd->pid, &status, 0);
+        if (WIFSIGNALED(status))
+            g_var.exit_status = 128 + WTERMSIG(status);
+        if (WIFEXITED(status))
+            g_var.exit_status = WEXITSTATUS(status);
+        cmd = cmd->next;
+    }
+}
+
+void execute_arguments(t_cmd *cmd, t_mini *box)
+{
+    g_var.size = count_commands(cmd);
+    g_var.pipe_nb = g_var.size - 1;
+    int i = 0;
+    g_var.exit_status = 0;
+    g_var.pre_pipe_infd = -1;
+    while (cmd && g_var.exit_status == 0) 
+    {
+        execute_pipes(cmd, i, box);
+        cmd = cmd->next;
         i++;
     }
-    int j = 0;
-    while(paths[j])
-    {
-        free(paths[j]);
-        j++;
-    }
-    free(paths);
-    return NULL;
-}
-
-int exec_builtin(int builtin_index, char **arguments, t_mini *box)
-{
-    if (builtin_index == 0)
-        return (ft_cd(arguments, box->env));
-    else if (builtin_index == 1)
-        return(ft_echo(arguments));
-    else if (builtin_index == 2)
-        return(ft_pwd(box->env));
-    else if (builtin_index == 3)
-        return(ft_exit(box->shell));
-    else if (builtin_index == 4)
-        return(ft_export(arguments, box->env));
-    else if (builtin_index == 5)
-        return(ft_env(box->env));
-    else if (builtin_index == 6)
-        return(ft_unset(arguments, box));
-    return -1;
-}
-
-
-void check_pipeline(t_cmd *cmd)
-{
-    t_cmd *current = cmd;
-    int pipe_fd[2];
-    int in_fd = STDIN_FILENO;
-
-    while (current)
-    {
-        if (current->next)
-        {
-            if (pipe(pipe_fd) < 0)
-            {
-                perror("Pipe error");
-                exit(EXIT_FAILURE);
-            }
-        }
-        else
-        {
-            pipe_fd[0] = STDIN_FILENO;
-            pipe_fd[1] = STDOUT_FILENO;
-        }
-
-        pid_t pid = fork();
-        if (pid < 0)
-        {
-            perror("Fork error");
-            exit(EXIT_FAILURE);
-        }
-
-        if (pid == 0)
-        {
-            if (in_fd != STDIN_FILENO)
-            {
-                dup2(in_fd, STDIN_FILENO);
-                close(in_fd);
-            }
-            if (current->next)
-            {
-                dup2(pipe_fd[1], STDOUT_FILENO);
-                close(pipe_fd[1]);
-            }
-            close(pipe_fd[0]);
-            handle_redirections(current);
-            execute_command(current, NULL);
-            exit(EXIT_SUCCESS);
-        }
-        else
-        {
-            if (in_fd != STDIN_FILENO)
-                close(in_fd);
-            if (current->next)
-                close(pipe_fd[1]);
-            in_fd = pipe_fd[0];
-            current = current->next;
-        }
-    }
-}
-void execute_command(t_cmd *cmd, t_mini *box)
-{
-    if(cmd->next)
-    {
-        check_pipeline(cmd);
-        return;
-    }
-    int builtin_index = check_builtin(cmd->arguments[0]);
-        pid_t pid = fork();
-    if (builtin_index != -1)
-    {
-        if (pid == 0)
-        {
-            execute_single_builtin(cmd, box, builtin_index);
-            exit(EXIT_SUCCESS);
-        }
-        else
-        {
-            int status;
-            wait(&status);
-            box->last_exit_status = WEXITSTATUS(status);
-        }
-    }
-    else
-    {
-        char *path = get_cmd_path(cmd->arguments[0], box->env);
-        if (!path)
-        {
-            perror("error:command not found");
-            return;
-        }
-        if (pid == 0)
-        {
-            char **env_array = separate_env(box->env);
-            if (!env_array)
-            {
-                perror("Error converting environment variables");
-                exit(EXIT_FAILURE);
-            }
-            execve(path, cmd->arguments, env_array);
-            perror("execve error");
-            exit(EXIT_FAILURE);
-        }
-        else
-        {
-            int status;
-            wait(&status);
-            box->last_exit_status = WEXITSTATUS(status);
-        }
-    }
-}
-
-int count_pipes(t_cmd *cmd_list)
-{
-    int count = 0;
-    t_cmd *current = cmd_list;
-
-    while (current)
-    {
-        if (current->type == PIPE)
-            count++;
-        current = current->next;
-    }
-    return count;
+    if (g_var.pre_pipe_infd > 2)
+        close(g_var.pre_pipe_infd);
+    sig_wait(cmd);
 }

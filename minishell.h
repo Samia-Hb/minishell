@@ -24,10 +24,11 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
+#include <sys/stat.h>
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <unistd.h>
-
+#include <errno.h>
 # define SIGINT 2 
 # define SIGQUIT 3
 # define SIGTERM 15
@@ -70,6 +71,36 @@ typedef enum
 	UNKOWN
 }					t_type;
 
+typedef struct s_alst
+{
+	void *content;
+	struct s_alst *next;
+}t_alst;
+
+typedef struct s_shell
+{
+	int				exit_status;
+	char			**args;
+}					t_shell;
+
+typedef struct s_env
+{
+	char			*name;
+	char			*vale;
+	struct s_env	*next;
+	struct s_env	*prv;
+}					t_envi;
+
+
+typedef struct s_mini
+{
+	t_envi			*env;
+	t_shell			*shell;
+	char			**ptr;
+	char			**arr;
+	int				last_exit_status;
+}					t_mini;
+
 typedef struct token
 {
 	TokenType					type;
@@ -81,19 +112,40 @@ typedef struct token
 
 typedef struct s_file
 {
-	char			*filename;
-	int				type;
-	struct s_file	*next;
-}					t_file;
+    char *filename;
+    int type;
+    char *red; // The path of the redirection
+    struct s_file *next;
+} t_file;
 
 typedef struct s_cmd
 {
-	t_type			type;
-	char			**arguments;
-	t_file			*file;
-	struct s_cmd	*prev;
-	struct s_cmd	*next;
-}					t_cmd;
+    t_type type;
+    char **arguments;
+    t_file *file;
+    struct s_cmd *prev;
+    struct s_cmd *next;
+    char *cmd_path; // The path of the command
+    int pipe_fd[2];
+    int pid;
+} t_cmd;
+
+typedef struct s_var
+{
+	t_alst *alist;
+    int exit_status; // The exit status
+    t_mini *box;     // Need to access env
+    int out_fd;
+	int in_fd;
+    int red_error; //error  for redir
+    int pre_pipe_infd; // si il ya une commande avant le pipe
+    int last_child_id;
+    char **envp;
+	int pipe_nb; // the number of pipes 
+    int size; // the size of the command
+} t_var;
+
+extern t_var g_var; // Declare the global variable
 
 typedef struct garbage_collector
 {
@@ -171,29 +223,7 @@ void							*ft_malloc(size_t size, int ele_nbr);
 void							clean_gc(void);
 
 ///////////////////// execution /////////////////////////
-typedef struct s_shell
-{
-	int				exit_status;
-	char			**args;
-}					t_shell;
 
-typedef struct s_env
-{
-	char			*name;
-	char			*vale;
-	struct s_env	*next;
-	struct s_env	*prv;
-}					t_envi;
-
-
-typedef struct s_mini
-{
-	t_envi			*env;
-	t_shell			*shell;
-	char			**ptr;
-	char			**arr;
-	int				last_exit_status;
-}					t_mini;
 
 // int					builtins(char **av, t_mini *box);
 int					is_builtin(char *cmd);
@@ -229,32 +259,40 @@ void	ft_remove(t_mini *box);
 // int	ft_pwd(t_envi *env);
 int	ft_exit(t_shell *shell);
 int	ft_env(t_envi *env);
-int count_pipes(t_cmd *cmd_list);
+
 
 // extenal command
-void check_pipeline(t_cmd *cmd);
-int exec_builtin(int builtin_index, char **arguments, t_mini *box);
-int check_builtin(char *cmd);
-char *get_cmd_path(char *cmd, t_envi *env);
-int count_env_vars(t_envi *env);
-void handle_redirections(t_cmd *cmd);
-char **convert_env_to_array(t_envi *env);
-void execute_single_builtin(t_cmd *cmd, t_mini *box, int builtin_index);
-int count_env_vars(t_envi *env);
 
-void execute_pipeline(t_cmd *cmd_list, t_mini *box);
-void execute_single_command(t_cmd *cmd);
-void	execute_command(t_cmd *cmd, t_mini *box);
-void	execute_single_builtin(t_cmd *cmd, t_mini *box, int builtin_index);
-char *get_cmd_path(char *cmd, t_envi *env);
 char				**separate_env(t_envi *env);
 char				**get_path(void);
 int					count_arguments(char **arguments);
-int					handle_hd(char *delim, int expand, t_mini *box);
-char				*expand_doc(char *s, t_mini *box);
-ssize_t				calc_len(char *s, t_mini *box);
-char				*expand_var(char *s, ssize_t *i, t_mini *box);
-int					is_identifier(int c);
-int					is_identifier(int c);
+
 void execute_pipe(t_cmd *cmd, t_mini *box);
+
+
+////////////////////////////////new shell////////////////////////////////
+void validate_cmd(t_cmd *cmd);
+char *allocate_folders(char *path, int i);
+void check_cmd_path(t_cmd *cmd);
+void my_strncpy(char *dest, const char *src, size_t n);
+int check_path(char *path, int builtin);
+void check_command_name(t_cmd *cmd);
+void child_process(t_cmd *cmd, int pipe_nb, int btn, t_mini *box);
+void execute_arguments(t_cmd *cmd, t_mini *box);
+void sig_wait(t_cmd *cmd);
+void execute_pipes(t_cmd *cmd, int pipe_nb, t_mini *box);
+// void exec_builtin(int btn, t_cmd *cmd);
+// int check_builtin(t_cmd *cmd);
+void handle_file_redirections(t_cmd *cmd, int btn);
+void execs(t_cmd *cmd, int btn, t_mini *box);
+void files_redirections(t_cmd *cmd, int builtin);
+void append_file_prep(char *path);
+void out_file_prep(char *path);
+void in_file_prep(char *path);
+int check_file_errors(char *path, int builtin);
+// void handle_file_redirections(t_cmd *cmd, int btn);
+int check_builtin(t_cmd *cmd);
+int count_commands(t_cmd *cmd);
+
+
 #endif

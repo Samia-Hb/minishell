@@ -1,6 +1,9 @@
 #include "../../../minishell.h"
 #include "../../../externel_folder/libftt/libft.h"
 
+
+
+
 void ft_remove(t_mini *box)
 {
 	t_envi *curr;

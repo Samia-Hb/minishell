@@ -20,8 +20,8 @@ SRCS  = $(wildcard externel_folder/libftt/*.c) \
 	  	execution/builtins/export/export.c \
         mnsh.c \
         execution/executing.c \
-        execution/builtins/builtins.c \
-        # $(wildcard execution/*.c) \
+        # execution/builtins/builtins.c \
+        $(wildcard execution/*.c) \
 
 OBJS = $(SRCS:.c=.o)
 

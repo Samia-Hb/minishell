@@ -1,6 +1,17 @@
 #include "../../../minishell.h"
 #include "../../../externel_folder/libftt/libft.h"
 
+// t_envi	*search_env(t_envi *envi, char *name)
+// {
+// 	while (envi)
+// 	{
+// 		if (ft_strcmp(envi->name, name)==0)
+// 			return (envi);
+// 		envi = envi->next;
+// 	}
+// 	return (NULL);
+// }
+
 void	update_env(t_envi *envi)
 {
 	t_envi	*pwd;
