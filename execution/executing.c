@@ -165,15 +165,15 @@ void files_redirections(t_cmd *cmd, int builtin)
             return;
         if (cmd->type == RE_IN)
         {
-            // if(builtin)
-            //     g_var.in_fd = open(curr_red->filename, O_RDONLY, 0644);
-            // else
+            if(builtin)
+                g_var.in_fd = open(curr_red->filename, O_RDONLY, 0644);
+            else
                 in_file_prep(curr_red->filename);
         }
         else if (cmd->type == RE_OUT)
         {
-            // if (builtin)
-            //     g_var.out_fd = open(curr_red->filename, O_CREAT | O_WRONLY | O_TRUNC, 0777);
+            if (builtin)
+                g_var.out_fd = open(curr_red->filename, O_CREAT | O_WRONLY | O_TRUNC, 0777);
             out_file_prep(curr_red->filename);
         }
         else if (cmd->type == RE_APPEND)
