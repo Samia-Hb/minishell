@@ -12,18 +12,7 @@
 
 #include "minishell.h"
 
-void initilized_g_var()
-{
-	g_var = malloc(sizeof(t_globalvar));
-    g_var->exit_status = 0;
-    g_var->pre_pipe_infd = -1;
-    g_var->last_child_id = 0;
-    g_var->out_fd = -1;
-    g_var->red_error = 0;
-    g_var->envp = NULL;
-    g_var->size = 0;
-    g_var->pipe_nb = 0;
-}
+t_globalvar *g_var = NULL;
 
 t_shell *init_shell()
 {
@@ -95,39 +84,39 @@ t_envi *init_env(char **envp)
 
 void	print_cmd(t_cmd *cmd)
 {
-	int	i;
+    int	i;
 
-	i = 0;
-	while (cmd)
-	{
-		printf("=======Arguments=======\n");
-		if (cmd->arguments)
-		{
-			i = 0;
-			while (cmd->arguments[i])
-			{
-				printf("arg[%d] == %s\n", i, cmd->arguments[i]);
-				i++;
-			}
-		}
-		if (cmd->file)
-		{
-			while (cmd->file)
-			{
-				printf("filename == %s type == %d\n", cmd->file->filename,
-						cmd->file->type);
-				cmd->file = cmd->file->next;
-			}
-		}
-		cmd = cmd->next;
-	}
+    i = 0;
+    while (cmd)
+    {
+        printf("=======Arguments=======\n");
+        if (cmd->arguments)
+        {
+            i = 0;
+            while (cmd->arguments[i])
+            {
+                printf("arg[%d] == %s\n", i, cmd->arguments[i]);
+                i++;
+            }
+        }
+        if (cmd->file)
+        {
+            while (cmd->file)
+            {
+                printf("filename == %s type == %d\n", cmd->file->filename,
+                        cmd->file->type);
+                cmd->file = cmd->file->next;
+            }
+        }
+        cmd = cmd->next;
+    }
 }
 
 void	initiale_global(void)
 {
-	g_var = malloc(sizeof(t_globalvar));
-	g_var->exit_status = 0;
-	g_var->head = NULL;
+    g_var = malloc(sizeof(t_globalvar));
+    g_var->exit_status = 0;
+    g_var->head = NULL;
     g_var->pre_pipe_infd = -1;
     g_var->last_child_id = 0;
     g_var->out_fd = -1;
@@ -164,18 +153,18 @@ int main(int argc, char **argv, char **envp)
     while (1)
     {
         handle_signal();
-		input = readline("minishell > ");
-		if (!input)
-			break ;
-		if (!ft_strlen(input))
-			continue ;
-		add_history(input);
-		tokens = tokenize(input);
-		if (check_syntax_errors(*tokens))
-			continue ;
-		if (!expand(*tokens))
-			continue;
-		cmd = analyse_tokens(tokens);
+        input = readline("minishell > ");
+        if (!input)
+            break ;
+        if (!ft_strlen(input))
+            continue ;
+        add_history(input);
+        tokens = tokenize(input);
+        if (check_syntax_errors(*tokens))
+            continue ;
+        if (!expand(*tokens))
+            continue;
+        cmd = analyse_tokens(tokens);
         print_cmd(cmd);
         exit(1);
         execute_arguments(cmd, box);
