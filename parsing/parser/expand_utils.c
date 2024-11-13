@@ -6,13 +6,13 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 19:19:37 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/07 14:14:16 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/09 12:59:57 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-char	*get_word_to_expand(char *str, int *j)
+char	*get_word_to_expand(char *str, int *j, char **result)
 {
 	char	*word;
 	int		i;
@@ -34,6 +34,7 @@ char	*get_word_to_expand(char *str, int *j)
 	word[i] = '\0';
 	if (!word)
 		word = ft_strdup("");
+	case_function(str, result, j);
 	return (word);
 }
 
@@ -78,11 +79,11 @@ char	*get_output(char *input)
 		if (input[i] == '"' || input[i] == '\'')
 		{
 			str = handle_quote(input + i);
-			i += ft_strlen(str);
+			i += ft_strlen(str) - 1;
 		}
 		i++;
 	}
-	return (ft_strndup(input, i));
+	return (ft_strndup(input + k, i - k));
 }
 
 char	*get_string(char *input, int *i)

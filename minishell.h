@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 15:39:23 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/07 14:47:43 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/13 16:44:32 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,11 +141,10 @@ typedef struct s_var
     int pre_pipe_infd; // si il ya une commande avant le pipe
     int last_child_id;
     char **envp;
-	int pipe_nb; // the number of pipes 
+	int	pipe_nb; // the number of pipes 
     int size; // the size of the command
 } t_var;
 
-extern t_var g_var; // Declare the global variable
 
 typedef struct garbage_collector
 {
@@ -155,17 +154,36 @@ typedef struct garbage_collector
 
 typedef struct global
 {
-	int 	exit_status;
-	t_gc	*head;
-}globalvar;
+	int							exit_status;
+	int 						pre_pipe_infd;
+    int 						last_child_id;
+	int 						in_fd;
+    int 						out_fd;
+    int 						red_error;
+    char 						**envp;
+    int 						size;
+    int 						pipe_nb;
+	t_gc						*head;
 
-extern globalvar var;
+}								t_globalvar;
+
+extern t_globalvar				*g_var;
 
 t_token							**tokenize(char *input);
 char							*handle_quote(char *str);
+int								is_charactere(char c);
+void							case_function(char *input, char **result,
+									int *j);
 int								is_special(char c);
+int								check_quote(char *str);
+
+int								one_dollar_test_case(int dollar_count,
+									char *input, int *i);
 int								dollar_counter(char *input);
+void							exit_status_case(char *input, char **result,
+									int *i, int *flag);
 char							*single_quote_expansion(char *input, int *i);
+char							*process_word(char *word);
 char							*double_quote_expansion(char *input, int *i);
 int								is_quoted(char *input);
 char							*expand_non_operator(char *token);
@@ -180,17 +198,20 @@ void							handle_heredoc(t_token **tokens, char *input,
 void							heredoc_process(t_cmd **node, t_file **head,
 									t_token **tokens);
 char							*tidle_expansion(int *i);
-void							fill_up_node(t_cmd **node, t_token **tokens, t_file *head);
+void							fill_up_node(t_cmd **node, t_token **tokens,
+									t_file **head);
 char							*dollar_expand(char *input, int *i);
 void							go_to_next(t_token **tokens);
 char							**result_traitement(char *input);
 char							*get_string(char *input, int *i);
 int								get_size(char **arr);
 int								get_size_arr(char *input);
+int								file_expansion_null(t_token *tokens);
 char							*parse_line(char *input);
 char							**handle_that_shit(char *input);
 char							**unquoted_result(char **input);
-char							*get_word_to_expand(char *str, int *j);
+char							*get_word_to_expand(char *str, int *j,
+									char **result);
 void							add_quote(char *input, char **expanded_value,
 									int *j);
 int								is_operator(t_token *node);
@@ -221,7 +242,6 @@ void							push_back(t_cmd **lst, t_cmd *node);
 void							push_t_file(t_file **head, t_file *node);
 void							*ft_malloc(size_t size, int ele_nbr);
 void							clean_gc(void);
-
 ///////////////////// execution /////////////////////////
 
 

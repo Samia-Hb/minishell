@@ -6,24 +6,23 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 15:53:32 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/07 15:55:20 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/13 16:43:41 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_var g_var;
-
 void initilized_g_var()
 {
-    g_var.exit_status = 0;
-    g_var.pre_pipe_infd = -1;
-    g_var.last_child_id = 0;
-    g_var.out_fd = -1;
-    g_var.red_error = 0;
-    g_var.envp = NULL;
-    g_var.size = 0;
-    g_var.pipe_nb = 0;
+	g_var = malloc(sizeof(t_globalvar));
+    g_var->exit_status = 0;
+    g_var->pre_pipe_infd = -1;
+    g_var->last_child_id = 0;
+    g_var->out_fd = -1;
+    g_var->red_error = 0;
+    g_var->envp = NULL;
+    g_var->size = 0;
+    g_var->pipe_nb = 0;
 }
 
 t_shell *init_shell()
@@ -115,7 +114,8 @@ void	print_cmd(t_cmd *cmd)
 		{
 			while (cmd->file)
 			{
-				printf("filename == %s\n", cmd->file->filename);
+				printf("filename == %s type == %d\n", cmd->file->filename,
+						cmd->file->type);
 				cmd->file = cmd->file->next;
 			}
 		}
@@ -123,6 +123,19 @@ void	print_cmd(t_cmd *cmd)
 	}
 }
 
+void	initiale_global(void)
+{
+	g_var = malloc(sizeof(t_globalvar));
+	g_var->exit_status = 0;
+	g_var->head = NULL;
+    g_var->pre_pipe_infd = -1;
+    g_var->last_child_id = 0;
+    g_var->out_fd = -1;
+    g_var->red_error = 0;
+    g_var->envp = NULL;
+    g_var->size = 0;
+    g_var->pipe_nb = 0;
+}
 int main(int argc, char **argv, char **envp)
 {
     char *input;
@@ -133,8 +146,9 @@ int main(int argc, char **argv, char **envp)
     (void)argv;
 
     tokens = NULL;
+    initiale_global();
+    // initilized_g_var();
     box = ft_malloc(sizeof(t_mini), 1);
-    initilized_g_var();
     // g_var.size = count_commands(cmd);
     // g_var.pipe_nb = g_var.size - 1;
     if (!box)
@@ -162,6 +176,8 @@ int main(int argc, char **argv, char **envp)
 		if (!expand(*tokens))
 			continue;
 		cmd = analyse_tokens(tokens);
+        print_cmd(cmd);
+        exit(1);
         execute_arguments(cmd, box);
         free(input);
         // clean_gc();

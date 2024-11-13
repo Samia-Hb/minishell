@@ -46,7 +46,7 @@ void check_cmd_path(t_cmd *cmd)
             ft_putstr_fd("minishell: ", 2);
             ft_putstr_fd(cmd->arguments[0], 2);
             ft_putstr_fd(": Permission denied\n", 2);
-            g_var.exit_status = 1;
+            g_var->exit_status = 1;
         }
     }
     else 
@@ -54,7 +54,7 @@ void check_cmd_path(t_cmd *cmd)
         ft_putstr_fd("minishell: ", 2);
         ft_putstr_fd(cmd->arguments[0], 2);
         ft_putstr_fd(": No such file or directory\n", 2);
-        g_var.exit_status = 1;
+        g_var->exit_status = 1;
     }
 }
 
@@ -124,7 +124,7 @@ void check_command_name(t_cmd *cmd)
     ft_putstr_fd("minishell: command not found: ", 2);
     ft_putstr_fd(cmd->arguments[0], 2);
     ft_putstr_fd("\n", 2);
-    g_var.exit_status = 127;
+    g_var->exit_status = 127;
     free(path_dirs);
 }
 
@@ -132,8 +132,8 @@ int check_file_errors(char *path, int builtin)
 {
     if (path && (path[0] == '$' || (path[0] == '"' && path[1] == '$')))
     {
-        g_var.red_error = 1;
-        g_var.exit_status = 1;
+        g_var->red_error = 1;
+        g_var->exit_status = 1;
         ft_putstr_fd("minishell: ", 2);
         ft_putstr_fd(path, 2);
         ft_putstr_fd(" ambiguous redirect\n", 2);
@@ -151,8 +151,8 @@ void handle_file_redirections(t_cmd *cmd,int btn)
     files_redirections(cmd, btn != -1);
     if (btn == -1)
         validate_cmd(cmd);
-    else if (g_var.pre_pipe_infd != -1 && !cmd->file->type)
-        dup2(g_var.pre_pipe_infd, STDIN_FILENO);
+    else if (g_var->pre_pipe_infd != -1 && !cmd->file->type)
+        dup2(g_var->pre_pipe_infd, STDIN_FILENO);
 }
 
 void files_redirections(t_cmd *cmd, int builtin)
@@ -166,20 +166,21 @@ void files_redirections(t_cmd *cmd, int builtin)
         if (cmd->type == RE_IN)
         {
             if(builtin)
-                g_var.in_fd = open(curr_red->filename, O_RDONLY, 0644);
+                g_var->in_fd = open(curr_red->filename, O_RDONLY, 0644);
             else
                 in_file_prep(curr_red->filename);
         }
         else if (cmd->type == RE_OUT)
         {
+            // printf("check here\n");
             if (builtin)
-                g_var.out_fd = open(curr_red->filename, O_CREAT | O_WRONLY | O_TRUNC, 0777);
+                g_var->out_fd = open(curr_red->filename, O_CREAT | O_WRONLY | O_TRUNC, 0777);
             out_file_prep(curr_red->filename);
         }
         else if (cmd->type == RE_APPEND)
         {
             if (builtin)
-                g_var.out_fd = open(curr_red->filename, O_CREAT | O_WRONLY | O_APPEND, 0777);
+                g_var->out_fd = open(curr_red->filename, O_CREAT | O_WRONLY | O_APPEND, 0777);
             else
                 append_file_prep(curr_red->filename);
         }
@@ -251,33 +252,33 @@ int check_builtin(t_cmd *cmd)
 
 void exec_builtin(int btn, t_cmd *cmd, t_mini *box)
 {
-    if (btn == 1 && !g_var.red_error)
+    if (btn == 1 && !g_var->red_error)
         ft_cd(cmd->arguments, box->env);
-    else if (btn == 2 && !g_var.red_error)
+    else if (btn == 2 && !g_var->red_error)
         ft_echo(cmd->arguments);
-    else if (btn == 3 && !g_var.red_error)
+    else if (btn == 3 && !g_var->red_error)
         ft_env(box->env);
-    else if (btn == 4 && !g_var.red_error)
+    else if (btn == 4 && !g_var->red_error)
         ft_exit(box->shell);
-    else if (btn == 5 && !g_var.red_error)
+    else if (btn == 5 && !g_var->red_error)
         ft_export(cmd->arguments, box->env);
-    else if (btn == 6 && !g_var.red_error)
+    else if (btn == 6 && !g_var->red_error)
         ft_pwd(box->env);
 
-    if (g_var.out_fd > 2)
-        close(g_var.out_fd);
-    g_var.out_fd = 1;
+    if (g_var->out_fd > 2)
+        close(g_var->out_fd);
+    g_var->out_fd = 1;
 }
 
 void child_process(t_cmd *cmd,int pipe_nb, int btn, t_mini *box) 
 {
     // path = cmd->file->filename;
-    g_var.last_child_id = fork();
-    if (g_var.last_child_id == 0) 
+    g_var->last_child_id = fork();
+    if (g_var->last_child_id == 0) 
     {
-        if (g_var.pre_pipe_infd != -1)
-            dup2(g_var.pre_pipe_infd, STDIN_FILENO);
-        if (pipe_nb < g_var.size - 1 && cmd->pipe_fd[1] > 2)
+        if (g_var->pre_pipe_infd != -1)
+            dup2(g_var->pre_pipe_infd, STDIN_FILENO);
+        if (pipe_nb < g_var->size - 1 && cmd->pipe_fd[1] > 2)
             dup2(cmd->pipe_fd[1], STDOUT_FILENO); 
         handle_file_redirections(cmd,btn); 
         execs(cmd, btn, box);
@@ -294,7 +295,7 @@ void execs(t_cmd *cmd, int btn, t_mini *box)
     }
     else if (cmd->cmd_path)
     {
-        execve(cmd->cmd_path, cmd->arguments, g_var.envp);
+        execve(cmd->cmd_path, cmd->arguments, g_var->envp);
         perror(cmd->cmd_path);
         exit(errno);
     }
@@ -302,11 +303,11 @@ void execs(t_cmd *cmd, int btn, t_mini *box)
 
 void child(t_cmd *cmd, int pipe_nb,int btn,  t_mini *box)
 {
-    if(g_var.last_child_id == 0)
+    if(g_var->last_child_id == 0)
     {
-        if(g_var.pre_pipe_infd != - 1)
-            dup2(g_var.pre_pipe_infd, STDIN_FILENO);
-        if(pipe_nb < g_var.size - 1 && cmd->pipe_fd[1] > 2)
+        if(g_var->pre_pipe_infd != - 1)
+            dup2(g_var->pre_pipe_infd, STDIN_FILENO);
+        if(pipe_nb < g_var->size - 1 && cmd->pipe_fd[1] > 2)
             dup2(cmd->pipe_fd[1], STDOUT_FILENO);
         handle_file_redirections(cmd, btn);
         execs(cmd, btn, box);
@@ -317,21 +318,23 @@ void child(t_cmd *cmd, int pipe_nb,int btn,  t_mini *box)
 void execute_pipes(t_cmd *cmd, int pipe_nb, t_mini *box) 
 {
     int btn = check_builtin(cmd);
-    if (g_var.size == 1 && btn != -1) 
+    if (g_var->size == 1 && btn != -1) 
     {
+        printf("check heree\n");
+        print_cmd(cmd);
         files_redirections(cmd, 1);
         exec_builtin(btn, cmd, box);
     }
     else 
     {
-        if (g_var.size != pipe_nb + 1 && pipe(cmd->pipe_fd) == -1) 
+        if (g_var->size != pipe_nb + 1 && pipe(cmd->pipe_fd) == -1) 
         {
             perror("pipe");
             exit(1);
         }
         child_process(cmd, pipe_nb, btn, box); 
         close(cmd->pipe_fd[1]);
-        g_var.pre_pipe_infd = cmd->pipe_fd[0];
+        g_var->pre_pipe_infd = cmd->pipe_fd[0];
     }
 }
 
@@ -343,27 +346,27 @@ void sig_wait(t_cmd *cmd)
     {
         waitpid(cmd->pid, &status, 0);
         if (WIFSIGNALED(status))
-            g_var.exit_status = 128 + WTERMSIG(status);
+            g_var->exit_status = 128 + WTERMSIG(status);
         if (WIFEXITED(status))
-            g_var.exit_status = WEXITSTATUS(status);
+            g_var->exit_status = WEXITSTATUS(status);
         cmd = cmd->next;
     }
 }
 
 void execute_arguments(t_cmd *cmd, t_mini *box)
 {
-    g_var.size = count_commands(cmd);
-    g_var.pipe_nb = g_var.size - 1;
+    g_var->size = count_commands(cmd);
+    g_var->pipe_nb = g_var->size - 1;
     int i = 0;
-    g_var.exit_status = 0;
-    g_var.pre_pipe_infd = -1;
-    while (cmd && g_var.exit_status == 0) 
+    g_var->exit_status = 0;
+    g_var->pre_pipe_infd = -1;
+    while (cmd && g_var->exit_status == 0) 
     {
         execute_pipes(cmd, i, box);
         cmd = cmd->next;
         i++;
     }
-    if (g_var.pre_pipe_infd > 2)
-        close(g_var.pre_pipe_infd);
+    if (g_var->pre_pipe_infd > 2)
+        close(g_var->pre_pipe_infd);
     sig_wait(cmd);
 }
