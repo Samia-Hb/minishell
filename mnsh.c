@@ -165,8 +165,8 @@ int main(int argc, char **argv, char **envp)
         if (!expand(*tokens))
             continue;
         cmd = analyse_tokens(tokens);
-        print_cmd(cmd);
-        exit(1);
+        // print_cmd(cmd);
+        // exit(1);
         execute_arguments(cmd, box);
         free(input);
         // clean_gc();
