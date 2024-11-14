@@ -157,6 +157,7 @@ void handle_file_redirections(t_cmd *cmd,int btn)
 
 void files_redirections(t_cmd *cmd, int builtin)
 {
+    g_var->size = count_commands(cmd);
     t_file *curr_red = cmd->file;
     // path = *curr_red->filename;
     while (curr_red) 
@@ -166,15 +167,40 @@ void files_redirections(t_cmd *cmd, int builtin)
         if (curr_red->type == 1)
         {
             if(builtin)
-                g_var->in_fd = open(curr_red->filename, O_RDONLY, 0644);
-            else
+            {
+                in_file_prep(curr_red->filename, builtin);
+                printf("were in the builtin\n");
+                exit(0);
+            }
+            // if(builtin)
+            // {
+            //     out_file_prep(curr_red->filename, builtin);
+            //     // printf("were in builtin\n");
+            //     // exit(1);
+            //     g_var->in_fd = open(curr_red->filename, O_RDONLY, 0644);
+            // }
+            // else
                 out_file_prep(curr_red->filename, builtin);
         }
         else if (curr_red->type == 2)
         {
-            // printf("check here\n");
-            if (builtin)
-                g_var->out_fd = open(curr_red->filename, O_CREAT | O_WRONLY | O_TRUNC, 0777);
+            if(builtin)
+            {
+                int fd = open(curr_red->filename, O_CREAT | O_WRONLY | O_TRUNC, 0777);
+                if(fd== - 1)
+                {
+                    printf("i cant open the file\n");
+                    exit(0);
+                }
+                else
+                    dup2(fd, STDOUT_FILENO);
+                g_var->out_fd = fd; 
+                close(fd);
+                // printf("check here\n");
+                // exit(0);
+                // g_var->out_fd = open(curr_red->filename, O_CREAT | O_WRONLY | O_TRUNC, 0777);
+            
+            }
 
                 // printf("im in tha builtin\n");
                 // exit(1);
@@ -258,7 +284,7 @@ void in_file_prep(char *path, int builtin)
         // exit(1);
         // printf("wre in the in_file_prep\n");
         //     exit(0);
-        g_var->in_fd = 0;
+        g_var->in_fd = 1;
         if(g_var->size > 1 || !builtin)
         {
             dup2(fd, STDIN_FILENO);
@@ -272,11 +298,7 @@ void in_file_prep(char *path, int builtin)
         //         close(fd);
         // }
         else
-        {
-            printf("the else condition\n");
-            exit(0);
             g_var->in_fd = fd;
-        }
     }
 }
 
@@ -324,13 +346,9 @@ void child_process(t_cmd *cmd,int pipe_nb, int btn, t_mini *box)
     if (g_var->last_child_id == 0) 
     {
         if (g_var->pre_pipe_infd != -1)
-        {
              dup2(g_var->pre_pipe_infd, STDIN_FILENO);
-        }
         if (pipe_nb < g_var->size - 1 && cmd->pipe_fd[1] > 2)
-        {
             dup2(cmd->pipe_fd[1], STDOUT_FILENO); 
-        }
             // printf("im in the child process\n");
             // exit(1);
         handle_file_redirections(cmd,btn); 
@@ -373,8 +391,8 @@ void execute_pipes(t_cmd *cmd, int pipe_nb, t_mini *box)
     int btn = check_builtin(cmd);
     if (g_var->size == 1 && btn != -1) 
     {
-        printf("check heree\n");
-        exit(1);
+        // printf("check heree\n");
+        // exit(1);
         // print_cmd(cmd);
         files_redirections(cmd, 1);
         exec_builtin(btn, cmd, box);
