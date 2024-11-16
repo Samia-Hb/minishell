@@ -159,60 +159,16 @@ void files_redirections(t_cmd *cmd, int builtin)
 {
     g_var->size = count_commands(cmd);
     t_file *curr_red = cmd->file;
-    // path = *curr_red->filename;
     while (curr_red) 
     {
         if (check_file_errors(curr_red->filename, builtin))
             return;
         if (curr_red->type == 1)
-        {
-            if(builtin)
-            {
-                in_file_prep(curr_red->filename, builtin);
-                printf("were in the builtin\n");
-                exit(0);
-            }
-            // if(builtin)
-            // {
-            //     out_file_prep(curr_red->filename, builtin);
-            //     // printf("were in builtin\n");
-            //     // exit(1);
-            //     g_var->in_fd = open(curr_red->filename, O_RDONLY, 0644);
-            // }
-            // else
                 out_file_prep(curr_red->filename, builtin);
-        }
-        else if (curr_red->type == 2)
-        {
-            if(builtin)
-            {
-                int fd = open(curr_red->filename, O_CREAT | O_WRONLY | O_TRUNC, 0777);
-                if(fd== - 1)
-                {
-                    printf("i cant open the file\n");
-                    exit(0);
-                }
-                else
-                    dup2(fd, STDOUT_FILENO);
-                g_var->out_fd = fd; 
-                close(fd);
-                // printf("check here\n");
-                // exit(0);
-                // g_var->out_fd = open(curr_red->filename, O_CREAT | O_WRONLY | O_TRUNC, 0777);
-            
-            }
-
-                // printf("im in tha builtin\n");
-                // exit(1);
+        if (curr_red->type == 2)
             in_file_prep(curr_red->filename , builtin);
-        }
-        else if (curr_red->type == 4)
-        {
-            if (builtin)
-                g_var->out_fd = open(curr_red->filename, O_CREAT | O_WRONLY | O_APPEND, 0777);
-            else
+        if (curr_red->type == 4)
                 append_file_prep(curr_red->filename);
-        }
         curr_red = curr_red->next;
     }
 }
@@ -231,76 +187,72 @@ void append_file_prep(char *path)
         close(fd);
     }
 }
-void	out_file_prep(char *path, int is_builtin)
-{
-    // path = token->file->filename;
-	int	fd;
-    // (void)token;
-	fd = open(path, O_CREAT | O_WRONLY | O_TRUNC, 0777);
-	if (fd == -1)
-	{
-		g_var->exit_status = errno;
-		g_var->red_error = 1;
-		ft_putstr_fd("minishell: ", 2);
-		perror(path);
-		if (!is_builtin || g_var->size > 1)
-			exit(1);
-	}
-	else
-	{
-		g_var->out_fd = 1;
-		if (!is_builtin || g_var->size > 1)
-		{
-			dup2(fd, 1);
-			if (fd > 2)
-				close(fd);
-		}
-		else
-			g_var->out_fd = fd;
-	}
-}
+// void	out_file_prep(char *path, int is_builtin)
+// {
+//     // path = token->file->filename;
+// 	int	fd;
+//     // (void)token;
+// 	fd = open(path, O_CREAT | O_WRONLY | O_TRUNC, 0777);
+// 	if (fd == -1)
+// 	{
+// 		g_var->exit_status = errno;
+// 		g_var->red_error = 1;
+// 		ft_putstr_fd("minishell: ", 2);
+// 		perror(path);
+// 		if (!is_builtin || g_var->size > 1)
+// 			exit(1);
+// 	}
+// 	else
+// 	{
+// 		g_var->out_fd = 1;
+// 		if (g_var->size > 1)
+// 		{
+// 			dup2(fd, 1);
+// 			if (fd > 2)
+// 				close(fd);
+// 		}
+// 		else
+// 			g_var->out_fd = fd;
+// 	}
+// }
 
 
-void in_file_prep(char *path, int builtin)
-{
-    // (void)cmd;
-    // path = cmd->file->filename;
-    // (void)builtin;
-    int fd = open(path, O_RDONLY, 0644);
-   	if (fd == -1)
-	{
-        // printf(" i cant open the file\n");
-        //     exit(0);
-		g_var->exit_status = errno;
-		g_var->red_error = 1;
-		ft_putstr_fd("minishell: ", 2);
-		perror(path);
-		if (!builtin || g_var->size > 1)
-			exit(1);
-	}
-    else
-    {
-        // printf("were in the in_file_prep function\n");
-        // exit(1);
-        // printf("wre in the in_file_prep\n");
-        //     exit(0);
-        g_var->in_fd = 1;
-        if(g_var->size > 1 || !builtin)
-        {
-            dup2(fd, STDIN_FILENO);
-            printf(" we did it\n");
-            // exit(0);
-        }
-        // if(fd > 2)
-        // {
-        //         printf("were in the fd > 2 condition\n");
-        //         exit(0);
-        //         close(fd);
-        // }
-        else
-            g_var->in_fd = fd;
-    }
-}
+// void in_file_prep(char *path, int builtin)
+// {
+//     // (void)cmd;
+//     // path = cmd->file->filename;
+//     // (void)builtin;
+//     int fd = open(path, O_RDONLY);
+//    	if (fd == -1)
+// 	{
+//         // printf(" i cant open the file\n");
+//         //     exit(0);
+// 		g_var->exit_status = errno;
+// 		g_var->red_error = 1;
+// 		ft_putstr_fd("minishell: ", 2);
+// 		perror(path);
+// 		if (!builtin || g_var->size > 1)
+// 			exit(1);
+// 	}
+//     else
+//     {
+//         // printf("were in the in_file_prep function\n");
+//         // exit(1);
+//         // printf("wre in the in_file_prep\n");
+//         //     exit(0);
+//         g_var->in_fd = 1;
+//         if(g_var->size > 1)
+//         {
+//             dup2(fd, STDIN_FILENO);
+//             // if(fd > 2)
+//                 // close(fd);
+//             // printf(" we did it\n");
+//             // exit(0);
+//         }
+//         else
+//             g_var->in_fd = fd;
+//     }
+// }
 
 int check_builtin(t_cmd *cmd)
 {
@@ -339,24 +291,130 @@ void exec_builtin(int btn, t_cmd *cmd, t_mini *box)
     g_var->out_fd = 1;
 }
 
-void child_process(t_cmd *cmd,int pipe_nb, int btn, t_mini *box) 
+void	child_process(t_cmd *token, int pipe_nb, int btn, t_mini *env)
 {
-    // path = cmd->file->filename;
-    g_var->last_child_id = fork();
-    if (g_var->last_child_id == 0) 
-    {
-        if (g_var->pre_pipe_infd != -1)
-             dup2(g_var->pre_pipe_infd, STDIN_FILENO);
-        if (pipe_nb < g_var->size - 1 && cmd->pipe_fd[1] > 2)
-            dup2(cmd->pipe_fd[1], STDOUT_FILENO); 
-            // printf("im in the child process\n");
-            // exit(1);
-        handle_file_redirections(cmd,btn); 
-        execs(cmd, btn, box);
-        exit(0);
-    }
+	// int	fd;
+
+	(void)pipe_nb;
+	g_var->last_child_id = fork();
+	if (g_var->last_child_id == 0)
+	{
+		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_DFL);
+	if (g_var->pre_pipe_infd != -1)
+			dup2(g_var->pre_pipe_infd, STDIN_FILENO);
+		if (token->pipe_fd[1] > 2)
+			dup2(token->pipe_fd[1], STDOUT_FILENO);
+		if (g_var->pre_pipe_infd > 2)
+			close(g_var->pre_pipe_infd);
+		if (token->pipe_fd[0] > 2)
+			close(token->pipe_fd[0]);
+		if (token->pipe_fd[1] > 2)
+			close(token->pipe_fd[1]);
+		handle_file_redirections(token, btn);
+		execs(token, btn, env);
+		exit(0);
+	}
+}
+// void child_process(t_cmd *cmd,int pipe_nb, int btn, t_mini *box) 
+// {
+//     g_var->last_child_id = fork();
+//     if (g_var->last_child_id == 0) 
+//     {
+//         if (g_var->pre_pipe_infd != -1)
+//              dup2(g_var->pre_pipe_infd, STDIN_FILENO);
+//         if (pipe_nb < g_var->size - 1 && cmd->pipe_fd[1] > 2)
+//             dup2(cmd->pipe_fd[1], STDOUT_FILENO); 
+//         handle_file_redirections(cmd,btn); 
+//         execs(cmd, btn, box);
+//         exit(0);
+//     }
+// }
+void	in_file_prep(char *path, int is_builtin)
+{
+	int	fd;
+
+	fd = open(path, O_RDONLY);
+	if (fd == -1)
+	{
+		g_var->exit_status = errno;
+		g_var->red_error = 1;
+		ft_putstr_fd("minishell: ", 2);
+		perror(path);
+		if (!is_builtin || g_var->size > 1)
+			exit(1);
+	}
+	else
+	{
+		g_var->in_fd = 1;
+		if (fd > 2)
+			close(fd);
+	}
 }
 
+
+void	execute_pipes(t_cmd *token, int pipe_nb, t_mini *env)
+{
+	int	btn;
+	// int	fd;
+	int	original_stdin;
+
+	original_stdin = dup(STDIN_FILENO);
+	btn = check_builtin(token);
+	if (g_var->size == 1 && btn != -1)
+	{
+		files_redirections(token, 1);
+		exec_builtin(btn, token, env);
+	}
+	else
+	{
+		if (g_var->size != pipe_nb + 1)
+		{
+			if (pipe(token->pipe_fd) == -1)
+			{
+				perror("pipe");
+				exit(1);
+			}
+		}
+		child_process(token, pipe_nb, btn, env);
+		if (token->pipe_fd[1] > 2)
+			close(token->pipe_fd[1]);
+		if (g_var->pre_pipe_infd > 2)
+			close(g_var->pre_pipe_infd);
+		g_var->pre_pipe_infd = token->pipe_fd[0];
+		if (g_var->last_child_id > 0)
+			waitpid(g_var->last_child_id, NULL, 0);
+	}
+	close(original_stdin);
+}
+
+void	out_file_prep(char *path, int is_builtin)
+{
+	int	fd;
+
+	fd = open(path, O_CREAT | O_WRONLY | O_TRUNC, 0777);
+	if (fd == -1)
+	{
+		g_var->exit_status = errno;
+		g_var->red_error = 1;
+		ft_putstr_fd("minishell: ", 2);
+		perror(path);
+		if (!is_builtin || g_var->size > 1)
+			exit(1);
+	}
+	else
+	{
+		g_var->out_fd = 1;
+		if (!is_builtin || g_var->size > 1)
+		{
+			dup2(fd, 1);
+			if (fd > 2)
+				close(fd);
+		}
+		else
+			g_var->out_fd = fd;
+	}
+}
 void execs(t_cmd *cmd, int btn, t_mini *box) 
 {
     if (btn != -1)
@@ -386,31 +444,31 @@ void child(t_cmd *cmd, int pipe_nb,int btn,  t_mini *box)
     }
 }
 
-void execute_pipes(t_cmd *cmd, int pipe_nb, t_mini *box) 
-{
-    int btn = check_builtin(cmd);
-    if (g_var->size == 1 && btn != -1) 
-    {
-        // printf("check heree\n");
-        // exit(1);
-        // print_cmd(cmd);
-        files_redirections(cmd, 1);
-        exec_builtin(btn, cmd, box);
-    }
-    else 
-    {
-        if (g_var->size != pipe_nb + 1 && pipe(cmd->pipe_fd) == -1) 
-        {
-            perror("pipe");
-            exit(1);
-        }
-        // printf("im in the execute pipe\n");
-        //     exit(1);
-        child_process(cmd, pipe_nb, btn, box); 
-        close(cmd->pipe_fd[1]);
-        g_var->pre_pipe_infd = cmd->pipe_fd[0];
-    }
-}
+// void execute_pipes(t_cmd *cmd, int pipe_nb, t_mini *box) 
+// {
+//     int btn = check_builtin(cmd);
+//     if (g_var->size == 1 && btn != -1) 
+//     {
+//         // printf("check heree\n");
+//         // exit(1);
+//         // print_cmd(cmd);
+//         files_redirections(cmd, 1);
+//         exec_builtin(btn, cmd, box);
+//     }
+//     else 
+//     {
+//         if (g_var->size != pipe_nb + 1 && pipe(cmd->pipe_fd) == -1) 
+//         {
+//             perror("pipe");
+//             exit(1);
+//         }
+//         // printf("im in the execute pipe\n");
+//         //     exit(1);
+//         child_process(cmd, pipe_nb, btn, box); 
+//         close(cmd->pipe_fd[1]);
+//         g_var->pre_pipe_infd = cmd->pipe_fd[0];
+//     }
+// }
 
 
 void sig_wait(t_cmd *cmd)
