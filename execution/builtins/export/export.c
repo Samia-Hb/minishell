@@ -1,5 +1,17 @@
-#include "../../../minishell.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   export.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: szeroual <szeroual@student.42.fr>          #+#  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024-11-17 08:53:58 by szeroual          #+#    #+#             */
+/*   Updated: 2024-11-17 08:53:58 by szeroual         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../../externel_folder/libftt/libft.h"
+#include "../../../minishell.h"
 
 void	swap_nodes(t_envi *a, t_envi *b)
 {
@@ -112,7 +124,8 @@ void	use_while_env(t_envi *new_env)
 		curr = new_env;
 		while (curr->next != NULL)
 		{
-			if (ft_strncmp(curr->name, curr->next->name, ft_strlen(curr->name)) > 0)
+			if (ft_strncmp(curr->name, curr->next->name,
+					ft_strlen(curr->name)) > 0)
 			{
 				swap_nodes(curr, curr->next);
 				is_swap = 1;
@@ -155,7 +168,9 @@ t_envi	*create_env_node(char *name, char *value)
 
 t_envi	*find_last_node(t_envi *env)
 {
-	t_envi	*curr = env;
+	t_envi	*curr;
+
+	curr = env;
 	while (curr->next)
 		curr = curr->next;
 	return (curr);
@@ -163,8 +178,11 @@ t_envi	*find_last_node(t_envi *env)
 
 void	add_env_variable(t_envi *env, char *name, char *value)
 {
-	t_envi	*new_node = create_env_node(name, value);
-	t_envi	*last = find_last_node(env);
+	t_envi	*new_node;
+	t_envi	*last;
+
+	new_node = create_env_node(name, value);
+	last = find_last_node(env);
 	last->next = new_node;
 }
 
@@ -177,9 +195,11 @@ int	check_plus(char *str, int size_name)
 
 void	process_existing_env(t_envi *new, char *ptr_i, char *arr[2])
 {
+	char	*joined_val;
+
 	if (check_plus(ptr_i, ft_strlen(arr[0])))
 	{
-		char *joined_val = malloc(ft_strlen(new->vale) + ft_strlen(arr[1]) + 1);
+		joined_val = malloc(ft_strlen(new->vale) + ft_strlen(arr[1]) + 1);
 		strcpy(joined_val, new->vale);
 		strcat(joined_val, arr[1]);
 		free(new->vale);
@@ -192,7 +212,7 @@ void	process_existing_env(t_envi *new, char *ptr_i, char *arr[2])
 	}
 }
 
-t_envi *search_env(t_envi *env, char *name)
+t_envi	*search_env(t_envi *env, char *name)
 {
 	while (env)
 	{
@@ -207,8 +227,9 @@ int	process_single_env(char *ptr_i, t_envi *env)
 {
 	char	*arr[2];
 	t_envi	*new;
-	int		status = 0;
+	int		status;
 
+	status = 0;
 	arr[0] = strtok(ptr_i, "=");
 	arr[1] = strtok(NULL, "=");
 	if (ft_utils(arr[0]))
@@ -229,10 +250,12 @@ int	process_single_env(char *ptr_i, t_envi *env)
 
 int	add_one(char **ptr, t_envi *env)
 {
-	int	i = 1;
-	int	status = 0;
+	int	i;
+	int	status;
 	int	result;
 
+	i = 1;
+	status = 0;
 	while (ptr[i])
 	{
 		result = process_single_env(ptr[i], env);
@@ -246,8 +269,9 @@ int	add_one(char **ptr, t_envi *env)
 int	ft_export(char **ptr, t_envi *env)
 {
 	t_envi	*newenv;
-	int		status = 0;
+	int		status;
 
+	status = 0;
 	status = add_one(ptr, env);
 	if (!ptr[1])
 	{
@@ -263,4 +287,3 @@ int	ft_export(char **ptr, t_envi *env)
 	}
 	return (status);
 }
-

@@ -18,10 +18,9 @@ SRCS  = $(wildcard externel_folder/libftt/*.c) \
         execution/builtins/pwd/pwd.c \
         execution/builtins/unset/unset.c \
 	  	execution/builtins/export/export.c \
+        execution/builtins/builtins.c \
         mnsh.c \
-        execution/executing.c \
-        # execution/builtins/builtins.c \
-        $(wildcard execution/*.c) \
+        $(wildcard execution/exec/*.c) \
 
 OBJS = $(SRCS:.c=.o)
 
@@ -30,7 +29,7 @@ all: $(NAME)
 $(NAME): $(OBJS)
 	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LFLAGS)
 
-%.o: %.c
+%.o: %.cmake
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:

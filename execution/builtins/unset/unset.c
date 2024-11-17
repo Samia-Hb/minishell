@@ -1,28 +1,39 @@
-#include "../../../minishell.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   unset.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: szeroual <szeroual@student.42.fr>          #+#  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024-11-17 08:54:23 by szeroual          #+#    #+#             */
+/*   Updated: 2024-11-17 08:54:23 by szeroual         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../../externel_folder/libftt/libft.h"
+#include "../../../minishell.h"
 
-
-
-
-void ft_remove(t_mini *box)
+void	ft_remove(t_mini *box)
 {
-	t_envi *curr;
-	t_envi *prv;
-	char **av = box->ptr;
-	int i = 0;
+	t_envi	*curr;
+	t_envi	*prv;
+	char	**av;
+	int		i;
 
-	while(av[i])
+	av = box->ptr;
+	i = 0;
+	while (av[i])
 	{
-		curr= box->env;
+		curr = box->env;
 		prv = NULL;
-		while(curr && ft_strcmp(curr->name, av[i]) != 0)
+		while (curr && ft_strcmp(curr->name, av[i]) != 0)
 		{
 			prv = curr;
 			curr = curr->next;
 		}
-		if(curr && ft_strcmp(curr->name, "_") != 0)
+		if (curr && ft_strcmp(curr->name, "_") != 0)
 		{
-			if(prv)
+			if (prv)
 				prv->next = curr->next;
 			else
 				box->env = curr->next;
