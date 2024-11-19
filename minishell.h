@@ -86,7 +86,7 @@ typedef struct s_shell
 typedef struct s_env
 {
 	char			*name;
-	char			*vale;
+	char			*vale; 
 	struct s_env	*next;
 	struct s_env	*prv;
 }					t_envi;
@@ -123,6 +123,7 @@ typedef struct s_cmd
     t_type type;
     char **arguments;
     t_file *file;
+	int is_herdoc;
     struct s_cmd *prev;
     struct s_cmd *next;
     char *cmd_path; // The path of the command
@@ -134,7 +135,6 @@ typedef struct s_var
 {
 	t_alst *alist;
     int exit_status; // The exit status
-    t_mini *box;     // Need to access env
     int out_fd;
 	int in_fd;
     int red_error; //error  for redir
@@ -315,6 +315,6 @@ int check_file_errors(char *path, int builtin);
 // void handle_file_redirections(t_cmd *cmd, int btn);
 int check_builtin(t_cmd *cmd);
 int count_commands(t_cmd *cmd);
-
-
+void error_pipe();
+void close_files(t_cmd *token);
 #endif

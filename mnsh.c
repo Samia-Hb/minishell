@@ -43,7 +43,6 @@ t_envi *init_env(char **envp)
             perror("strdup");
             exit(EXIT_FAILURE);
         }
-
         name = strtok(env_entry, "=");
         value = strtok(NULL, "=");
         if (!name || !value)
@@ -125,6 +124,7 @@ void	initiale_global(void)
     g_var->size = 0;
     g_var->pipe_nb = 0;
 }
+
 int main(int argc, char **argv, char **envp)
 {
     char *input;

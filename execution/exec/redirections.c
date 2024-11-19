@@ -35,7 +35,6 @@ void	in_file_prep(char *path, int is_builtin)
 	}
 }
 
-
 void	out_file_prep(char *path, int is_builtin)
 {
 	int	fd;
@@ -66,7 +65,9 @@ void	out_file_prep(char *path, int is_builtin)
 
 void append_file_prep(char *path) 
 {
-    int fd = open(path, O_CREAT | O_WRONLY | O_APPEND, 0777);
+    int fd; 
+	
+	fd = open(path, O_CREAT | O_WRONLY | O_APPEND, 0777);
     if (fd == -1) 
     {
         perror(path);
@@ -81,7 +82,6 @@ void append_file_prep(char *path)
 
 void handle_file_redirections(t_cmd *cmd,int btn) 
 {
-    // path = cmd->file->filename;
     files_redirections(cmd, btn != -1);
     if (btn == -1)
         validate_cmd(cmd);
@@ -92,17 +92,19 @@ void handle_file_redirections(t_cmd *cmd,int btn)
 void files_redirections(t_cmd *cmd, int builtin)
 {
     g_var->size = count_commands(cmd);
-    t_file *curr_red = cmd->file;
+    t_file *curr_red;
+	
+	curr_red = cmd->file;
     while (curr_red) 
     {
         if (check_file_errors(curr_red->filename, builtin))
             return;
         if (curr_red->type == 1)
-                out_file_prep(curr_red->filename, builtin);
+            out_file_prep(curr_red->filename, builtin);
         if (curr_red->type == 2)
             in_file_prep(curr_red->filename , builtin);
         if (curr_red->type == 4)
-                append_file_prep(curr_red->filename);
+            append_file_prep(curr_red->filename);
         curr_red = curr_red->next;
     }
 }
