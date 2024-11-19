@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 15:53:32 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/19 10:04:23 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/19 13:25:42 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,34 +14,6 @@
 
 t_globalvar *g_var = NULL;
 
-<<<<<<< HEAD
-// void ft_clean(Token **tokens, t_parser *parsed, t_queue *queue)
-// {
-// 	int i;
-
-// 	i = 0;
-// 	if(tokens)
-// 	{
-// 		while(*tokens)
-// 		{
-// 			free(tokens[i]->value);
-// 			i++;
-// 			(*tokens) = (*tokens)->next;
-// 		}
-// 		free(tokens);
-// 	}
-// 	if (parsed)
-// 		free(parsed);
-// 	if (queue)
-// 		free(queue);
-// }
-int	main()
-{
-    char	    *input;
-    Token	    **tokens;
-	int			errno;
-    t_cmd    	*cmd;
-=======
 t_shell *init_shell()
 {
     t_shell *shell = malloc(sizeof(t_shell));
@@ -54,7 +26,6 @@ t_shell *init_shell()
     shell->args = NULL;
     return shell;
 }
->>>>>>> main
 
 t_envi *init_env(char **envp)
 {
@@ -63,10 +34,11 @@ t_envi *init_env(char **envp)
     char *name;
     char *value;
     int i = 0;
+    char *env_entry;
 
     while (envp[i])
     {
-        char *env_entry = strdup(envp[i]);
+        env_entry = ft_strdup(envp[i]);
         if (!env_entry)
         {
             perror("strdup");
@@ -85,18 +57,15 @@ t_envi *init_env(char **envp)
         if (!new_node)
         {
             perror("malloc");
-            free(env_entry);
+            clean_gc();
             exit(EXIT_FAILURE);
         }
-        new_node->name = strdup(name);
-        new_node->vale = strdup(value);
+        new_node->name = ft_strdup(name);
+        new_node->vale = ft_strdup(value);
         if (!new_node->name || !new_node->vale)
         {
             perror("strdup");
-            free(new_node->name);
-            free(new_node->vale);
-            free(new_node);
-            free(env_entry);
+            clean_gc();
             exit(EXIT_FAILURE);
         }
         new_node->next = env_list;
@@ -104,7 +73,7 @@ t_envi *init_env(char **envp)
         if (env_list)
             env_list->prv = new_node;
         env_list = new_node;
-        free(env_entry);
+        // free(env_entry);
         i++;
     }
     return env_list;
@@ -171,6 +140,7 @@ int main(int argc, char **argv, char **envp)
         exit(EXIT_FAILURE);
     }
     box->env = init_env(envp);
+    // printf("hey there\n");
     box->shell = init_shell();
     box->ptr = NULL;
     box->arr = NULL;
@@ -185,79 +155,17 @@ int main(int argc, char **argv, char **envp)
         if (!ft_strlen(input))
             continue ;
         add_history(input);
-<<<<<<< HEAD
-		tokens = tokenize(input);
-		errno = check_syntax_errors(*tokens);
-        if (errno)
-            main();
-        expand(*tokens);
-		// cmd = generate_final_struct(toknes);
-		cmd = analyse_tokens(tokens);
-		(void)cmd;
-		// queue = generate_postfix(parsed);
-		// ast = generate_ast_from_postfix(queue);
-		// rl_clear_history();
-		// exit(1);
-	}
-	return (0);
-}
-
-
-
-		// Token *token = *tokens;
-		// int i ;
-		// while (token)
-		// {
-		// 	i = 0;
-		// 	printf("token = %s\n", token->value);
-		// 	if (token->expanded_value)
-		// 	{
-		// 		while (token->expanded_value[i])
-		// 		{
-		// 			printf("expanded_arg[%d] = %s\n",i, token->expanded_value[i]);
-		// 			i++;
-		// 		}
-		// 	}
-		// 	token = token->next;
-		// }
-		// exit(1);
-
-
-
-
-
-		// printf("======== Analysed result =======\n");
-		// while (parsed)
-		// {
-		// 	i = 0;
-		// 	printf ("token = %s\n", parsed->token->value);
-		// 	if(parsed->arguments)
-		// 	{
-		// 		while (parsed->arguments[i])
-		// 		{
-		// 			printf("       arg[%d] = %s\n",i, parsed->arguments[i]);
-		// 			i++;
-		// 		}
-		// 	}
-		// 	parsed = parsed->next;
-		// }
-		// main();
-
-		/// ///////////////////////////////////
-		// int i;
-=======
         tokens = tokenize(input);
         if (check_syntax_errors(*tokens))
             continue ;
         if (!expand(*tokens))
             continue;
         cmd = analyse_tokens(tokens);
-        // print_cmd(cmd);
-        // exit(1);
+        print_cmd(cmd);
+        clean_gc();
+        exit(1);
         execute_arguments(cmd, box);
-        free(input);
-        // clean_gc();
     }
     return 0;
 }
->>>>>>> main
+// 4785 in 236

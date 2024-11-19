@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 13:39:34 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/13 15:23:53 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/19 13:22:12 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,17 @@ void	*ft_malloc(size_t size, int ele_nbr)
 	ptr = malloc(ele_nbr * size);
 	node = malloc(sizeof(t_gc));
 	node->ptr = ptr;
-	node->next = g_var->head;
-	g_var->head = node;
+	node->next = NULL;
+	if (!g_var)
+	{
+		g_var = malloc(sizeof(t_globalvar));
+		g_var->head = node;		
+	}
+	else
+	{
+		node->next = g_var->head;
+		g_var->head = node;
+	}
 	return (ptr);
 }
 
@@ -38,6 +47,9 @@ void	clean_gc(void)
 		if (temp)
 			free(temp);
 	}
-	free(g_var->head);
-	free(g_var);
+	if(g_var->head)
+		free(g_var->head);
+	if (g_var)
+		free(g_var);
 }
+// 8177 in 385

@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 19:05:46 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/13 14:41:55 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/19 10:37:28 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ void	heredoc_process(t_cmd **node, t_file **head, t_token **tokens)
 
 	(*tokens) = (*tokens)->next;
 	processed_del = process_delimiter((*tokens)->value);
-	printf("processes_del === %s\n", processed_del);
 	fd = open((*tokens)->value, O_CREAT | O_TRUNC | O_RDWR, 0777);
 	while (1)
 	{

@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   redirections.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: szeroual <szeroual@student.42.fr>          #+#  +:+       +#+        */
+/*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024-11-16 13:07:36 by szeroual          #+#    #+#             */
-/*   Updated: 2024-11-16 13:07:36 by szeroual         ###   ########.fr       */
+/*   Created: 2024/11/16 13:07:36 by szeroual          #+#    #+#             */
+/*   Updated: 2024/11/19 10:37:52 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
-
 
 void	in_file_prep(char *path, int is_builtin)
 {

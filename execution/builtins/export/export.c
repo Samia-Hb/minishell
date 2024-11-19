@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 21:41:35 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/18 23:36:50 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/19 10:46:47 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	process_existing_env(t_envi **env, char *arr[2])
 	while (tmp)
 	{
 		if (!strcmp(tmp->name, arr[0]))
-			tmp->vale = strdup(arr[1]);
+			tmp->vale = ft_strdup(arr[1]);
 		tmp = tmp->next;
 	}
 }
@@ -55,13 +55,13 @@ int	process_single_env(char *ptr_i, t_envi **env)
 	char	*tmp;
 
 	status = 0;
-	tmp = strdup(ptr_i);
+	tmp = ft_strdup(ptr_i);
 	arr[0] = strtok(ptr_i, "=");
 	arr[1] = strtok(NULL, "=");
 	if (!arr[1] && tmp[strlen(tmp) - 1] != '=')
 		return (status);
 	else if (!arr[1] && tmp[strlen(tmp) - 1] == '=')
-		arr[1] = strdup("");
+		arr[1] = ft_strdup("");
 	if (ft_utils(arr[0]))
 	{
 		new = search_env(*env, arr[0]);
