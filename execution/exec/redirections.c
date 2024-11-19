@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 13:07:36 by szeroual          #+#    #+#             */
-/*   Updated: 2024/11/19 10:37:52 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/19 20:18:35 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ void	out_file_prep(char *path, int is_builtin)
 	}
 	else
 	{
-		g_var->out_fd = 1;
 		if (!is_builtin || g_var->size > 1)
 		{
 			dup2(fd, 1);

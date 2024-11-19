@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 15:54:46 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/17 15:54:47 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/19 20:18:41 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,17 +46,17 @@ int	ft_echo(char **args)
 
 	if (!args[1])
 	{
-		printf("\n");
+		write(g_var->out_fd, "\n", 1);
 		return (0);
 	}
 	i = first_non_option(args);
 	while (args && args[i])
 	{
-		printf("%s", args[i]);
+		write(g_var->out_fd, args[i], ft_strlen(args[i]));
 		if (args[++i])
-			printf(" ");
+			write(g_var->out_fd, " ", 1);
 	}
 	if (!is_n_option(args[1]) || !args[1])
-		printf("\n");
+		write(g_var->out_fd, "\n", 1);
 	return (0);
 }

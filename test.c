@@ -1,32 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   test.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/17 16:00:17 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/19 20:21:13 by shebaz           ###   ########.fr       */
+/*   Created: 2024/11/19 22:49:29 by shebaz            #+#    #+#             */
+/*   Updated: 2024/11/19 22:53:08 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../minishell.h"
+# include "minishell.h"
 
-int	ft_env(t_envi *env)
-{
-	t_envi	*tmp;
-
-	tmp = env;
-	while (tmp)
-	{
-		if (tmp->vale)
-		{
-			ft_putstr_fd(tmp->name, g_var->out_fd);
-			ft_putstr_fd("=", 1);
-			ft_putstr_fd(tmp->vale, g_var->out_fd);
-			ft_putstr_fd("\n", 1);
-		}
-		tmp = tmp->next;
-	}
-	return (0);
-}
+// int	main()
+// {
+// 	int fd = open("file.c", O_CREAT | O_RDWR | O_TRUNC, 0777);
+// 	int i = 0;
+// 	while (i < 5)
+// 	{
+// 		write(fd, "hey\n", 4);
+// 		i++;
+// 	}
+// 	unlink("file.c");
+// }

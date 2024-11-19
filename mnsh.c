@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 15:53:32 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/19 13:25:42 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/19 23:19:00 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,11 +136,10 @@ int main(int argc, char **argv, char **envp)
     box = malloc(sizeof(t_mini));
     if (!box)
     {
-        perror("malloc");
+        write(2, "Error\n", 6);
         exit(EXIT_FAILURE);
     }
     box->env = init_env(envp);
-    // printf("hey there\n");
     box->shell = init_shell();
     box->ptr = NULL;
     box->arr = NULL;
@@ -151,20 +150,19 @@ int main(int argc, char **argv, char **envp)
         handle_signal();
         input = readline("minishell > ");
         if (!input)
-            break ;
-        if (!ft_strlen(input))
-            continue ;
-        add_history(input);
-        tokens = tokenize(input);
-        if (check_syntax_errors(*tokens))
+			break ;
+		if (!ft_strlen(input))
+			continue ;
+		add_history(input);
+		tokens = tokenize(input);
+		if (check_syntax_errors(*tokens))
             continue ;
         if (!expand(*tokens))
             continue;
         cmd = analyse_tokens(tokens);
-        print_cmd(cmd);
-        clean_gc();
-        exit(1);
+        // print_cmd(cmd);
         execute_arguments(cmd, box);
+        // clean_gc();
     }
     return 0;
 }

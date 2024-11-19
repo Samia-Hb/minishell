@@ -24,7 +24,7 @@ void	*ft_malloc(size_t size, int ele_nbr)
 	if (!g_var)
 	{
 		g_var = malloc(sizeof(t_globalvar));
-		g_var->head = node;		
+		g_var->head = node;
 	}
 	else
 	{
@@ -47,7 +47,7 @@ void	clean_gc(void)
 		if (temp)
 			free(temp);
 	}
-	if(g_var->head)
+	if (g_var->head)
 		free(g_var->head);
 	if (g_var)
 		free(g_var);
