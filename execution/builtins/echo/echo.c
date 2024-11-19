@@ -3,14 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: szeroual <szeroual@student.42.fr>          #+#  +:+       +#+        */
+/*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024-11-17 08:53:37 by szeroual          #+#    #+#             */
-/*   Updated: 2024-11-17 08:53:37 by szeroual         ###   ########.fr       */
+/*   Created: 2024/11/17 15:54:46 by shebaz            #+#    #+#             */
+/*   Updated: 2024/11/17 15:54:47 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../externel_folder/libftt/libft.h"
 #include "../../../minishell.h"
 
 int	is_n_option(char *arg)
@@ -46,7 +45,10 @@ int	ft_echo(char **args)
 	int	i;
 
 	if (!args[1])
+	{
+		printf("\n");
 		return (0);
+	}
 	i = first_non_option(args);
 	while (args && args[i])
 	{

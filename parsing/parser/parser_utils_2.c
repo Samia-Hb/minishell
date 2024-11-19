@@ -6,11 +6,32 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 14:00:16 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/09 14:00:30 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/18 23:34:20 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
+
+char	*ft_getenv(char *word)
+{
+	t_envi	*tmp;
+
+	tmp = g_var->envp;
+	while (tmp)
+	{
+		if (!strcmp(tmp->name, word))
+			return (ft_strdup(tmp->vale));
+		tmp = tmp->next;
+	}
+	return (NULL);
+}
+
+int	is_number(char c)
+{
+	if (c >= '0' && c <= '9')
+		return (1);
+	return (0);
+}
 
 int	file_expansion_null(t_token *tokens)
 {

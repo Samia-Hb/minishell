@@ -11,16 +11,16 @@ SRCS  = $(wildcard externel_folder/libftt/*.c) \
         $(wildcard parsing/signal/*.c) \
         $(wildcard parsing/minishel_utils/*.c) \
         $(wildcard parsing/generate_struct/*.c) \
+        $(wildcard execution/builtins/export/*.c ) \
         execution/builtins/cd/cd.c \
 		execution/builtins/echo/echo.c \
        	execution/builtins/env/env.c \
         execution/builtins/exit/exit.c \
         execution/builtins/pwd/pwd.c \
         execution/builtins/unset/unset.c \
-	  	execution/builtins/export/export.c \
-        execution/builtins/builtins.c \
         mnsh.c \
         $(wildcard execution/exec/*.c) \
+        execution/builtins/builtins.c \
 
 OBJS = $(SRCS:.c=.o)
 

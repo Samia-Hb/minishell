@@ -3,27 +3,29 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: szeroual <szeroual@student.42.fr>          #+#  +:+       +#+        */
+/*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024-11-17 08:54:14 by szeroual          #+#    #+#             */
-/*   Updated: 2024-11-17 08:54:14 by szeroual         ###   ########.fr       */
+/*   Created: 2024/11/17 16:00:56 by shebaz            #+#    #+#             */
+/*   Updated: 2024/11/17 16:16:16 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../externel_folder/libftt/libft.h"
 #include "../../../minishell.h"
 
-int	ft_pwd(t_envi *env)
+int	ft_pwd(char **args, t_envi *env)
 {
-	char buff[1024];
-	char *pwd = getcwd(buff, sizeof(buff));
+	char	buff[1024];
+	char	*pwd;
+
+	if (args[1])
+		return (printf("invalid option : %s\n", args[1]), 1);
+	pwd = getcwd(buff, sizeof(buff));
 	if (!pwd)
 	{
 		perror("pwd; failed");
 		return (1);
 	}
 	printf("%s\n", pwd);
-	write(1, "\n", 1);
 	if (env)
 	{
 		free(env->vale);

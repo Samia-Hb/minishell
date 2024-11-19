@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 20:13:54 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/13 14:39:44 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/18 23:35:02 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ char	*dollar_expand(char *input, int *i)
 		if (!ft_strncmp(word, "?", 1))
 			result = ft_strjoin(result, word);
 		else
-			result = ft_strjoin(result, getenv(word));
+			result = ft_strjoin(result, ft_getenv(word));
 		if (!result)
 			result = ft_strdup("");
 	}

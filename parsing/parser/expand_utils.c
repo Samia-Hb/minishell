@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 19:19:37 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/09 12:59:57 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/18 23:34:44 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ char	*get_word_to_expand(char *str, int *j, char **result)
 	while (str[*j] == '$')
 		(*j)++;
 	k = *j;
+	if (is_number(str[*j]))
+		return ((*j)++, ft_strdup(""));
 	while (str[*j] && !is_special(str[*j]))
 		(*j)++;
 	length = (*j) - k;

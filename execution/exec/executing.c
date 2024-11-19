@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executing.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: szeroual <szeroual@student.42.fr>          #+#  +:+       +#+        */
+/*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024-11-16 13:07:20 by szeroual          #+#    #+#             */
-/*   Updated: 2024-11-16 13:07:20 by szeroual         ###   ########.fr       */
+/*   Created: 2024/11/16 13:07:20 by szeroual          #+#    #+#             */
+/*   Updated: 2024/11/19 10:02:37 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void execs(t_cmd *cmd, int btn, t_mini *box)
     }
     if (cmd->cmd_path)
     {
-        execve(cmd->cmd_path, cmd->arguments, g_var->envp);
+        execve(cmd->cmd_path, cmd->arguments, NULL);
         perror(cmd->cmd_path);
         exit(errno);
     }

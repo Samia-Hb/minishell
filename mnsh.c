@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 15:53:32 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/13 16:43:41 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/19 10:04:23 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ t_globalvar *g_var = NULL;
 
 t_shell *init_shell()
 {
-    t_shell *shell = ft_malloc(sizeof(t_shell), 1);
+    t_shell *shell = malloc(sizeof(t_shell));
     if (!shell)
     {
         perror("malloc");
@@ -52,7 +52,7 @@ t_envi *init_env(char **envp)
             i++;
             continue;
         }
-        new_node = ft_malloc(sizeof(t_envi), 1);
+        new_node = malloc(sizeof(t_envi));
         if (!new_node)
         {
             perror("malloc");
@@ -111,18 +111,18 @@ void	print_cmd(t_cmd *cmd)
     }
 }
 
-void	initiale_global(void)
+void	initiale_global(t_envi *env)
 {
-    g_var = malloc(sizeof(t_globalvar));
-    g_var->exit_status = 0;
-    g_var->head = NULL;
-    g_var->pre_pipe_infd = -1;
-    g_var->last_child_id = 0;
-    g_var->out_fd = -1;
-    g_var->red_error = 0;
-    g_var->envp = NULL;
-    g_var->size = 0;
-    g_var->pipe_nb = 0;
+	g_var = malloc(sizeof(t_globalvar));
+	g_var->exit_status = 0;
+	g_var->head = NULL;
+	g_var->pre_pipe_infd = -1;
+	g_var->envp = env;
+	g_var->last_child_id = 0;
+	g_var->out_fd = -1;
+	g_var->red_error = 0;
+	g_var->size = 0;
+	g_var->pipe_nb = 0;
 }
 
 int main(int argc, char **argv, char **envp)
@@ -135,11 +135,7 @@ int main(int argc, char **argv, char **envp)
     (void)argv;
 
     tokens = NULL;
-    initiale_global();
-    // initilized_g_var();
-    box = ft_malloc(sizeof(t_mini), 1);
-    // g_var.size = count_commands(cmd);
-    // g_var.pipe_nb = g_var.size - 1;
+    box = malloc(sizeof(t_mini));
     if (!box)
     {
         perror("malloc");
@@ -150,6 +146,7 @@ int main(int argc, char **argv, char **envp)
     box->ptr = NULL;
     box->arr = NULL;
     box->last_exit_status = 0;
+    initiale_global(box->env);
     while (1)
     {
         handle_signal();

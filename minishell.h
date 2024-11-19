@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 15:39:23 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/13 16:44:32 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/19 10:00:21 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,14 +155,14 @@ typedef struct garbage_collector
 typedef struct global
 {
 	int							exit_status;
-	int 						pre_pipe_infd;
-    int 						last_child_id;
-	int 						in_fd;
-    int 						out_fd;
-    int 						red_error;
-    char 						**envp;
-    int 						size;
-    int 						pipe_nb;
+	int							pre_pipe_infd;
+	int							last_child_id;
+	int							in_fd;
+	int							out_fd;
+	int							red_error;
+	t_envi						*envp;
+	int							size;
+	int							pipe_nb;
 	t_gc						*head;
 
 }								t_globalvar;
@@ -176,7 +176,7 @@ void							case_function(char *input, char **result,
 									int *j);
 int								is_special(char c);
 int								check_quote(char *str);
-
+int								is_number(char c);
 int								one_dollar_test_case(int dollar_count,
 									char *input, int *i);
 int								dollar_counter(char *input);
@@ -230,6 +230,7 @@ void							handle_signal(void);
 void							handle_ctrl_d(void);
 void							handle_ctrl_c(void);
 int								expand(t_token *tokens);
+char							*ft_getenv(char *word);
 t_cmd							*analyse_tokens(t_token **tokens);
 void							handle_ctrl_c(void);
 void							handle_ctrl_d(void);
@@ -242,43 +243,40 @@ void							push_back(t_cmd **lst, t_cmd *node);
 void							push_t_file(t_file **head, t_file *node);
 void							*ft_malloc(size_t size, int ele_nbr);
 void							clean_gc(void);
+t_envi							*init_env(char **envp);
 ///////////////////// execution /////////////////////////
 
-
-// int					builtins(char **av, t_mini *box);
-int					is_builtin(char *cmd);
-void				ft_putstr_fd(char *str, int fd);
-int					ft_cd(char **ptr, t_envi *envi);
-void				update_env(t_envi *envi);
-t_envi				*search_env(t_envi *envi, char *name);
-int					is_n_option(char *arg);
-int					first_non_option(char **args);
-int					ft_echo(char **args);
-int					ft_unset(char **ptr, t_mini *box);
-void				ft_remove(t_mini *box);
-int					f__plus(char *r);
-int					ft_export(char **ptr, t_envi *env);
-int					ft_pwd(t_envi *env);
-int					ft_exit(t_shell *shell);
-int					ft_env(t_envi *env);
 /////////////////////////////builtins///////////////////////////
+int								is_builtin(char *cmd);
+void							ft_putstr_fd(char *str, int fd);
+int								ft_cd(char **ptr, t_envi *envi);
+void							update_env(t_envi *envi);
+t_envi							*search_env(t_envi *envi, char *name);
+int								is_n_option(char *arg);
+int								first_non_option(char **args);
+int								ft_echo(char **args);
+int								ft_unset(char **ptr, t_mini *box);
+int								ft_pwd(char **args, t_envi *env);
+int								ft_exit(char **args);
+int								ft_env(t_envi *env);
+void							add_env_variable(t_envi **env, char *name,
+									char *value);
+t_envi							*sort_env(t_envi *env);
+int								ft_utils(char *ptr);
+void							swap_nodes(t_envi *a, t_envi *b);
+t_envi							*cpy_list(t_envi *env);
+int								check_each_element(char *str);
+void							ft_remove(char **ptr, t_mini *box, int i);
 
-int	ft_cd(char **ptr, t_envi *envi);
-void	update_env(t_envi *envi);
-t_envi	*search_env(t_envi *envi, char *name);
-int ft_echo(char **args);
-int first_non_option(char **args);
-int is_n_option(char *arg);
-int	ft_export(char **ptr, t_envi *env);
-int	add_one(char **ptr, t_envi *env);
-int	process_single_env(char *ptr_i, t_envi *env);
-int	process_single_env(char *ptr_i, t_envi *env);
-int	process_single_env(char *ptr_i, t_envi *env);
-int	ft_unset(char **ptr, t_mini *box);
-void	ft_remove(t_mini *box);
-// int	ft_pwd(t_envi *env);
-int	ft_exit(t_shell *shell);
-int	ft_env(t_envi *env);
+int								ft_cd(char **ptr, t_envi *envi);
+void							update_env(t_envi *envi);
+t_envi							*search_env(t_envi *envi, char *name);
+int								ft_echo(char **args);
+int								first_non_option(char **args);
+int								is_n_option(char *arg);
+int								ft_export(char **ptr, t_envi **env);
+int								ft_unset(char **ptr, t_mini *box);
+int								ft_env(t_envi *env);
 
 
 // extenal command
