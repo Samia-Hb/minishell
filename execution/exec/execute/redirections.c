@@ -35,6 +35,27 @@ void	in_file_prep(char *path, int is_builtin)
 	}
 }
 
+void in_herdoc(char *path, int builtin)
+{
+	int fd;
+	fd = open(path, O_RDONLY);
+	if(fd == -1)
+	{
+		g_var->exit_status = errno;
+		g_var->fd_here_doc = 1;
+		ft_putstr_fd("minishell: ", 2);
+		perror(path);
+		if(!builtin || g_var->size > 1)
+			exit(1);
+	}
+	else
+	{
+		g_var->fd_here_doc = 1;
+		if(fd > 2)
+			close(fd);
+	}
+
+}
 void	out_file_prep(char *path, int is_builtin)
 {
 	int	fd;
@@ -103,6 +124,8 @@ void files_redirections(t_cmd *cmd, int builtin)
             out_file_prep(curr_red->filename, builtin);
         if (curr_red->type == 2)
             in_file_prep(curr_red->filename , builtin);
+		if(curr_red->type == 3)
+			in_herdoc(curr_red->filename, builtin);
         if (curr_red->type == 4)
             append_file_prep(curr_red->filename);
         curr_red = curr_red->next;

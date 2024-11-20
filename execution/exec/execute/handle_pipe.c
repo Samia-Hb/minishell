@@ -56,3 +56,4 @@ void	execute_pipes(t_cmd *token, int pipe_nb, t_mini *env)
 	}
 	close(original_stdin);
 }
+

@@ -123,7 +123,7 @@ typedef struct s_cmd
     t_type type;
     char **arguments;
     t_file *file;
-	int is_herdoc;
+	int is_herdoc_end;
     struct s_cmd *prev;
     struct s_cmd *next;
     char *cmd_path; // The path of the command
@@ -163,6 +163,7 @@ typedef struct global
 	t_envi						*envp;
 	int							size;
 	int							pipe_nb;
+	int							fd_here_doc;
 	t_gc						*head;
 
 }								t_globalvar;
@@ -316,4 +317,9 @@ t_envi *create_env_node(char *name, char *value);
 t_envi *create__node(char *name, char *value);
 void add_env_node(t_envi **env_list, t_envi *new_node);
 void	initiale_global(t_envi *env);
+void search_command_in_paths(t_cmd *cmd, char **path_dirs);
+void handle_command_not_found(t_cmd *cmd);
+void free_path_dirs(char **path_dirs);
+int is_executable(char *path);
+char *construct_full_path(char *dir, char *cmd);
 #endif

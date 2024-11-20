@@ -41,6 +41,12 @@ t_shell *init_shell()
     return shell;
 }
 
+void error_strdup()
+{
+    perror("strdup");
+    exit(EXIT_FAILURE);
+}
+
 t_envi *create__node(char *name, char *value)
 {
     t_envi *new_node = malloc(sizeof(t_envi));
@@ -73,72 +79,40 @@ void add_env_node(t_envi **env_list, t_envi *new_node)
     new_node->next = *env_list;
     *env_list = new_node;
 }
-void error_strdup()
+
+void process_env_entry(char *env_entry, t_envi **env_list)
 {
-      perror("strdup");
-      exit(EXIT_FAILURE);
+    char *name = strtok(env_entry, "=");
+    char *value = strtok(NULL, "=");
+    if (!name || !value)
+    {
+        perror("error");
+        free(env_entry);
+        return;
+    }
+    t_envi *new_node = create__node(name, value);
+    add_env_node(env_list, new_node);
+    free(env_entry);
 }
 
 t_envi *init_env(char **envp)
 {
-    t_envi *env_list;
-    char *name;
-    char *value;
-    int i;
-    
-    i = 0;
-    env_list = NULL;
+    t_envi *env_list = NULL;
+    int i = 0;
+
     while (envp[i])
     {
         char *env_entry = strdup(envp[i]);
         if (!env_entry)
-          error_strdup();
-        name = strtok(env_entry, "=");
-        value = strtok(NULL, "=");
-        if (!name || !value)
         {
-            perror("error");
-            free(env_entry);
-            i++;
-            continue;
+            error_strdup();
         }
-        t_envi *new_node = create__node(name, value);
-        add_env_node(&env_list, new_node);
-        free(env_entry);
+        process_env_entry(env_entry, &env_list);
         i++;
     }
     return env_list;
 }
 
-void	print_cmd(t_cmd *cmd)
-{
-    int	i;
-
-    i = 0;
-    while (cmd)
-    {
-        printf("=======Arguments=======\n");
-        if (cmd->arguments)
-        {
-            i = 0;
-            while (cmd->arguments[i])
-            {
-                printf("arg[%d] == %s\n", i, cmd->arguments[i]);
-                i++;
-            }
-        }
-        if (cmd->file)
-        {
-            while (cmd->file)
-            {
-                printf("filename == %s type == %d\n", cmd->file->filename,
-                        cmd->file->type);
-                cmd->file = cmd->file->next;
-            }
-        }
-        cmd = cmd->next;
-    }
-}
 void error_malloc()
 {
     perror("malloc");
@@ -153,43 +127,57 @@ void init_box(t_mini *box, char **envp)
     box->arr = NULL;
     box->last_exit_status = 0;
 }
+
 void initialisation(t_mini *box, char **envp)
 {
     initiale_global(init_env(envp));
     init_box(box, envp);
 }
 
-int main(int argc, char **argv, char **envp)
+void handle_input(char *input, t_mini *box)
 {
-    char *input;
     t_token **tokens;
     t_cmd *cmd;
-    t_mini *box;
-    (void)argc;
-    (void)argv;
 
-    tokens = NULL;
-    box = malloc(sizeof(t_mini));
-    if (!box)
-        error_malloc();
-    initialisation(box, envp);
+    if (!ft_strlen(input))
+        return;
+    add_history(input);
+    tokens = tokenize(input);
+    if (check_syntax_errors(*tokens))
+        return;
+    if (!expand(*tokens))
+        return;
+    cmd = analyse_tokens(tokens);
+    execute_arguments(cmd, box);
+}
+
+void shell_loop(t_mini *box)
+{
+    char *input;
+
     while (1)
     {
         handle_signal();
         input = readline("minishell > ");
         if (!input)
-            break ;
-        if (!ft_strlen(input))
-            continue ;
-        add_history(input);
-        tokens = tokenize(input);
-        if (check_syntax_errors(*tokens))
-            continue ;
-        if (!expand(*tokens))
-            continue;
-        cmd = analyse_tokens(tokens);
-        execute_arguments(cmd, box);
+            break;
+        handle_input(input, box);
         free(input);
     }
+}
+
+int main(int argc, char **argv, char **envp)
+{
+    t_mini *box;
+
+    (void)argc;
+    (void)argv;
+
+    box = malloc(sizeof(t_mini));
+    if (!box)
+        error_malloc();
+    initialisation(box, envp);
+    shell_loop(box);
     return 0;
 }
+
