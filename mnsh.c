@@ -73,22 +73,26 @@ void add_env_node(t_envi **env_list, t_envi *new_node)
     new_node->next = *env_list;
     *env_list = new_node;
 }
+void error_strdup()
+{
+      perror("strdup");
+      exit(EXIT_FAILURE);
+}
 
 t_envi *init_env(char **envp)
 {
-    t_envi *env_list = NULL;
+    t_envi *env_list;
     char *name;
     char *value;
-    int i = 0;
-
+    int i;
+    
+    i = 0;
+    env_list = NULL;
     while (envp[i])
     {
         char *env_entry = strdup(envp[i]);
         if (!env_entry)
-        {
-            perror("strdup");
-            exit(EXIT_FAILURE);
-        }
+          error_strdup();
         name = strtok(env_entry, "=");
         value = strtok(NULL, "=");
         if (!name || !value)
@@ -135,7 +139,25 @@ void	print_cmd(t_cmd *cmd)
         cmd = cmd->next;
     }
 }
+void error_malloc()
+{
+    perror("malloc");
+    exit(EXIT_FAILURE);
+}
 
+void init_box(t_mini *box, char **envp)
+{
+    box->env = init_env(envp);
+    box->shell = init_shell();
+    box->ptr = NULL;
+    box->arr = NULL;
+    box->last_exit_status = 0;
+}
+void initialisation(t_mini *box, char **envp)
+{
+    initiale_global(init_env(envp));
+    init_box(box, envp);
+}
 
 int main(int argc, char **argv, char **envp)
 {
@@ -149,16 +171,8 @@ int main(int argc, char **argv, char **envp)
     tokens = NULL;
     box = malloc(sizeof(t_mini));
     if (!box)
-    {
-        perror("malloc");
-        exit(EXIT_FAILURE);
-    }
-    box->env = init_env(envp);
-    box->shell = init_shell();
-    box->ptr = NULL;
-    box->arr = NULL;
-    box->last_exit_status = 0;
-    initiale_global(box->env);
+        error_malloc();
+    initialisation(box, envp);
     while (1)
     {
         handle_signal();
@@ -174,11 +188,8 @@ int main(int argc, char **argv, char **envp)
         if (!expand(*tokens))
             continue;
         cmd = analyse_tokens(tokens);
-        // print_cmd(cmd);
-        // exit(1);
         execute_arguments(cmd, box);
         free(input);
-        // clean_gc();
     }
     return 0;
 }

@@ -39,7 +39,6 @@ void	check_cmd_path(t_cmd *cmd)
 	}
 }
 
-
 int	check_path(char *path, int builtin)
 {
 	struct stat	statbuf;
