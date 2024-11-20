@@ -315,4 +315,8 @@ int check_builtin(t_cmd *cmd);
 int count_commands(t_cmd *cmd);
 void error_pipe();
 void close_files(t_cmd *token);
+t_envi *create_env_node(char *name, char *value);
+t_envi *create__node(char *name, char *value);
+void add_env_node(t_envi **env_list, t_envi *new_node);
+void	initiale_global(t_envi *env);
 #endif

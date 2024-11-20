@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   executing.c                                        :+:      :+:    :+:   */
+/*   child_process.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
+/*   By: szeroual <szeroual@student.42.fr>          #+#  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/16 13:07:20 by szeroual          #+#    #+#             */
-/*   Updated: 2024/11/19 10:02:37 by shebaz           ###   ########.fr       */
+/*   Created: 2024-11-20 10:40:47 by szeroual          #+#    #+#             */
+/*   Updated: 2024-11-20 10:40:47 by szeroual         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../minishell.h"
+#include "../../../minishell.h"
 
 void	child_process(t_cmd *token, int pipe_nb, int btn, t_mini *env)
 {
@@ -34,21 +34,6 @@ void	child_process(t_cmd *token, int pipe_nb, int btn, t_mini *env)
 	execs(token, btn, env);
 		exit(0);
 	}
-}
-
-void execs(t_cmd *cmd, int btn, t_mini *box) 
-{
-    if (btn != -1)
-    {
-        exec_builtin(btn, cmd, box);
-        exit(0);
-    }
-    if (cmd->cmd_path)
-    {
-        execve(cmd->cmd_path, cmd->arguments, NULL);
-        perror(cmd->cmd_path);
-        exit(errno);
-    }
 }
 
 void child(t_cmd *cmd, int pipe_nb,int btn,  t_mini *box)
@@ -78,23 +63,3 @@ void sig_wait(t_cmd *cmd)
         cmd = cmd->next;
     }
 }
-
-void execute_arguments(t_cmd *cmd, t_mini *box)
-{
-    g_var->size = count_commands(cmd);
-    g_var->pipe_nb = g_var->size - 1;
-    g_var->exit_status = 0;
-    g_var->pre_pipe_infd = -1;
-    int i;
-    i = 0;
-    while (cmd && g_var->exit_status == 0) 
-    {
-        execute_pipes(cmd, i, box);
-        cmd = cmd->next;
-        i++;
-    }
-    if (g_var->pre_pipe_infd > 2)
-        close(g_var->pre_pipe_infd);
-    sig_wait(cmd);
-}
-

@@ -12,6 +12,8 @@ SRCS  = $(wildcard externel_folder/libftt/*.c) \
         $(wildcard parsing/minishel_utils/*.c) \
         $(wildcard parsing/generate_struct/*.c) \
         $(wildcard execution/builtins/export/*.c ) \
+        $(wildcard execution/exec/check/*.c) \
+        $(wildcard execution/exec/execute/*.c) \
         execution/builtins/cd/cd.c \
 		execution/builtins/echo/echo.c \
        	execution/builtins/env/env.c \
