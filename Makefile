@@ -20,7 +20,9 @@ SRCS  = $(wildcard externel_folder/libftt/*.c) \
         execution/builtins/exit/exit.c \
         execution/builtins/pwd/pwd.c \
         execution/builtins/unset/unset.c \
-        mnsh.c \
+        main.c \
+        main_util1.c\
+        main_util2.c \
         $(wildcard execution/exec/*.c) \
         execution/builtins/builtins.c \
 

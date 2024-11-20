@@ -322,4 +322,10 @@ void handle_command_not_found(t_cmd *cmd);
 void free_path_dirs(char **path_dirs);
 int is_executable(char *path);
 char *construct_full_path(char *dir, char *cmd);
+void error_strdup();
+void initialisation(t_mini *box, char **envp);
+void handle_input(char *input, t_mini *box);
+void shell_loop(t_mini *box);
+void process_env_entry(char *env_entry, t_envi **env_list);
+t_shell *init_shell();
 #endif
