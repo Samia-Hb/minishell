@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 19:05:46 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/19 23:17:24 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/20 22:28:43 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	heredoc_process(t_cmd **node, t_file **head, t_token **tokens)
 		line = readline("heredoc > ");
 		if (!line)
 			exit (g_var->exit_status);
-		if (!ft_strncmp(line, processed_del, ft_strlen(processed_del)))
+		if (!ft_strcmp(line, processed_del))
 			break ;
 		if (!is_quoted((*tokens)->value))
 			line = parse_line(line);

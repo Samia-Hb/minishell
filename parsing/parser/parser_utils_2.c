@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 14:00:16 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/18 23:34:20 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/20 23:09:15 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,27 @@ int	is_number(char c)
 	return (0);
 }
 
+int	check_symbol_nbr(char *str)
+{
+	int	i;
+	int	counter;
+
+	i = 0;
+	counter = 0;
+	while (str[i])
+	{
+		if (str[i] == '<')
+			counter++;
+		i++;
+	}
+	if (counter > 2)
+	{
+		printf("Syntax Error .\n");
+		return (1);
+	}
+	return (0);
+}
+
 int	file_expansion_null(t_token *tokens)
 {
 	char	**value;
@@ -40,6 +61,11 @@ int	file_expansion_null(t_token *tokens)
 
 	while (tokens)
 	{
+		if (tokens->type == TOKEN_REDIR_HERE_DOC)
+		{
+			if (check_symbol_nbr(tokens->value))
+				return (1);
+		}
 		if (is_red(tokens) && tokens->type != TOKEN_REDIR_HERE_DOC)
 		{
 			result = expand_non_operator(tokens->next->value);

@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 13:07:36 by szeroual          #+#    #+#             */
-/*   Updated: 2024/11/19 20:18:35 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/20 22:01:04 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,14 @@ void handle_file_redirections(t_cmd *cmd,int btn)
         dup2(g_var->pre_pipe_infd, STDIN_FILENO);
 }
 
+void append_heredoc_prep(t_cmd *cmd)
+{
+	int fd;
+	
+	fd = open(cmd->file->filename, O_RDWR, 0777);
+	dup2(fd, STDIN_FILENO);
+	g_var->in_fd = fd;
+}
 void files_redirections(t_cmd *cmd, int builtin)
 {
     g_var->size = count_commands(cmd);
@@ -95,13 +103,18 @@ void files_redirections(t_cmd *cmd, int builtin)
 	curr_red = cmd->file;
     while (curr_red) 
     {
-        if (check_file_errors(curr_red->filename, builtin))
-            return;
+        // if (check_file_errors(curr_red->filename, builtin))
+        //     return;
         if (curr_red->type == 1)
             out_file_prep(curr_red->filename, builtin);
-        if (curr_red->type == 2)
+        else if (curr_red->type == 2)
             in_file_prep(curr_red->filename , builtin);
-        if (curr_red->type == 4)
+	    else if (curr_red->type == 3)
+		{
+            append_heredoc_prep(cmd);		
+			unlink(cmd->file->filename);
+		}
+        else if (curr_red->type == 4)
             append_file_prep(curr_red->filename);
         curr_red = curr_red->next;
     }

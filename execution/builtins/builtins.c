@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 09:50:00 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/19 20:30:35 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/20 15:58:36 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 int	check_builtin(t_cmd *cmd)
 {
+	if (!cmd->arguments || !cmd->arguments[0])
+		return (-1);
 	if (!ft_strcmp(cmd->arguments[0], "cd"))
 		return (1);
 	else if (!ft_strcmp(cmd->arguments[0], "echo"))

@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 21:41:35 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/19 10:46:47 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/20 21:34:15 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,22 +14,27 @@
 
 int	check_each_element(char *str)
 {
-	int	i;
+	char	*arr[2];
+	char	*tmp;
+	int		i;
 
 	i = 0;
+	tmp = ft_strdup(str);
 	if (!ft_strlen(str))
-	{
-		printf("minishell: export: `%s': not a valid identifier\n", str);
 		return (1);
-	}
-	while (str[i])
+	arr[0] = strtok(tmp, "=");
+	while (arr[0][i])
 	{
-		if ((is_special(str[i]) && str[i] != '=') || str[0] == '=')
-		{
-			printf("minishell: export: `%s': not a valid identifier\n", str);
+		if (is_number(str[i]))
 			return (1);
+		while (arr[0][i])
+		{
+			if ((is_special(str[i]) && str[i] != '\\' && str[i] != '$')
+				|| str[0] == '$' || str[0] == '=' || str[i] == '*'
+				|| str[i] == '@')
+				return (1);
+			i++;
 		}
-		i++;
 	}
 	return (0);
 }
@@ -84,7 +89,10 @@ int	add_one(char **ptr, t_envi **env)
 	while (ptr[i])
 	{
 		if (check_each_element(ptr[i]))
+		{
+			printf("minishell: export: `%s': not a valid identifier\n", ptr[i]);
 			status = 1;
+		}
 		else
 		{
 			result = process_single_env(ptr[i], env);

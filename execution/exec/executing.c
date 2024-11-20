@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 13:07:20 by szeroual          #+#    #+#             */
-/*   Updated: 2024/11/19 10:02:37 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/20 21:55:13 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,11 +81,12 @@ void sig_wait(t_cmd *cmd)
 
 void execute_arguments(t_cmd *cmd, t_mini *box)
 {
+    int i;
+    
     g_var->size = count_commands(cmd);
     g_var->pipe_nb = g_var->size - 1;
     g_var->exit_status = 0;
     g_var->pre_pipe_infd = -1;
-    int i;
     i = 0;
     while (cmd && g_var->exit_status == 0) 
     {

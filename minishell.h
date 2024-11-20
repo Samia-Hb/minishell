@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 10:29:24 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/19 11:21:36 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/20 16:53:10 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,12 +111,12 @@ typedef struct s_file
 typedef struct s_cmd
 {
 	t_type						type;
-	char						**arguments;
-	t_file						*file;
+	char						**arguments; //
+	t_file						*file;//
 	int							is_herdoc;
-	struct s_cmd				*prev;
-	struct s_cmd				*next;
-	char *cmd_path; // The path of the command
+	struct s_cmd				*prev;//
+	struct s_cmd				*next;//
+	char 						*cmd_path;
 	int							pipe_fd[2];
 	int							pid;
 }								t_cmd;
