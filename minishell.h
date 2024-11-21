@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 10:29:24 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/21 21:45:21 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/21 22:46:52 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,6 +127,7 @@ typedef struct s_var
 	int							exit_status;
 	int							out_fd;
 	int							in_fd;
+	int							in_herdoc;
 	int							red_error;
 	int							pre_pipe_infd;
 	int							last_child_id;

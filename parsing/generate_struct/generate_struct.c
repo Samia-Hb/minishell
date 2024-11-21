@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 19:05:46 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/20 22:28:43 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/22 00:34:46 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,28 +17,51 @@ void	heredoc_process(t_cmd **node, t_file **head, t_token **tokens)
 	int		fd;
 	char	*processed_del;
 	char	*line;
+	int		pid;
+	int		status;
 
+	// printf("check here\n");
 	(*tokens) = (*tokens)->next;
 	processed_del = process_delimiter((*tokens)->value);
+	printf("filname== %s\n", (*tokens)->value);
 	fd = open((*tokens)->value, O_CREAT | O_TRUNC | O_RDWR, 0777);
-	while (1)
+	pid = fork();
+	if (!pid)
 	{
-		handle_signal();
-		line = readline("heredoc > ");
+		// handle_signal();		
+		while (1)
+		{
+			line = readline("heredoc > ");
+			if (!line)
+				break ;
+			if (!ft_strcmp(line, processed_del))
+				break ;
+			if (!is_quoted((*tokens)->value))
+				line = parse_line(line);
+			write(fd, line, ft_strlen(line));
+			write(fd, "\n", 1);
+		}
 		if (!line)
-			exit (g_var->exit_status);
-		if (!ft_strcmp(line, processed_del))
-			break ;
-		if (!is_quoted((*tokens)->value))
-			line = parse_line(line);
-		write(fd, line, ft_strlen(line));
-		write(fd, "\n", 1);
+		{
+			printf("checkkkkkkkkkkkk\n");
+			unlink((*tokens)->value);
+			printf("minishell : warning: here-document must delimited by end-of-file (wanted `%s')\n",(*tokens)->value);
+			exit (130);
+		}
+		exit(0);
+	}
+	else
+		waitpid(pid, &status, 0);
+	if (WEXITSTATUS(status) == 130)
+	{
+		g_var->exit_status = 130;
+		exit(g_var->exit_status);
 	}
 	(*node)->file = ft_malloc(sizeof(t_file), 1);
 	(*node)->file->type = RE_HEREDOC;
 	(*node)->file->filename = ft_strdup((*tokens)->value);
-	(*tokens) = (*tokens)->next;
 	push_t_file(head, (*node)->file);
+	(*tokens) = (*tokens)->next;
 }
 
 void	red_process(t_token **tokens, t_cmd **node, int *i)

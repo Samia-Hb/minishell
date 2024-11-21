@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 22:29:05 by szeroual          #+#    #+#             */
-/*   Updated: 2024/11/21 21:33:50 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/22 00:36:59 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,8 @@ void	handle_input(char *input, t_mini *box)
 	if (!expand(*tokens))
 		return ;
 	cmd = analyse_tokens(tokens);
+	print_cmd(cmd);
+	// exit(1);
 	execute_arguments(cmd, box);
 }
 
