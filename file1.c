@@ -1,0 +1,16 @@
+total 124 drwxr - xr - x 4 shebaz 4221 34 Nov 21 16 : 25 execution drwxr - xr
+	- x 4 shebaz 4221 31 Nov 19 10 : 16 externel_folder - rwxr - xr
+	- x 1 shebaz 4221 818 Nov 21 18 : 43 file - rw
+	- r-- r-- 1 shebaz 4221 6 Nov 21 20 : 23 file1 - rwxr - xr
+	- x 1 shebaz 4221 0 Nov 21 20 : 37 file1.c - rwxr - xr
+	- x 1 shebaz 4221 6 Nov 21 18 : 43 file2 - rw
+	- r-- r-- 1 shebaz 4221 2449 Nov 21 17 : 39 main.c - rw
+	- r-- r-- 1 shebaz 4221 3640 Nov 21 20 : 35 main.o - rw
+	- r-- r-- 1 shebaz 4221 1751 Nov 21 16 : 25 main_util1.c - rw
+	- r-- r-- 1 shebaz 4221 3208 Nov 21 20 : 35 main_util1.o - rw
+	- r-- r-- 1 shebaz 4221 2085 Nov 21 16 : 25 main_util2.c - rw
+	- r-- r-- 1 shebaz 4221 3064 Nov 21 20 : 35 main_util2.o - rw
+	- r-- r-- 1 shebaz 4221 1153 Nov 21 16 : 25 Makefile - rwxr - xr
+	- x 1 shebaz 4221 73320 Nov 21 20 : 35 minishell - rw
+	- r-- r-- 1 shebaz 4221 9735 Nov 21 18 : 03 minishell.h drwxr - xr
+	- x 7 shebaz 4221 93 Nov 19 10 : 37 parsing

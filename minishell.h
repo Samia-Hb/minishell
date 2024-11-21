@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 10:29:24 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/21 15:50:12 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/21 21:45:21 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -312,4 +312,8 @@ void							shell_loop(t_mini *box);
 void							process_env_entry(char *env_entry,
 									t_envi **env_list);
 t_shell							*init_shell(void);
+
+////testss
+void							print_arguments(char **str);
+
 #endif

@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 10:40:47 by szeroual          #+#    #+#             */
-/*   Updated: 2024/11/21 15:40:11 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/21 21:26:08 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	child(t_cmd *cmd, int pipe_nb, int btn, t_mini *box)
 			dup2(cmd->pipe_fd[1], STDOUT_FILENO);
 		handle_file_redirections(cmd, btn);
 		execs(cmd, btn, box);
-		exit(0);
+		// exit(0);
 	}
 }
 

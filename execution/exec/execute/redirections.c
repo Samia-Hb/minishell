@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 13:07:36 by szeroual          #+#    #+#             */
-/*   Updated: 2024/11/21 15:49:19 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/21 21:37:39 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,24 @@ void	handle_file_redirections(t_cmd *cmd, int btn)
 		validate_cmd(cmd);
 	else if (g_var->pre_pipe_infd != -1 && !cmd->file->type)
 		dup2(g_var->pre_pipe_infd, STDIN_FILENO);
+}
+
+void	append_heredoc_prep(t_cmd *cmd)
+{
+	int	fd;
+	int	pid;
+
+	pid = fork();
+	if (pid == 0)
+	{
+		fd = open(cmd->file->filename, O_RDWR, 0777);
+		dup2(fd, STDIN_FILENO);
+		g_var->in_fd = fd;
+		close(fd);
+		exit(0);
+	}
+	else if (pid > 0)
+		waitpid(pid, NULL, 0);
 }
 
 void	files_redirections(t_cmd *cmd, int builtin)

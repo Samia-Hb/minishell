@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 13:07:29 by szeroual          #+#    #+#             */
-/*   Updated: 2024/11/20 21:53:39 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/21 18:44:18 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,17 @@ void	red_builtin(t_cmd *token, int btn, t_mini *box)
 	exec_builtin(btn, token, box);
 }
 
+void	print_arguments(char **str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		printf("arg[%d] = %s\n", i, str[i]);
+		i++;
+	}
+}
 void	execute_pipes(t_cmd *token, int pipe_nb, t_mini *env)
 {
 	int	btn;

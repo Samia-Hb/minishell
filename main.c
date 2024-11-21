@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 15:53:32 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/21 16:38:35 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/21 21:45:26 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,36 @@ void	error_malloc(void)
 	exit(EXIT_FAILURE);
 }
 
+void	print_cmd(t_cmd *cmd)
+{
+	int	i;
+
+	i = 0;
+	while (cmd)
+	{
+		printf("=======Arguments=======\n");
+		if (cmd->arguments)
+		{
+			i = 0;
+			while (cmd->arguments[i])
+			{
+				printf("arg[%d] == %s\n", i, cmd->arguments[i]);
+				i++;
+			}
+		}
+		if (cmd->file)
+		{
+			while (cmd->file)
+			{
+				printf("filename == %s type == %d\n", cmd->file->filename,
+					cmd->file->type);
+				cmd->file = cmd->file->next;
+			}
+		}
+		cmd = cmd->next;
+	}
+}
+
 t_envi	*init_env(char **envp)
 {
 	t_envi	*env_list;
@@ -59,6 +89,7 @@ int	main(int argc, char **argv, char **envp)
 	t_mini	*box;
 
 	(void)argc;
+	envp = envp;
 	(void)argv;
 	box = malloc(sizeof(t_mini));
 	if (!box)
