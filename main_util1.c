@@ -12,56 +12,55 @@
 
 #include "minishell.h"
 
-
-void init_box(t_mini *box, char **envp)
+void	init_box(t_mini *box, char **envp)
 {
-    box->env = init_env(envp);
-    box->shell = init_shell();
-    box->ptr = NULL;
-    box->arr = NULL;
-    box->last_exit_status = 0;
+	box->env = init_env(envp);
+	box->shell = init_shell();
+	box->ptr = NULL;
+	box->arr = NULL;
+	box->last_exit_status = 0;
 }
 
-void error_strdup()
+void	error_strdup(void)
 {
-    perror("strdup");
-    exit(EXIT_FAILURE);
+	perror("strdup");
+	exit(EXIT_FAILURE);
 }
 
-void initialisation(t_mini *box, char **envp)
+void	initialisation(t_mini *box, char **envp)
 {
-    initiale_global(init_env(envp));
-    init_box(box, envp);
+	initiale_global(init_env(envp));
+	init_box(box, envp);
 }
 
-void handle_input(char *input, t_mini *box)
+void	handle_input(char *input, t_mini *box)
 {
-    t_token **tokens;
-    t_cmd *cmd;
+	t_token	**tokens;
+	t_cmd	*cmd;
 
-    if (!ft_strlen(input))
-        return;
-    add_history(input);
-    tokens = tokenize(input);
-    if (check_syntax_errors(*tokens))
-        return;
-    if (!expand(*tokens))
-        return;
-    cmd = analyse_tokens(tokens);
-    execute_arguments(cmd, box);
+	if (!ft_strlen(input))
+		return ;
+	add_history(input);
+	tokens = tokenize(input);
+	if (check_syntax_errors(*tokens))
+		return ;
+	if (!expand(*tokens))
+		return ;
+	cmd = analyse_tokens(tokens);
+	execute_arguments(cmd, box);
 }
 
-void shell_loop(t_mini *box)
+void	shell_loop(t_mini *box)
 {
-    char *input;
+	char	*input;
 
-    while (1)
-    {
-        handle_signal();
-        input = readline("minishell > ");
-        if (!input)
-            break;
-        handle_input(input, box);
-        free(input);
-    }
+	while (1)
+	{
+		handle_signal();
+		input = readline("minishell > ");
+		if (!input)
+			break ;
+		handle_input(input, box);
+		free(input);
+	}
 }

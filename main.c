@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-t_globalvar *g_var = NULL;
+t_globalvar	*g_var = NULL;
 
 void	initiale_global(t_envi *env)
 {
@@ -28,39 +28,41 @@ void	initiale_global(t_envi *env)
 	g_var->pipe_nb = 0;
 }
 
-void error_malloc()
+void	error_malloc(void)
 {
-    perror("malloc");
-    exit(EXIT_FAILURE);
+	perror("malloc");
+	exit(EXIT_FAILURE);
 }
 
-t_envi *init_env(char **envp)
+t_envi	*init_env(char **envp)
 {
-    t_envi *env_list = NULL;
-    int i = 0;
+	t_envi	*env_list;
+	int		i;
+	char	*env_entry;
 
-    while (envp[i])
-    {
-        char *env_entry = strdup(envp[i]);
-        if (!env_entry)
-            error_strdup();
-        process_env_entry(env_entry, &env_list);
-        i++;
-    }
-    return env_list;
+	env_list = NULL;
+	i = 0;
+	while (envp[i])
+	{
+		env_entry = strdup(envp[i]);
+		if (!env_entry)
+			error_strdup();
+		process_env_entry(env_entry, &env_list);
+		i++;
+	}
+	return (env_list);
 }
 
-int main(int argc, char **argv, char **envp)
+int	main(int argc, char **argv, char **envp)
 {
-    t_mini *box;
+	t_mini	*box;
 
-    (void)argc;
-    (void)argv;
-
-    box = malloc(sizeof(t_mini));
-    if (!box)
-        error_malloc();
-    initialisation(box, envp);
-    shell_loop(box);
-    return 0;
+	(void)argc;
+	(void)argv;
+	box = malloc(sizeof(t_mini));
+	if (!box)
+		error_malloc();
+	initialisation(box, envp);
+	shell_loop(box);
+	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 09:50:00 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/19 10:07:16 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/20 15:58:36 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,21 @@
 
 int	check_builtin(t_cmd *cmd)
 {
-	if (ft_strcmp(cmd->arguments[0], "cd") == 0)
+	if (!cmd->arguments || !cmd->arguments[0])
+		return (-1);
+	if (!ft_strcmp(cmd->arguments[0], "cd"))
 		return (1);
-	else if (ft_strcmp(cmd->arguments[0], "echo") == 0)
+	else if (!ft_strcmp(cmd->arguments[0], "echo"))
 		return (2);
-	else if (ft_strcmp(cmd->arguments[0], "env") == 0)
+	else if (!ft_strcmp(cmd->arguments[0], "env"))
 		return (3);
-	else if (ft_strcmp(cmd->arguments[0], "exit") == 0)
+	else if (!ft_strcmp(cmd->arguments[0], "exit"))
 		return (4);
-	else if (ft_strcmp(cmd->arguments[0], "export") == 0)
+	else if (!ft_strcmp(cmd->arguments[0], "export"))
 		return (5);
-	else if (ft_strcmp(cmd->arguments[0], "pwd") == 0)
+	else if (!ft_strcmp(cmd->arguments[0], "pwd"))
 		return (6);
-	else if (ft_strcmp(cmd->arguments[0], "unset") == 0)
+	else if (!ft_strcmp(cmd->arguments[0], "unset"))
 		return (7);
 	return (-1);
 }

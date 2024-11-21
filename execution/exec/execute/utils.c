@@ -3,14 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: szeroual <szeroual@student.42.fr>          #+#  +:+       +#+        */
+/*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024-11-16 13:07:11 by szeroual          #+#    #+#             */
-/*   Updated: 2024-11-16 13:07:11 by szeroual         ###   ########.fr       */
+/*   Created: 2024/11/16 13:07:11 by szeroual          #+#    #+#             */
+/*   Updated: 2024/11/21 15:49:25 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../minishell.h"
+
+void	append_heredoc_prep(t_cmd *cmd)
+{
+	int	fd;
+
+	fd = open(cmd->file->filename, O_RDWR, 0777);
+	dup2(fd, STDIN_FILENO);
+	g_var->in_fd = fd;
+}
 
 void	validate_cmd(t_cmd *cmd)
 {

@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 23:04:40 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/18 23:12:14 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/19 10:48:38 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ t_envi	*create_env_node(char *name, char *value)
 
 	if (!name)
 		return (NULL);
-	new_node = malloc(sizeof(t_envi));
+	new_node = ft_malloc(sizeof(t_envi), 1);
 	if (!new_node)
 	{
 		perror("error");

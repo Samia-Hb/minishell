@@ -1,6 +1,6 @@
 CFLAGS = -Wall -Wextra -Werror 
 
-CC = cc #-fs+anitize=address -g3
+CC = cc #-fsanitize=address -g3
 LFLAGS = -lreadline
 NAME = minishell
 

@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/23 15:39:23 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/19 10:00:21 by shebaz           ###   ########.fr       */
+/*   Created: 2024/11/19 10:29:24 by shebaz            #+#    #+#             */
+/*   Updated: 2024/11/21 15:50:12 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include "externel_folder/gnl/get_next_line.h"
 # include "externel_folder/libftt/libft.h"
+# include <errno.h>
 # include <fcntl.h>
 # include <limits.h>
 # include <readline/history.h>
@@ -24,22 +25,13 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
-#include <sys/stat.h>
+# include <sys/stat.h>
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <unistd.h>
-#include <errno.h>
-# define SIGINT 2 
+# define SIGINT 2
 # define SIGQUIT 3
 # define SIGTERM 15
-
-// typedef struct s_mini
-// {
-//     t_envi *env;
-//     t_shell *shell;
-//     char **ptr;
-//     char **arr;
-// }t_mini;
 
 typedef enum
 {
@@ -59,8 +51,7 @@ typedef enum
 	TOKEN_BUILT_IN,
 	TOKEN_ARGUMENT,
 	TOKEN_UNKNOWN
-}
-					TokenType;
+}								TokenType;
 typedef enum
 {
 	PIPE,
@@ -69,37 +60,36 @@ typedef enum
 	RE_HEREDOC,
 	RE_APPEND,
 	UNKOWN
-}					t_type;
+}								t_type;
 
 typedef struct s_alst
 {
-	void *content;
-	struct s_alst *next;
-}t_alst;
+	void						*content;
+	struct s_alst				*next;
+}								t_alst;
 
 typedef struct s_shell
 {
-	int				exit_status;
-	char			**args;
-}					t_shell;
+	int							exit_status;
+	char						**args;
+}								t_shell;
 
 typedef struct s_env
 {
-	char			*name;
-	char			*vale; 
-	struct s_env	*next;
-	struct s_env	*prv;
-}					t_envi;
-
+	char						*name;
+	char						*vale;
+	struct s_env				*next;
+	struct s_env				*prv;
+}								t_envi;
 
 typedef struct s_mini
 {
-	t_envi			*env;
-	t_shell			*shell;
-	char			**ptr;
-	char			**arr;
-	int				last_exit_status;
-}					t_mini;
+	t_envi						*env;
+	t_shell						*shell;
+	char						**ptr;
+	char						**arr;
+	int							last_exit_status;
+}								t_mini;
 
 typedef struct token
 {
@@ -112,39 +102,38 @@ typedef struct token
 
 typedef struct s_file
 {
-    char *filename;
-    int type;
-    char *red; // The path of the redirection
-    struct s_file *next;
-} t_file;
+	char						*filename;
+	int							type;
+	char						*red;
+	struct s_file				*next;
+}								t_file;
 
 typedef struct s_cmd
 {
-    t_type type;
-    char **arguments;
-    t_file *file;
-	int is_herdoc_end;
-    struct s_cmd *prev;
-    struct s_cmd *next;
-    char *cmd_path; // The path of the command
-    int pipe_fd[2];
-    int pid;
-} t_cmd;
+	t_type						type;
+	char						**arguments;
+	t_file						*file;
+	int							is_herdoc_end;
+	struct s_cmd				*prev;
+	struct s_cmd				*next;
+	char						*cmd_path;
+	int							pipe_fd[2];
+	int							pid;
+}								t_cmd;
 
 typedef struct s_var
 {
-	t_alst *alist;
-    int exit_status; // The exit status
-    int out_fd;
-	int in_fd;
-    int red_error; //error  for redir
-    int pre_pipe_infd; // si il ya une commande avant le pipe
-    int last_child_id;
-    char **envp;
-	int	pipe_nb; // the number of pipes 
-    int size; // the size of the command
-} t_var;
-
+	t_alst						*alist;
+	int							exit_status;
+	int							out_fd;
+	int							in_fd;
+	int							red_error;
+	int							pre_pipe_infd;
+	int							last_child_id;
+	char						**envp;
+	int							pipe_nb;
+	int							size;
+}								t_var;
 
 typedef struct garbage_collector
 {
@@ -245,7 +234,6 @@ void							push_t_file(t_file **head, t_file *node);
 void							*ft_malloc(size_t size, int ele_nbr);
 void							clean_gc(void);
 t_envi							*init_env(char **envp);
-///////////////////// execution /////////////////////////
 
 /////////////////////////////builtins///////////////////////////
 int								is_builtin(char *cmd);
@@ -279,53 +267,49 @@ int								ft_export(char **ptr, t_envi **env);
 int								ft_unset(char **ptr, t_mini *box);
 int								ft_env(t_envi *env);
 
+/////////////////////////////execution///////////////////////////
 
-// extenal command
-
-char				**separate_env(t_envi *env);
-char				**get_path(void);
-int					count_arguments(char **arguments);
-
-void execute_pipe(t_cmd *cmd, t_mini *box);
-
-
-////////////////////////////////new shell////////////////////////////////
-void validate_cmd(t_cmd *cmd);
-char *allocate_folders(char *path, int i);
-void check_cmd_path(t_cmd *cmd);
-void my_strncpy(char *dest, const char *src, size_t n);
-int check_path(char *path, int builtin);
-void check_command_name(t_cmd *cmd);
-void child_process(t_cmd *cmd, int pipe_nb, int btn, t_mini *box);
-void execute_arguments(t_cmd *cmd, t_mini *box);
-void sig_wait(t_cmd *cmd);
-void execute_pipes(t_cmd *cmd, int pipe_nb, t_mini *box);
-void exec_builtin(int btn, t_cmd *cmd, t_mini *box);
-void handle_file_redirections(t_cmd *cmd, int btn);
-void execs(t_cmd *cmd, int btn, t_mini *box);
-void files_redirections(t_cmd *cmd, int builtin);
-void append_file_prep(char *path);
-void out_file_prep(char *path, int builtin);
-void in_file_prep(char *path, int builtin);
-int check_file_errors(char *path, int builtin);
-// void handle_file_redirections(t_cmd *cmd, int btn);
-int check_builtin(t_cmd *cmd);
-int count_commands(t_cmd *cmd);
-void error_pipe();
-void close_files(t_cmd *token);
-t_envi *create_env_node(char *name, char *value);
-t_envi *create__node(char *name, char *value);
-void add_env_node(t_envi **env_list, t_envi *new_node);
-void	initiale_global(t_envi *env);
-void search_command_in_paths(t_cmd *cmd, char **path_dirs);
-void handle_command_not_found(t_cmd *cmd);
-void free_path_dirs(char **path_dirs);
-int is_executable(char *path);
-char *construct_full_path(char *dir, char *cmd);
-void error_strdup();
-void initialisation(t_mini *box, char **envp);
-void handle_input(char *input, t_mini *box);
-void shell_loop(t_mini *box);
-void process_env_entry(char *env_entry, t_envi **env_list);
-t_shell *init_shell();
+void							validate_cmd(t_cmd *cmd);
+char							*allocate_folders(char *path, int i);
+void							check_cmd_path(t_cmd *cmd);
+void							my_strncpy(char *dest, const char *src,
+									size_t n);
+void							check_command_name(t_cmd *cmd);
+void							child_process(t_cmd *cmd, int pipe_nb, int btn,
+									t_mini *box);
+void							execute_arguments(t_cmd *cmd, t_mini *box);
+void							sig_wait(t_cmd *cmd);
+void							execute_pipes(t_cmd *cmd, int pipe_nb,
+									t_mini *box);
+void							exec_builtin(int btn, t_cmd *cmd, t_mini *box);
+void							handle_file_redirections(t_cmd *cmd, int btn);
+void							execs(t_cmd *cmd, int btn, t_mini *box);
+void							files_redirections(t_cmd *cmd, int builtin);
+void							append_file_prep(char *path);
+void							out_file_prep(char *path, int builtin);
+void							in_file_prep(char *path, int builtin);
+void							append_heredoc_prep(t_cmd *cmd);
+int								check_file_errors(char *path, int builtin);
+int								check_builtin(t_cmd *cmd);
+int								count_commands(t_cmd *cmd);
+void							error_pipe(void);
+void							close_files(t_cmd *token);
+t_envi							*create_env_node(char *name, char *value);
+t_envi							*create__node(char *name, char *value);
+void							add_env_node(t_envi **env_list,
+									t_envi *new_node);
+void							initiale_global(t_envi *env);
+void							search_command_in_paths(t_cmd *cmd,
+									char **path_dirs);
+void							handle_command_not_found(t_cmd *cmd);
+void							free_path_dirs(char **path_dirs);
+int								is_executable(char *path);
+char							*construct_full_path(char *dir, char *cmd);
+void							error_strdup(void);
+void							initialisation(t_mini *box, char **envp);
+void							handle_input(char *input, t_mini *box);
+void							shell_loop(t_mini *box);
+void							process_env_entry(char *env_entry,
+									t_envi **env_list);
+t_shell							*init_shell(void);
 #endif

@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 20:25:49 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/13 14:40:49 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/20 22:46:51 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	handle_consecutive_operator(t_token *tokens)
 			|| (is_red(current) && is_red(prev)) || (prev->type == TOKEN_PIPE
 				&& current->type == TOKEN_PIPE))
 		{
-			printf("Syntax Error.\n");
+			printf("Syntax Error .\n");
 			return (1);
 		}
 		prev = current;

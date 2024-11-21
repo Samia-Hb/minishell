@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 15:20:22 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/06 21:29:07 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/20 22:55:20 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,9 @@ void	handle_heredoc(t_token **tokens, char *input, int *i)
 
 	j = 0;
 	delimiter = NULL;
-	while (input[j] != ' ' && input[j] != '\t' && input[j] != '\0')
+	while (input[j] && input[j] == '<')
+		j++;
+	if (input[j] == '-')
 		j++;
 	here = ft_strndup(input, j);
 	add_token(tokens, TOKEN_REDIR_HERE_DOC, here, i);

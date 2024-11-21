@@ -3,22 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   handle_pipe.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: szeroual <szeroual@student.42.fr>          #+#  +:+       +#+        */
+/*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024-11-16 13:07:29 by szeroual          #+#    #+#             */
-/*   Updated: 2024-11-16 13:07:29 by szeroual         ###   ########.fr       */
+/*   Created: 2024/11/16 13:07:29 by szeroual          #+#    #+#             */
+/*   Updated: 2024/11/20 21:53:39 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../minishell.h"
 
-void error_pipe()
+void	error_pipe(void)
 {
 	perror("pipe");
 	exit(1);
 }
 
-void close_files(t_cmd *token)
+void	close_files(t_cmd *token)
 {
 	if (token->pipe_fd[1] > 2)
 		close(token->pipe_fd[1]);
@@ -26,7 +26,7 @@ void close_files(t_cmd *token)
 		close(g_var->pre_pipe_infd);
 }
 
-void red_builtin(t_cmd *token, int btn, t_mini *box)
+void	red_builtin(t_cmd *token, int btn, t_mini *box)
 {
 	files_redirections(token, 1);
 	exec_builtin(btn, token, box);
@@ -34,8 +34,8 @@ void red_builtin(t_cmd *token, int btn, t_mini *box)
 
 void	execute_pipes(t_cmd *token, int pipe_nb, t_mini *env)
 {
-	int btn;
-	int original_stdin;
+	int	btn;
+	int	original_stdin;
 
 	original_stdin = dup(STDIN_FILENO);
 	btn = check_builtin(token);
@@ -56,4 +56,3 @@ void	execute_pipes(t_cmd *token, int pipe_nb, t_mini *env)
 	}
 	close(original_stdin);
 }
-
