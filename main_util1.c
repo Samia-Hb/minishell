@@ -21,11 +21,13 @@ void init_box(t_mini *box, char **envp)
     box->arr = NULL;
     box->last_exit_status = 0;
 }
+
 void error_strdup()
 {
     perror("strdup");
     exit(EXIT_FAILURE);
 }
+
 void initialisation(t_mini *box, char **envp)
 {
     initiale_global(init_env(envp));

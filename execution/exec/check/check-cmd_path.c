@@ -58,3 +58,13 @@ int	check_path(char *path, int builtin)
 	free(folders);
 	return (status);
 }
+
+int is_executable(char *path)
+{
+    struct stat statbuf;
+    if (stat(path, &statbuf) == 0 && S_ISREG(statbuf.st_mode) && (statbuf.st_mode & S_IXUSR))
+    {
+        return 1;
+    }
+    return 0;
+}

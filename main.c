@@ -64,4 +64,3 @@ int main(int argc, char **argv, char **envp)
     shell_loop(box);
     return 0;
 }
-

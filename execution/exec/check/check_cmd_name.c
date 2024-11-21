@@ -27,15 +27,6 @@ char *construct_full_path(char *dir, char *cmd)
     return full_path;
 }
 
-int is_executable(char *path)
-{
-    struct stat statbuf;
-    if (stat(path, &statbuf) == 0 && S_ISREG(statbuf.st_mode) && (statbuf.st_mode & S_IXUSR))
-    {
-        return 1;
-    }
-    return 0;
-}
 
 void free_path_dirs(char **path_dirs)
 {

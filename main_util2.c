@@ -25,8 +25,6 @@ t_shell *init_shell()
     return shell;
 }
 
-
-
 t_envi *create__node(char *name, char *value)
 {
     t_envi *new_node = malloc(sizeof(t_envi));
