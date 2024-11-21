@@ -111,12 +111,12 @@ typedef struct s_file
 typedef struct s_cmd
 {
 	t_type						type;
-	char						**arguments; //
-	t_file						*file;//
+	char **arguments; //
+	t_file *file;     //
 	int							is_herdoc;
-	struct s_cmd				*prev;//
-	struct s_cmd				*next;//
-	char 						*cmd_path;
+	struct s_cmd *prev; //
+	struct s_cmd *next; //
+	char						*cmd_path;
 	int							pipe_fd[2];
 	int							pid;
 }								t_cmd;

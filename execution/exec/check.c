@@ -33,7 +33,7 @@ void	check_cmd_path(t_cmd *cmd)
 	}
 	else
 	{
-	    ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd("minishell: ", 2);
 		ft_putstr_fd(cmd->arguments[0], 2);
 		ft_putstr_fd(": No such file or directory\n", 2);
 		g_var->exit_status = 1;
