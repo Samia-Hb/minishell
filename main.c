@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   mnsh.c                                             :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 15:53:32 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/19 10:04:23 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/21 16:38:35 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@ void	initiale_global(t_envi *env)
 	g_var->pre_pipe_infd = -1;
 	g_var->envp = env;
 	g_var->last_child_id = 0;
-	g_var->out_fd = -1;
+	g_var->out_fd = STDOUT_FILENO;
+	g_var->in_fd = STDIN_FILENO;
 	g_var->red_error = 0;
 	g_var->size = 0;
 	g_var->pipe_nb = 0;
