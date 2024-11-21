@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 15:53:32 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/20 23:31:20 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/21 14:58:49 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,6 +165,7 @@ int main(int argc, char **argv, char **envp)
             continue;
         cmd = analyse_tokens(tokens);
         // print_cmd(cmd);
+        // exit(1);
         execute_arguments(cmd, box);
     }
     return 0;

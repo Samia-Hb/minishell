@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 13:07:36 by szeroual          #+#    #+#             */
-/*   Updated: 2024/11/20 22:01:04 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/21 15:14:33 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,11 +80,11 @@ void append_file_prep(char *path)
 
 void handle_file_redirections(t_cmd *cmd,int btn) 
 {
-    files_redirections(cmd, btn != -1);
-    if (btn == -1)
-        validate_cmd(cmd);
-    else if (g_var->pre_pipe_infd != -1 && !cmd->file->type)
-        dup2(g_var->pre_pipe_infd, STDIN_FILENO);
+	files_redirections(cmd, btn != -1);
+	if (btn == -1)
+		validate_cmd(cmd);
+	else if (g_var->pre_pipe_infd != -1 && !cmd->file->type)
+		dup2(g_var->pre_pipe_infd, STDIN_FILENO);
 }
 
 void append_heredoc_prep(t_cmd *cmd)
@@ -95,6 +95,7 @@ void append_heredoc_prep(t_cmd *cmd)
 	dup2(fd, STDIN_FILENO);
 	g_var->in_fd = fd;
 }
+
 void files_redirections(t_cmd *cmd, int builtin)
 {
     g_var->size = count_commands(cmd);
@@ -103,8 +104,6 @@ void files_redirections(t_cmd *cmd, int builtin)
 	curr_red = cmd->file;
     while (curr_red) 
     {
-        // if (check_file_errors(curr_red->filename, builtin))
-        //     return;
         if (curr_red->type == 1)
             out_file_prep(curr_red->filename, builtin);
         else if (curr_red->type == 2)
