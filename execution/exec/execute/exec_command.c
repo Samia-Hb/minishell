@@ -38,31 +38,6 @@ char **separate_env(t_envi *env)
     return the_env;
 }
 
-// void	execs(t_cmd *cmd, int btn, t_mini *box)
-// {
-//     char **env_array;
-
-//     if (btn != -1)
-//     {
-//         exec_builtin(btn, cmd, box);
-//         exit(0);
-//     }
-//     if (cmd->cmd_path)
-//     {
-//         env_array = separate_env(box->env); 
-//         if (!env_array)
-//         {
-//             perror("Failed to convert environment variables");
-//             exit(1);
-//         }
-//         execve(cmd->cmd_path, cmd->arguments, env_array);
-//         perror(cmd->cmd_path);
-//         free(env_array); 
-//         exit(1);
-//     }
-// }
-
-
 void	execs(t_cmd *token, int btn, t_mini *env)
 {
 	if (btn != -1)
@@ -91,13 +66,7 @@ void	execs(t_cmd *token, int btn, t_mini *env)
 int	init_execute_arguments(void)
 {
 	g_var->exit_status = 0;
-	// g_var->interactive = 0;
 	g_var->pre_pipe_infd = -1;
-	// g_var->fd = NULL;
-	// g_var->hd_files = ft_calloc(17, sizeof(char *));
-	// if (!g_var->hd_files)
-	// 	return (1);
-	// signal(SIGINT, SIG_IGN);
 	return (0);
 }
 
@@ -106,7 +75,6 @@ void	cleanup_execute_arguments(t_cmd *token)
 	if (g_var->pre_pipe_infd > 2)
 		close(g_var->pre_pipe_infd);
 	sig_wait(token);
-	// free_hdfiles();
 }
 
 

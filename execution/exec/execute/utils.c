@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "../../../minishell.h"
-// #include "../parsing.h"
 
 void	handle_signals(int mode)
 {
@@ -92,7 +91,6 @@ char	*get_cmd_path(char *cmd, char **dirs)
 		free(temp);
 		if (!cmd_path)
         {
-            // ft_free_array(dirs);
             return (NULL);
         }
 		if (access(cmd_path, F_OK))
@@ -107,7 +105,6 @@ char	*get_cmd_path(char *cmd, char **dirs)
 		    cmd_path = NULL;
 		}
 	}
-	// ft_free_array(dirs);
 	return (put_cmd_status(status, cmd_path, cmd));
 }
 
@@ -167,34 +164,6 @@ int	get_var_index(char *key)
 	return (i);
 }
 
-// void	check_command_name(t_cmd *token)
-// {
-// 	int		i;
-// 	char	**execps_paths;
-
-// 	i = -1;
-// 	execps_paths = NULL;
-// 	i = get_var_index("PATH=");
-// 	if (i != -1)
-// 	{
-// 		execps_paths = ft_split(g_var->en[i] + 5, ':');
-// 		token->cmd_path = get_cmd_path(token->arguments[0], execps_paths);
-// 	}
-// 	else
-// 		check_cmd_path(token);
-// }
-// t_alst	*lista_new(void *content)
-// {
-// 	t_alst	*list;
-
-// 	list = malloc(sizeof(t_alst));
-// 	if (!list)
-// 		return (NULL);
-// 	list->content = content;
-// 	list->next = NULL;
-// 	return (list);
-// }
-
 char	*allocate_folders(char *path, int i)
 {
 	char	*folders;
@@ -209,15 +178,6 @@ char	*allocate_folders(char *path, int i)
 	my_strncpy(folders, path, i + 1);
 	return (folders);
 }
-// void	lista_add_front(t_alst **lst, t_alst *new)
-// {
-// 	if (!new)
-// 		return ;
-// 	if (*lst)
-// 		new->next = *lst;
-// 	*lst = new;
-// }
-
 
 int	handle_stat_error(char *path, int is_builtin)
 {
@@ -231,7 +191,6 @@ int	handle_stat_error(char *path, int is_builtin)
 	}
 	else
 	{
-		// free_hdfiles();
 		exit(1);
 	}
 }
