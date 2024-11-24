@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 20:40:55 by shebaz            #+#    #+#             */
-/*   Updated: 2024/10/26 20:40:56 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/20 23:34:03 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ void	handle_ctrl_c(void)
 
 void	handle_ctrl_d(void)
 {
+	clean_gc();
 	exit(127);
 }
 
@@ -29,4 +30,5 @@ void	handle_signal(void)
 {
 	signal(SIGINT, (__sighandler_t)handle_ctrl_c);
 	signal(SIGTERM, (__sighandler_t)handle_ctrl_d);
+	signal(SIGQUIT, SIG_IGN);
 }

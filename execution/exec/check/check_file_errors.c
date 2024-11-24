@@ -1,40 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd.c                                              :+:      :+:    :+:   */
+/*   check_file_errors.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/17 16:00:56 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/19 20:25:11 by shebaz           ###   ########.fr       */
+/*   Created: 2024/11/20 10:38:44 by szeroual          #+#    #+#             */
+/*   Updated: 2024/11/21 15:39:42 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../minishell.h"
 
-int	ft_pwd(char **args, t_envi *env)
-{
-	char	buff[1024];
-	char	*pwd;
 
-	if (args[1])
-		return (printf("invalid option : %s\n", args[1]), 1);
-	pwd = getcwd(buff, sizeof(buff));
-	if (!pwd)
+int	check_file_errors(char *path, int builtin)
+{
+	if (path && (path[0] == '$' || (path[0] == '"' && path[1] == '$')))
 	{
-		perror("pwd; failed");
-		return (1);
-	}
-	write(g_var->out_fd, pwd, ft_strlen(pwd));
-	write(g_var->out_fd, "\n", 1);
-	if (env)
-	{
-		free(env->vale);
-		env->vale = ft_strdup(pwd);
-		if (!env->vale)
+		g_var->red_error = 1;
+		g_var->exit_status = 1;
+		if (path[0] == '$' && path[1])
 		{
-			perror("Failed to duplicate pwd");
+			ft_putstr_fd("minishell: ", 2);
+			ft_putstr_fd(path, 2);
+			ft_putstr_fd(" ambiguous redirect\n", 2);
+		}
+		else
+			ft_putstr_fd("minishell: No such file or directory\n", 2);
+		if (builtin)
 			return (1);
+		else
+		{
+			// free_hdfiles();
+			exit(1);
 		}
 	}
 	return (0);

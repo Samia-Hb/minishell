@@ -1,6 +1,6 @@
 CFLAGS = -Wall -Wextra -Werror 
 
-CC = cc #-fs+anitize=address -g3
+CC = cc #-fsanitize=address -g3
 LFLAGS = -lreadline
 NAME = minishell
 
@@ -11,17 +11,20 @@ SRCS  = $(wildcard externel_folder/libftt/*.c) \
         $(wildcard parsing/signal/*.c) \
         $(wildcard parsing/minishel_utils/*.c) \
         $(wildcard parsing/generate_struct/*.c) \
+        $(wildcard execution/builtins/export/*.c ) \
+        $(wildcard execution/exec/check/*.c) \
+        $(wildcard execution/exec/execute/*.c) \
         execution/builtins/cd/cd.c \
 		execution/builtins/echo/echo.c \
        	execution/builtins/env/env.c \
         execution/builtins/exit/exit.c \
         execution/builtins/pwd/pwd.c \
         execution/builtins/unset/unset.c \
-	  	execution/builtins/export/export.c \
-        mnsh.c \
-        execution/executing.c \
+        main.c \
+        main_util1.c\
+        main_util2.c \
+        $(wildcard execution/exec/*.c) \
         execution/builtins/builtins.c \
-        # $(wildcard execution/*.c) \
 
 OBJS = $(SRCS:.c=.o)
 
@@ -30,7 +33,7 @@ all: $(NAME)
 $(NAME): $(OBJS)
 	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LFLAGS)
 
-%.o: %.c
+%.o: %.cmake
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:

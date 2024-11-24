@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/14 13:47:35 by szeroual          #+#    #+#             */
-/*   Updated: 2024/10/26 20:31:56 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/06 15:58:46 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 # include <stdint.h>
 # include <stdlib.h>
 # include <unistd.h>
+# include "../../minishell.h"
+# include <stdio.h>
 
 void	*ft_memchr(const void *s, int c, size_t n);
 void	*ft_memcpy(void *dest, const void *src, size_t n);

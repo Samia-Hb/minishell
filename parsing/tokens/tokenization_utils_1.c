@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 15:20:22 by shebaz            #+#    #+#             */
-/*   Updated: 2024/10/31 21:03:49 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/20 22:55:20 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ char	*heredoc_token(char *input, int l)
 	int		i;
 
 	i = 0;
-	full_token = malloc(l * sizeof(char));
+	full_token = ft_malloc(sizeof(char), l);
 	if (!full_token)
 		return (NULL);
 	while (i < l)
@@ -38,7 +38,7 @@ char	*read_from_stdin(char *result, char *buffer, int *n)
 	return (result);
 }
 
-void	handle_heredoc(Token **tokens, char *input, int *i)
+void	handle_heredoc(t_token **tokens, char *input, int *i)
 {
 	char	*delimiter;
 	char	*here;
@@ -47,7 +47,9 @@ void	handle_heredoc(Token **tokens, char *input, int *i)
 
 	j = 0;
 	delimiter = NULL;
-	while (input[j] != ' ' && input[j] != '\t' && input[j] != '\0')
+	while (input[j] && input[j] == '<')
+		j++;
+	if (input[j] == '-')
 		j++;
 	here = ft_strndup(input, j);
 	add_token(tokens, TOKEN_REDIR_HERE_DOC, here, i);
