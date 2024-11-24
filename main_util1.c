@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 22:29:05 by szeroual          #+#    #+#             */
-/*   Updated: 2024/11/23 23:31:29 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/25 00:17:04 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,22 @@ void	error_strdup(void)
 	exit(EXIT_FAILURE);
 }
 
+void	initiale_global(t_envi *env)
+{
+	g_var = malloc(sizeof(struct s_global));
+	if (!g_var)
+	{
+		perror("malloc failed");
+		exit(EXIT_FAILURE);
+	}
+	g_var->envp = env;
+	g_var->exit_status = 0;
+}
+
 void	initialisation(t_mini *box, char **envp)
 {
+	initiale_global(init_env(envp));
 	init_box(box, envp);
-	initiale_global(box->env);
 }
 
 void	handle_input(char *input, t_mini *box)
@@ -50,7 +62,6 @@ void	handle_input(char *input, t_mini *box)
 	if (!expand(*tokens))
 		return ;
 	cmd = analyse_tokens(tokens);
-	// print_cmd(cmd);
 	execute_arguments(cmd, box);
 }
 

@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 10:38:44 by szeroual          #+#    #+#             */
-/*   Updated: 2024/11/21 15:39:42 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/25 00:05:41 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,14 @@ int	check_file_errors(char *path, int builtin)
 	{
 		g_var->red_error = 1;
 		g_var->exit_status = 1;
-		ft_putstr_fd("minishell: ", 2);
-		ft_putstr_fd(path, 2);
-		ft_putstr_fd(" ambiguous redirect\n", 2);
+		if (path[0] == '$' && path[1])
+		{
+			ft_putstr_fd("minishell: ", 2);
+			ft_putstr_fd(path, 2);
+			ft_putstr_fd(" ambiguous redirect\n", 2);
+		}
+		else
+			ft_putstr_fd("minishell: No such file or directory\n", 2);
 		if (builtin)
 			return (1);
 		else

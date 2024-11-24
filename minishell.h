@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/19 10:29:24 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/23 19:57:34 by shebaz           ###   ########.fr       */
+/*   Created: 2024/11/25 00:06:05 by shebaz            #+#    #+#             */
+/*   Updated: 2024/11/25 00:18:48 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 # include "externel_folder/gnl/get_next_line.h"
 # include "externel_folder/libftt/libft.h"
-# include <errno.h>
+# include <dirent.h>
 # include <fcntl.h>
 # include <limits.h>
 # include <readline/history.h>
@@ -29,11 +29,12 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <unistd.h>
+
 # define SIGINT 2
 # define SIGQUIT 3
 # define SIGTERM 15
 
-typedef enum
+typedef enum t_TokenType
 {
 	TOKEN_TILDLE,
 	TOKEN_PIPE,
@@ -51,8 +52,9 @@ typedef enum
 	TOKEN_BUILT_IN,
 	TOKEN_ARGUMENT,
 	TOKEN_UNKNOWN
-}								TokenType;
-typedef enum
+}								t_token_type;
+
+typedef enum t_type
 {
 	PIPE,
 	RE_OUT,
@@ -93,7 +95,7 @@ typedef struct s_mini
 
 typedef struct token
 {
-	TokenType					type;
+	t_token_type				type;
 	char						*value;
 	char						**expanded_value;
 	struct token				*next;
@@ -116,18 +118,18 @@ typedef struct s_cmd
 	int							is_herdoc_end;
 	struct s_cmd				*prev;
 	struct s_cmd				*next;
+	int							builtin;
 	char						*cmd_path;
 	int							pipe_fd[2];
 	int							pid;
+	int							in_fd;
+	int							out_fd;
 }								t_cmd;
 
 typedef struct s_var
 {
 	t_alst						*alist;
 	int							exit_status;
-	int							out_fd;
-	int							in_fd;
-	int							in_herdoc;
 	int							red_error;
 	int							pre_pipe_infd;
 	int							last_child_id;
@@ -142,23 +144,26 @@ typedef struct garbage_collector
 	struct garbage_collector	*next;
 }								t_gc;
 
-struct global
+struct s_global
 {
 	int							exit_status;
 	int							pre_pipe_infd;
 	int							last_child_id;
-	int							in_fd;
 	int							out_fd;
 	int							red_error;
 	t_envi						*envp;
+	int							num;
 	int							size;
 	int							pipe_nb;
 	int							fd_here_doc;
 	t_gc						*head;
-
+	char						**en;
+	t_alst						**alist;
+	int							in_fd;
+	// int out_fd;
 };
 
-extern struct global				*g_var;
+extern struct s_global	*g_var;
 
 t_token							**tokenize(char *input);
 char							*handle_quote(char *str);
@@ -179,7 +184,7 @@ char							*double_quote_expansion(char *input, int *i);
 int								is_quoted(char *input);
 char							*expand_non_operator(char *token);
 int								built_in_checker(const char *str);
-void							add_token(t_token **tokens, TokenType type,
+void							add_token(t_token **tokens, t_token_type type,
 									char *value, int *k);
 char							*get_executable(char *command);
 char							*get_inside_quote(char *tmp, int *i, int *j);
@@ -237,6 +242,7 @@ void							clean_gc(void);
 t_envi							*init_env(char **envp);
 
 /////////////////////////////builtins///////////////////////////
+
 int								is_builtin(char *cmd);
 void							ft_putstr_fd(char *str, int fd);
 int								ft_cd(char **ptr, t_envi *envi);
@@ -258,36 +264,18 @@ t_envi							*cpy_list(t_envi *env);
 int								check_each_element(char *str);
 void							ft_remove(char **ptr, t_mini *box, int i);
 
-int								ft_cd(char **ptr, t_envi *envi);
-void							update_env(t_envi *envi);
-t_envi							*search_env(t_envi *envi, char *name);
-int								first_non_option(char **args);
-int								is_n_option(char *arg);
-int								ft_export(char **ptr, t_envi **env);
-int								ft_unset(char **ptr, t_mini *box);
-int								ft_env(t_envi *env);
-
 /////////////////////////////execution///////////////////////////
 
 void							validate_cmd(t_cmd *cmd);
 char							*allocate_folders(char *path, int i);
 void							check_cmd_path(t_cmd *cmd);
-void							my_strncpy(char *dest, const char *src,
-									size_t n);
-void							check_command_name(t_cmd *cmd);
-void							child_process(t_cmd *cmd, int pipe_nb, int btn,
-									t_mini *box);
 void							execute_arguments(t_cmd *cmd, t_mini *box);
 void							sig_wait(t_cmd *cmd);
 void							execute_pipes(t_cmd *cmd, int pipe_nb,
 									t_mini *box);
 void							exec_builtin(int btn, t_cmd *cmd, t_mini *box);
-void							handle_file_redirections(t_cmd *cmd, int btn);
 void							execs(t_cmd *cmd, int btn, t_mini *box);
 void							files_redirections(t_cmd *cmd, int builtin);
-void							append_file_prep(char *path);
-void							out_file_prep(char *path, int builtin);
-void							in_file_prep(char *path, int builtin);
 void							append_heredoc_prep(t_cmd *cmd);
 int								check_file_errors(char *path, int builtin);
 int								check_builtin(t_cmd *cmd);
@@ -312,8 +300,45 @@ void							shell_loop(t_mini *box);
 void							process_env_entry(char *env_entry,
 									t_envi **env_list);
 t_shell							*init_shell(void);
-
-////testss
-void							print_arguments(char **str);
-
+void							child_process(t_cmd *token, int btn,
+									t_mini *env);
+void							handle_file_redirections(t_cmd *cmd, int btn);
+void							child(t_cmd *cmd, int pipe_nb, int btn,
+									t_mini *box);
+void							execs(t_cmd *token, int btn, t_mini *env);
+int								init_execute_arguments(void);
+void							cleanup_execute_arguments(t_cmd *token);
+void							execute_arguments(t_cmd *token, t_mini *env);
+void							execute_pipes(t_cmd *token, int pipe_nb,
+									t_mini *env);
+void							handle_pipe_creation(t_cmd *token, int pipe_nb);
+void							handle_file_descriptors(t_cmd *token);
+void							files_redirections(t_cmd *cmd, int builtin);
+void							append_file_prep(t_cmd *token, char *path,
+									int is_builtin);
+void							out_file_prep(char *path, int is_builtin);
+void							in_file_prep(char *path, int is_builtin);
+void							print_perror(char *str, int exitt);
+void							check_cmd_path(t_cmd *token);
+int								get_var_index(char *key);
+void							check_command_name(t_cmd *token);
+char							*allocate_folders(char *path, int i);
+int								handle_stat_error(char *path, int is_builtin);
+void							handle_file_redirections(t_cmd *token, int btn);
+void							init_g_var(t_cmd **token);
+char							*put_cmd_status(int status, char *cmd_path,
+									char *cmd);
+char							*construct_full_path(char *dir, char *cmd);
+void							free_path_dirs(char **path_dirs);
+void							handle_command_not_found(t_cmd *cmd);
+void							search_command_in_paths(t_cmd *cmd,
+									char **path_dirs);
+void							check_command_name(t_cmd *cmd);
+int								check_file_errors(char *path, int builtin);
+void							my_strncpy(char *dest, char *src, int n);
+int								check_path(char *path, int is_builtin);
+char							*get_cmd_path(char *cmd, char **dirs);
+void							lista_add_front(t_alst **lst, t_alst *new);
+t_alst							*lista_new(void *content);
+int								ft_export(char **ptr, t_envi **env);
 #endif
