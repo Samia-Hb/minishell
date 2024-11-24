@@ -6,50 +6,51 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 19:05:46 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/22 00:34:46 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/22 17:12:03 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
+void	child_proces(char *token, char *processed_del, int fd)
+{
+	char	*line;
+
+	line = NULL;
+	while (1)
+	{
+		line = readline("heredoc > ");
+		if (!line)
+			break ;
+		if (!ft_strcmp(line, processed_del))
+			break ;
+		if (!is_quoted(token))
+			line = parse_line(line);
+		write(fd, line, ft_strlen(line));
+		write(fd, "\n", 1);
+	}
+	if (!line)
+	{
+		unlink(token);
+		printf("minishell : warning: heredoc delimited by EOF \n");
+		exit (130);
+	}
+	exit(0);
+}
+
 void	heredoc_process(t_cmd **node, t_file **head, t_token **tokens)
 {
 	int		fd;
 	char	*processed_del;
-	char	*line;
 	int		pid;
 	int		status;
 
-	// printf("check here\n");
 	(*tokens) = (*tokens)->next;
 	processed_del = process_delimiter((*tokens)->value);
-	printf("filname== %s\n", (*tokens)->value);
 	fd = open((*tokens)->value, O_CREAT | O_TRUNC | O_RDWR, 0777);
 	pid = fork();
 	if (!pid)
-	{
-		// handle_signal();		
-		while (1)
-		{
-			line = readline("heredoc > ");
-			if (!line)
-				break ;
-			if (!ft_strcmp(line, processed_del))
-				break ;
-			if (!is_quoted((*tokens)->value))
-				line = parse_line(line);
-			write(fd, line, ft_strlen(line));
-			write(fd, "\n", 1);
-		}
-		if (!line)
-		{
-			printf("checkkkkkkkkkkkk\n");
-			unlink((*tokens)->value);
-			printf("minishell : warning: here-document must delimited by end-of-file (wanted `%s')\n",(*tokens)->value);
-			exit (130);
-		}
-		exit(0);
-	}
+		child_proces((*tokens)->value, processed_del, fd);
 	else
 		waitpid(pid, &status, 0);
 	if (WEXITSTATUS(status) == 130)
@@ -84,34 +85,6 @@ void	red_process(t_token **tokens, t_cmd **node, int *i)
 		}
 	}
 	(*node)->file = head;
-}
-
-char	*process_delimiter(char *tmp)
-{
-	int		i;
-	int		j;
-	char	*result;
-	char	*hp;
-
-	i = 0;
-	result = ft_strdup("");
-	while (tmp[i])
-	{
-		if (tmp[i] == '$' && tmp[i + 1]
-			&& (tmp[i + 1] == '"' || tmp[i + 1] == '\''))
-			i++;
-		j = i;
-		if (tmp[i] == '"' || tmp[i] == '\'')
-			hp = get_inside_quote(tmp, &i, &j);
-		else
-		{
-			while (tmp[i] && tmp[i] != '"' && tmp[i] != '\'')
-				i++;
-			hp = ft_strndup(tmp + j, i - j);
-		}
-		result = ft_strjoin(result, hp);
-	}
-	return (result);
 }
 
 void	create_node_arguments(t_cmd **node, t_token **tokens)

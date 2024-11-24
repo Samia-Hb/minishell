@@ -6,17 +6,17 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 15:53:32 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/21 21:45:26 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/23 19:58:40 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_globalvar	*g_var = NULL;
+struct global				*g_var;
 
 void	initiale_global(t_envi *env)
 {
-	g_var = malloc(sizeof(t_globalvar));
+	g_var = malloc(sizeof(struct global));
 	g_var->exit_status = 0;
 	g_var->head = NULL;
 	g_var->pre_pipe_infd = -1;
@@ -42,7 +42,6 @@ void	print_cmd(t_cmd *cmd)
 	i = 0;
 	while (cmd)
 	{
-		printf("=======Arguments=======\n");
 		if (cmd->arguments)
 		{
 			i = 0;
@@ -89,8 +88,8 @@ int	main(int argc, char **argv, char **envp)
 	t_mini	*box;
 
 	(void)argc;
-	envp = envp;
 	(void)argv;
+	envp = envp;
 	box = malloc(sizeof(t_mini));
 	if (!box)
 		error_malloc();

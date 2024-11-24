@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_util2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: szeroual <szeroual@student.42.fr>          #+#  +:+       +#+        */
+/*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024-11-20 22:30:12 by szeroual          #+#    #+#             */
-/*   Updated: 2024-11-20 22:30:12 by szeroual         ###   ########.fr       */
+/*   Created: 2024/11/20 22:30:12 by szeroual          #+#    #+#             */
+/*   Updated: 2024/11/23 15:55:47 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,8 @@ t_envi	*create__node(char *name, char *value)
 		perror("malloc");
 		exit(EXIT_FAILURE);
 	}
-	new_node->name = strdup(name);
-	new_node->vale = strdup(value);
+	new_node->name = ft_strdup(name);
+	new_node->vale = ft_strdup(value);
 	if (!new_node->name || !new_node->vale)
 	{
 		perror("strdup");
@@ -72,7 +72,6 @@ void	process_env_entry(char *env_entry, t_envi **env_list)
 	value = strtok(NULL, "=");
 	if (!name || !value)
 	{
-		perror("error");
 		free(env_entry);
 		return ;
 	}

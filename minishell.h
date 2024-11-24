@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 10:29:24 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/21 22:46:52 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/23 19:57:34 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,7 +142,7 @@ typedef struct garbage_collector
 	struct garbage_collector	*next;
 }								t_gc;
 
-typedef struct global
+struct global
 {
 	int							exit_status;
 	int							pre_pipe_infd;
@@ -156,9 +156,9 @@ typedef struct global
 	int							fd_here_doc;
 	t_gc						*head;
 
-}								t_globalvar;
+};
 
-extern t_globalvar				*g_var;
+extern struct global				*g_var;
 
 t_token							**tokenize(char *input);
 char							*handle_quote(char *str);
@@ -261,7 +261,6 @@ void							ft_remove(char **ptr, t_mini *box, int i);
 int								ft_cd(char **ptr, t_envi *envi);
 void							update_env(t_envi *envi);
 t_envi							*search_env(t_envi *envi, char *name);
-int								ft_echo(char **args);
 int								first_non_option(char **args);
 int								is_n_option(char *arg);
 int								ft_export(char **ptr, t_envi **env);

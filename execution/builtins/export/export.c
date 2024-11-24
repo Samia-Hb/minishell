@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 21:41:35 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/20 21:34:15 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/23 17:27:31 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ int	check_each_element(char *str)
 	if (!ft_strlen(str))
 		return (1);
 	arr[0] = strtok(tmp, "=");
+	if (!arr[0])
+		return (1);
 	while (arr[0][i])
 	{
 		if (is_number(str[i]))
@@ -91,6 +93,7 @@ int	add_one(char **ptr, t_envi **env)
 		if (check_each_element(ptr[i]))
 		{
 			printf("minishell: export: `%s': not a valid identifier\n", ptr[i]);
+			g_var->exit_status = 1;
 			status = 1;
 		}
 		else

@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 13:07:29 by szeroual          #+#    #+#             */
-/*   Updated: 2024/11/22 00:53:15 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/22 16:50:53 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,12 +43,11 @@ void	print_arguments(char **str)
 		i++;
 	}
 }
+
 void	execute_pipes(t_cmd *token, int pipe_nb, t_mini *env)
 {
 	int	btn;
-	int	original_stdin;
 
-	original_stdin = dup(STDIN_FILENO);
 	btn = check_builtin(token);
 	if (g_var->size == 1 && btn != -1)
 		red_builtin(token, btn, env);
@@ -65,5 +64,4 @@ void	execute_pipes(t_cmd *token, int pipe_nb, t_mini *env)
 		if (g_var->last_child_id > 0)
 			waitpid(g_var->last_child_id, NULL, 0);
 	}
-	close(original_stdin);
 }

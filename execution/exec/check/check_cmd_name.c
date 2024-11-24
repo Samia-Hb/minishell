@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 10:37:38 by szeroual          #+#    #+#             */
-/*   Updated: 2024/11/21 17:31:12 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/23 17:56:20 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ void	handle_command_not_found(t_cmd *cmd)
 	ft_putstr_fd(cmd->arguments[0], 2);
 	ft_putstr_fd("\n", 2);
 	g_var->exit_status = 127;
+	exit(g_var->exit_status);
 }
 
 void	search_command_in_paths(t_cmd *cmd, char **path_dirs)

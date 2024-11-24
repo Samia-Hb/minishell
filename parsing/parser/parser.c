@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 13:46:11 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/20 23:01:22 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/23 17:35:00 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ int	random_case(t_token *tokens)
 			&& (ft_strchr_sec(tokens->next->value, '(')
 				|| ft_strchr_sec(tokens->next->value, ')')))
 		{
-			printf("Syntax Error.\n");
+			printf("minishell: syntax error near unexpected token.\n");
 			return (1);
 		}
 		tokens = tokens->next;

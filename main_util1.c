@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 22:29:05 by szeroual          #+#    #+#             */
-/*   Updated: 2024/11/22 00:50:22 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/23 23:31:29 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,8 @@ void	error_strdup(void)
 
 void	initialisation(t_mini *box, char **envp)
 {
-	initiale_global(init_env(envp));
 	init_box(box, envp);
+	initiale_global(box->env);
 }
 
 void	handle_input(char *input, t_mini *box)
@@ -43,12 +43,14 @@ void	handle_input(char *input, t_mini *box)
 	add_history(input);
 	tokens = tokenize(input);
 	if (check_syntax_errors(*tokens))
+	{
+		g_var->exit_status = 2;
 		return ;
+	}
 	if (!expand(*tokens))
 		return ;
 	cmd = analyse_tokens(tokens);
 	// print_cmd(cmd);
-	// exit(1);
 	execute_arguments(cmd, box);
 }
 

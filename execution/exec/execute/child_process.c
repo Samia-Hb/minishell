@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 10:40:47 by szeroual          #+#    #+#             */
-/*   Updated: 2024/11/21 22:36:49 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/23 18:11:06 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,20 +34,8 @@ void	child_process(t_cmd *token, int pipe_nb, int btn, t_mini *env)
 		execs(token, btn, env);
 		exit(0);
 	}
-}
-
-void	child(t_cmd *cmd, int pipe_nb, int btn, t_mini *box)
-{
-	if (g_var->last_child_id == 0)
-	{
-		if (g_var->pre_pipe_infd != -1)
-			dup2(g_var->pre_pipe_infd, STDIN_FILENO);
-		if (pipe_nb < g_var->size - 1 && cmd->pipe_fd[1] > 2)
-			dup2(cmd->pipe_fd[1], STDOUT_FILENO);
-		handle_file_redirections(cmd, btn);
-		execs(cmd, btn, box);
-		// exit(0);
-	}
+	else
+		waitpid(g_var->last_child_id, NULL, 0);
 }
 
 void	sig_wait(t_cmd *cmd)

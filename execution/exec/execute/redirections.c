@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 13:07:36 by szeroual          #+#    #+#             */
-/*   Updated: 2024/11/22 00:16:08 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/23 19:51:18 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ void	append_heredoc_prep(t_cmd *cmd)
 	int	fd;
 
     fd = open (cmd->file->filename, O_RDWR, 0777);
-    printf("fd === %d\n", fd);
     if (fd == -1)
     {
         write(2, "Error\n", 6);
@@ -45,18 +44,16 @@ void	in_file_prep(char *path, int is_builtin)
     fd = open(path, O_RDONLY);
     if (fd == -1)
 	{
-		printf("fd: %d\n", fd);
-		// exit(1);
         g_var->exit_status = errno;
         g_var->red_error = 1;
         ft_putstr_fd("minishell: ", 2);
         perror(path);
-        if (!is_builtin || g_var->size > 1)
+    	if (!is_builtin || g_var->size > 1)
             exit(1);
     }
     else
     {
-            if (dup2(fd, 0) == -1)
+            if (dup2(fd, g_var->in_fd) == -1)
             {
                 perror("dup2");
                 exit(1);
