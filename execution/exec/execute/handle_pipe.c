@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   handle_pipe.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/11/24 17:13:23 by shebaz            #+#    #+#             */
+/*   Updated: 2024/11/24 19:01:56 by shebaz           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include"../../../minishell.h"
 
@@ -29,12 +40,11 @@ void	handle_pipe_creation(t_cmd *token, int pipe_nb)
 
 void	execute_pipes(t_cmd *token, int pipe_nb, t_mini *env)
 {
+
 	token->builtin = check_builtin(token);
 	g_var->size = count_commands(token);
 	if (g_var->size == 1 && token->builtin != -1)
 	{
-		// printf("check\n");
-		// exit(1);
 		files_redirections(token, 1);
 		exec_builtin(token->builtin, token, env);
 	}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_util1.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: szeroual <szeroual@student.42.fr>          #+#  +:+       +#+        */
+/*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024-11-20 22:29:05 by szeroual          #+#    #+#             */
-/*   Updated: 2024-11-20 22:29:05 by szeroual         ###   ########.fr       */
+/*   Created: 2024/11/20 22:29:05 by szeroual          #+#    #+#             */
+/*   Updated: 2024/11/24 18:54:55 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,22 +26,23 @@ void	error_strdup(void)
 	perror("strdup");
 	exit(EXIT_FAILURE);
 }
-void	initiale_global(t_envi *env)
-{
-    g_var = malloc(sizeof(t_globalvar));
-    if (!g_var)
-    {
-        perror("malloc failed");
-        exit(EXIT_FAILURE);
-    }
-    g_var->envp = env;
-    g_var->exit_status = 0;
-}
+
 void	initialisation(t_mini *box, char **envp)
 {
-	initiale_global(init_env(envp));
 	init_box(box, envp);
+	initiale_global(box->env);
 }
+// void	initiale_global(t_envi *env)
+// {
+//     g_var = malloc(sizeof(t_globalvar));
+//     if (!g_var)
+//     {
+//         perror("malloc failed");
+//         exit(EXIT_FAILURE);
+//     }
+//     g_var->envp = env;
+//     g_var->exit_status = 0;
+// }
 
 void	handle_input(char *input, t_mini *box)
 {
@@ -53,7 +54,10 @@ void	handle_input(char *input, t_mini *box)
 	add_history(input);
 	tokens = tokenize(input);
 	if (check_syntax_errors(*tokens))
+	{
+		g_var->exit_status = 2;
 		return ;
+	}
 	if (!expand(*tokens))
 		return ;
 	cmd = analyse_tokens(tokens);

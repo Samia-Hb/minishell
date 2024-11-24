@@ -1,3 +1,43 @@
+// <<<<<<< HEAD
+// /* ************************************************************************** */
+// /*                                                                            */
+// /*                                                        :::      ::::::::   */
+// /*   redirections.c                                     :+:      :+:    :+:   */
+// /*                                                    +:+ +:+         +:+     */
+// /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
+// /*                                                +#+#+#+#+#+   +#+           */
+// /*   Created: 2024/11/16 13:07:36 by szeroual          #+#    #+#             */
+// /*   Updated: 2024/11/23 19:51:18 by shebaz           ###   ########.fr       */
+// /*                                                                            */
+// /* ************************************************************************** */
+
+// #include "../../../minishell.h"
+
+// void	handle_file_redirections(t_cmd *cmd, int btn)
+// {
+// 	files_redirections(cmd, btn != -1);
+// 	if (btn == -1)
+// 		validate_cmd(cmd);
+// 	else if (g_var->pre_pipe_infd != -1 && !cmd->file->type)
+// 		dup2(g_var->pre_pipe_infd, STDIN_FILENO);
+// }
+
+// void	append_heredoc_prep(t_cmd *cmd)
+// {
+// 	int	fd;
+
+//     fd = open (cmd->file->filename, O_RDWR, 0777);
+//     if (fd == -1)
+//     {
+//         write(2, "Error\n", 6);
+//         exit(g_var->exit_status);
+//     }
+//     dup2(fd, STDIN_FILENO);
+//     g_var->in_fd = fd;
+//     close(fd);
+//     unlink(cmd->file->filename);
+// }
+
 #include "../../../minishell.h"
 void	in_file_prep(char *path, int is_builtin)
 {
@@ -114,6 +154,22 @@ void	append_file_prep(t_cmd *token, char *path, int is_builtin)
     }
 }
 
+void	append_heredoc_prep(t_cmd *cmd)
+{
+	int	fd;
+
+    fd = open (cmd->file->filename, O_RDWR, 0777);
+    if (fd == -1)
+    {
+        write (2, "Error\n", 6);
+        exit(g_var->exit_status);
+    }
+    dup2(fd, STDIN_FILENO);
+    g_var->in_fd = fd;
+    close(fd);
+    unlink(cmd->file->filename);
+}
+
 void	files_redirections(t_cmd *cmd, int builtin)
 {
     t_file	*curr_red;
@@ -126,11 +182,11 @@ void	files_redirections(t_cmd *cmd, int builtin)
             out_file_prep(curr_red->filename, builtin);
         else if (curr_red->type == 2)
             in_file_prep(curr_red->filename, builtin);
-        // else if (curr_red->type == 3)
-        // {
-        //     append_heredoc_prep(cmd);
-        //     unlink(cmd->file->filename);
-        // }
+        else if (curr_red->type == 3)
+        {
+            append_heredoc_prep(cmd);
+            unlink(cmd->file->filename);
+        }
         else if (curr_red->type == 4)
             append_file_prep(cmd, curr_red->filename, builtin);
         curr_red = curr_red->next;

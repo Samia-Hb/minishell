@@ -38,6 +38,32 @@ char **separate_env(t_envi *env)
     return the_env;
 }
 
+// <<<<<<< HEAD
+
+// void	execs(t_cmd *cmd, int btn, t_mini *box)
+// {
+//     char **env_array;
+
+//     if (btn != -1)
+//     {
+//         exec_builtin(btn, cmd, box);
+//         exit(0);
+//     }
+//     if (cmd->cmd_path)
+//     {
+//         env_array = separate_env(box->env); 
+//         if (!env_array)
+//         {
+//             perror("Failed to convert environment variables");
+//             exit(1);
+//         }
+//         execve(cmd->cmd_path, cmd->arguments, env_array);
+//         perror(cmd->cmd_path);
+//         free(env_array); 
+//         exit(errno);
+//     }
+// }
+// =======
 void	execs(t_cmd *token, int btn, t_mini *env)
 {
 	if (btn != -1)
@@ -65,7 +91,7 @@ void	execs(t_cmd *token, int btn, t_mini *env)
 
 int	init_execute_arguments(void)
 {
-	g_var->exit_status = 0;
+	// g_var->exit_status = 0;
 	g_var->pre_pipe_infd = -1;
 	return (0);
 }
@@ -78,48 +104,26 @@ void	cleanup_execute_arguments(t_cmd *token)
 }
 
 
-int	check_builtin(t_cmd *cmd)
-{
-	if (!cmd->arguments || !cmd->arguments[0])
-		return (-1);
-	if (!ft_strcmp(cmd->arguments[0], "cd"))
-		return (1);
-	else if (!ft_strcmp(cmd->arguments[0], "echo"))
-		return (2);
-	else if (!ft_strcmp(cmd->arguments[0], "env"))
-		return (3);
-	else if (!ft_strcmp(cmd->arguments[0], "exit"))
-		return (4);
-	else if (!ft_strcmp(cmd->arguments[0], "export"))
-		return (5);
-	else if (!ft_strcmp(cmd->arguments[0], "pwd"))
-		return (6);
-	else if (!ft_strcmp(cmd->arguments[0], "unset"))
-		return (7);
-	return (-1);
-}
-
-
-void	exec_builtin(int btn, t_cmd *cmd, t_mini *box)
-{
-	if (btn == 1)
-		ft_cd(cmd->arguments, box->env);
-	else if (btn == 2)
-		ft_echo(cmd->arguments);
-	else if (btn == 3)
-		ft_env(box->env);
-	else if (btn == 4)
-		ft_exit(cmd->arguments);
-	else if (btn == 5)
-		ft_export(cmd->arguments, &box->env);
-	else if (btn == 6)
-		ft_pwd(cmd->arguments, box->env);
-	else if (btn == 7)
-		ft_unset(cmd->arguments, box);
-	if (g_var->out_fd > 2)
-		close(g_var->out_fd);
-	g_var->out_fd = 1;
-}
+// void	exec_builtin(int btn, t_cmd *cmd, t_mini *box)
+// {
+// 	if (btn == 1)
+// 		ft_cd(cmd->arguments, box->env);
+// 	else if (btn == 2)
+// 		ft_echo(cmd->arguments);
+// 	else if (btn == 3)
+// 		ft_env(box->env);
+// 	else if (btn == 4)
+// 		ft_exit(cmd->arguments);
+// 	else if (btn == 5)
+// 		ft_export(cmd->arguments, &box->env);
+// 	else if (btn == 6)
+// 		ft_pwd(cmd->arguments, box->env);
+// 	else if (btn == 7)
+// 		ft_unset(cmd->arguments, box);
+// 	if (g_var->out_fd > 2)
+// 		close(g_var->out_fd);
+// 	g_var->out_fd = 1;
+// }
 void	execute_arguments(t_cmd *token, t_mini *env)
 {
 	int			i;
@@ -130,15 +134,8 @@ void	execute_arguments(t_cmd *token, t_mini *env)
 	init_execute_arguments();
 	i = 0;
 	current = token;
-	while (current && g_var->exit_status == 0)
+	while (current && !g_var->exit_status)
 	{
-		// if (ft_heredoc(i, current, env))
-		// {
-		// 	if (g_var->fd)
-		// 		unlink(g_var->fd);
-		// 	return ;
-		// }
-		// g_var->hd_files[i] = g_var->fd;
 		execute_pipes(current, i, env);
 		current = current->next;
 		i++;

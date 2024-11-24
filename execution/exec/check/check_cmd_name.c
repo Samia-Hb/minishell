@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 10:37:38 by szeroual          #+#    #+#             */
-/*   Updated: 2024/11/21 15:38:13 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/24 17:20:29 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,11 @@ void	handle_command_not_found(t_cmd *cmd)
 	ft_putstr_fd(cmd->arguments[0], 2);
 	ft_putstr_fd("\n", 2);
 	g_var->exit_status = 127;
+// <<<<<<< HEAD
+// 	exit(g_var->exit_status);
+// }
+
+// =======
 }
 
 int	is_executable(char *path)

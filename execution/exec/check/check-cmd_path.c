@@ -3,16 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   check-cmd_path.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: szeroual <szeroual@student.42.fr>          #+#  +:+       +#+        */
+/*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024-11-20 10:36:17 by szeroual          #+#    #+#             */
-/*   Updated: 2024-11-20 10:36:17 by szeroual         ###   ########.fr       */
+/*   Created: 2024/11/20 10:36:17 by szeroual          #+#    #+#             */
+/*   Updated: 2024/11/24 17:23:38 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../minishell.h"
-
-
 
 int	check_path(char *path, int is_builtin)
 {
@@ -30,4 +28,3 @@ int	check_path(char *path, int is_builtin)
 		return (handle_stat_error(path, is_builtin));
 	return (1);
 }
-
