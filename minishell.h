@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 00:06:05 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/25 00:18:48 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/25 18:40:08 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -341,4 +341,5 @@ char							*get_cmd_path(char *cmd, char **dirs);
 void							lista_add_front(t_alst **lst, t_alst *new);
 t_alst							*lista_new(void *content);
 int								ft_export(char **ptr, t_envi **env);
+void							print_envi(t_envi *env);
 #endif

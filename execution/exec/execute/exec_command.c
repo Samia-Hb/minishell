@@ -129,9 +129,9 @@ void	execute_arguments(t_cmd *token, t_mini *env)
 
 	if (!token)
 		return ;
-	init_execute_arguments();
 	i = 0;
 	current = token;
+	init_execute_arguments();
 	while (current && g_var->exit_status == 0)
 	{
 		execute_pipes(current, i, env);

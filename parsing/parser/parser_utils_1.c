@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 20:25:49 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/24 22:45:34 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/25 20:50:25 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	handle_consecutive_operator(t_token *tokens)
 			|| (is_red(current) && is_red(prev)) || (prev->type == TOKEN_PIPE
 				&& current->type == TOKEN_PIPE))
 		{
-			printf("minishell: syntax error near unexpected token \n");
+			printf("minishell: syntax error near unexpected token\n");
 			return (1);
 		}
 		prev = current;

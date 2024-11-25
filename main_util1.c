@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 22:29:05 by szeroual          #+#    #+#             */
-/*   Updated: 2024/11/25 00:17:04 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/25 19:56:29 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,8 @@ void	initiale_global(t_envi *env)
 
 void	initialisation(t_mini *box, char **envp)
 {
-	initiale_global(init_env(envp));
 	init_box(box, envp);
+	initiale_global(init_env(envp));
 }
 
 void	handle_input(char *input, t_mini *box)
