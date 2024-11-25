@@ -6,11 +6,18 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 21:45:07 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/25 21:00:17 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/25 21:34:02 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../minishell.h"
+
+int	is_digit(char c)
+{
+	if (c <= '0' || c >= '9')
+		return (0);
+	return (1);
+}
 
 int	is_numeric(const char *str)
 {
@@ -25,7 +32,7 @@ int	is_numeric(const char *str)
 	}
 	while (*str)
 	{
-		if (!isdigit(*str))
+		if (!is_digit(*str))
 		{
 			printf("minishell: exit: %s:numeric argument required\n", str);
 			return (0);
