@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 16:00:56 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/23 16:21:38 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/25 20:57:09 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@ int	ft_pwd(char **args, t_envi *env)
 	char	*pwd;
 
 	if (args[1])
-		return (g_var->exit_status = 1, printf("invalid option : %s\n", args[1]), 1);
+		return (g_var->exit_status = 1,
+			printf("invalid option : %s\n", args[1]), 1);
 	pwd = getcwd(buff, sizeof(buff));
 	if (!pwd)
 	{
