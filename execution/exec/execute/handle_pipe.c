@@ -5,12 +5,12 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/24 17:13:23 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/24 19:01:56 by shebaz           ###   ########.fr       */
+/*   Created: 2024/11/25 00:02:59 by shebaz            #+#    #+#             */
+/*   Updated: 2024/11/25 00:03:04 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include"../../../minishell.h"
+#include "../../../minishell.h"
 
 void	handle_file_descriptors(t_cmd *token)
 {
@@ -40,7 +40,6 @@ void	handle_pipe_creation(t_cmd *token, int pipe_nb)
 
 void	execute_pipes(t_cmd *token, int pipe_nb, t_mini *env)
 {
-
 	token->builtin = check_builtin(token);
 	g_var->size = count_commands(token);
 	if (g_var->size == 1 && token->builtin != -1)

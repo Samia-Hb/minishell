@@ -6,20 +6,11 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 20:24:14 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/23 17:45:10 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/24 22:44:44 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
-
-// void	error_handling(int exit_status)
-// {
-// 	if (exit_status == '1')
-// 		printf("zsh: parse error near `|'");
-// 	else if (exit_status == 130)
-// 		printf("zsh: Error");
-// 	exit(exit_status);
-// }
 
 t_token	*get_last_token(t_token *token)
 {
@@ -62,6 +53,7 @@ int	handle_quotes(t_token *tokens)
 		if (!check_quote(tokens->value))
 		{
 			printf("Syntax Error: unclosed quoted\n");
+			g_var->exit_status = 2;
 			return (1);
 		}
 		tokens = tokens->next;

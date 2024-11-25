@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 13:39:34 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/23 19:59:20 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/25 00:18:24 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	*ft_malloc(size_t size, int ele_nbr)
 	node->next = NULL;
 	if (!g_var)
 	{
-		g_var = malloc(sizeof(struct global));
+		g_var = malloc(sizeof(struct s_global));
 		g_var->head = node;
 	}
 	else

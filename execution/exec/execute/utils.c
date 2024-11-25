@@ -6,31 +6,12 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 13:07:11 by szeroual          #+#    #+#             */
-/*   Updated: 2024/11/24 17:23:15 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/25 00:03:52 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../minishell.h"
 
-// <<<<<<< HEAD
-// // void	append_heredoc_prep(t_cmd *cmd)
-// // {
-// // 	int	fd;
-
-// // 	fd = open(cmd->file->filename, O_RDWR, 0777);
-// // 	dup2(fd, STDIN_FILENO);
-// // 	g_var->in_fd = fd;
-// // }
-
-// void	validate_cmd(t_cmd *cmd)
-// {
-// 	if (ft_strchr(cmd->arguments[0], '/'))
-// 		check_cmd_path(cmd);
-// 	else
-// 		check_command_name(cmd);
-// }
-
-// =======
 void	handle_signals(int mode)
 {
 	if (mode == 0)
@@ -46,7 +27,7 @@ void	handle_signals(int mode)
 
 void	sig_wait(t_cmd *token)
 {
-	int			status;
+	int		status;
 	t_cmd	*current;
 
 	handle_signals(0);
@@ -73,7 +54,6 @@ void	sig_wait(t_cmd *token)
 	handle_signals(1);
 }
 
-
 void	print_perror(char *str, int exitt)
 {
 	ft_putstr_fd("minishell: ", 2);
@@ -81,11 +61,9 @@ void	print_perror(char *str, int exitt)
 	g_var->exit_status = 127;
 	if (exitt)
 	{
-		//free_hdfiles();
 		exit(127);
 	}
 }
-
 
 char	*get_cmd_path(char *cmd, char **dirs)
 {
@@ -102,16 +80,13 @@ char	*get_cmd_path(char *cmd, char **dirs)
 	{
 		temp = ft_strjoin(dirs[i], "/");
 		if (!temp)
-        {
-            // ft_free_array(dirs);
-            return (NULL);
-        }
+			return (NULL);
 		cmd_path = ft_strjoin(temp, cmd);
 		free(temp);
 		if (!cmd_path)
-        {
-            return (NULL);
-        }
+		{
+			return (NULL);
+		}
 		if (access(cmd_path, F_OK))
 			status = 1;
 		else if (access(cmd_path, X_OK))
@@ -121,12 +96,11 @@ char	*get_cmd_path(char *cmd, char **dirs)
 		if (status)
 		{
 			free(cmd_path);
-		    cmd_path = NULL;
+			cmd_path = NULL;
 		}
 	}
 	return (put_cmd_status(status, cmd_path, cmd));
 }
-
 
 void	my_strncpy(char *dest, char *src, int n)
 {
@@ -155,7 +129,6 @@ void	check_cmd_path(t_cmd *token)
 			ft_putstr_fd("minishell: ", 2);
 			ft_putstr_fd(token->arguments[0], 2);
 			ft_putstr_fd(" is a directory\n", 2);
-			// free_hdfiles();
 			exit(126);
 		}
 		else
@@ -214,7 +187,6 @@ int	handle_stat_error(char *path, int is_builtin)
 	}
 }
 
-
 int	count_commands(t_cmd *cmd)
 {
 	int		count;
@@ -230,38 +202,6 @@ int	count_commands(t_cmd *cmd)
 	return (count);
 }
 
-// <<<<<<< HEAD
-// char	*allocate_folders(char *path, int i)
-// {
-// 	char	*folders;
-
-// 	folders = malloc(i + 2);
-// 	if (!folders)
-// 	{
-// 		perror("malloc failed");
-// 		exit(1);
-// 	}
-// 	my_strncpy(folders, path, i + 1);
-// 	return (folders);
-// }
-
-// void	my_strncpy(char *dest, const char *src, size_t n)
-// {
-// 	size_t	i;
-
-// 	i = 0;
-// 	while (i < n && src[i] != '\0')
-// 	{
-// 		dest[i] = src[i];
-// 		i++;
-// 	}
-// 	while (i < n)
-// 	{
-// 		dest[i] = '\0';
-// 		i++;
-// 	}
-// }
-// =======
 char	*put_cmd_status(int status, char *cmd_path, char *cmd)
 {
 	if (status)
@@ -287,66 +227,3 @@ char	*put_cmd_status(int status, char *cmd_path, char *cmd)
 	else
 		return (cmd_path);
 }
-
-// void	append_heredoc_prep(t_cmd *cmd)
-// {
-// 	int	fd;
-
-// 	fd = open(cmd->file->filename, O_RDWR, 0777);
-// 	dup2(fd, STDIN_FILENO);
-// 	g_var->in_fd = fd;
-// }
-
-// void	validate_cmd(t_cmd *cmd)
-// {
-// 	if (ft_strchr(cmd->arguments[0], '/'))
-// 		check_cmd_path(cmd);
-// 	else
-// 		check_command_name(cmd);
-// }
-
-// int	count_commands(t_cmd *cmd)
-// {
-// 	int		count;
-// 	t_cmd	*current;
-
-// 	count = 0;
-// 	current = cmd;
-// 	while (current)
-// 	{
-// 		count++;
-// 		current = current->next;
-// 	}
-// 	return (count);
-// }
-
-// char	*allocate_folders(char *path, int i)
-// {
-// 	char	*folders;
-
-// 	folders = malloc(i + 2);
-// 	if (!folders)
-// 	{
-// 		perror("malloc failed");
-// 		exit(1);
-// 	}
-// 	my_strncpy(folders, path, i + 1);
-// 	return (folders);
-// }
-
-// void	my_strncpy(char *dest, const char *src, size_t n)
-// {
-// 	size_t	i;
-
-// 	i = 0;
-// 	while (i < n && src[i] != '\0')
-// 	{
-// 		dest[i] = src[i];
-// 		i++;
-// 	}
-// 	while (i < n)
-// 	{
-// 		dest[i] = '\0';
-// 		i++;
-// 	}
-// }

@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 10:38:44 by szeroual          #+#    #+#             */
-/*   Updated: 2024/11/24 17:23:29 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/25 00:05:41 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,7 @@ int	check_file_errors(char *path, int builtin)
 		if (builtin)
 			return (1);
 		else
-		{
-			// free_hdfiles();
 			exit(1);
-		}
 	}
 	return (0);
 }

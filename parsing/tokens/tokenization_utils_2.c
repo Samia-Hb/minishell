@@ -6,13 +6,13 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 13:37:34 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/08 21:24:56 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/25 00:10:22 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-t_token	*create_token(TokenType type, const char *value)
+t_token	*create_token(t_token_type type, const char *value)
 {
 	t_token	*token;
 
@@ -28,7 +28,7 @@ t_token	*create_token(TokenType type, const char *value)
 	return (token);
 }
 
-void	add_token(t_token **tokens, TokenType type, char *value, int *k)
+void	add_token(t_token **tokens, t_token_type type, char *value, int *k)
 {
 	t_token	*new_node;
 	t_token	*ptr;
