@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 22:29:05 by szeroual          #+#    #+#             */
-/*   Updated: 2024/11/25 19:56:29 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/28 00:42:47 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,8 @@ void	handle_input(char *input, t_mini *box)
 	if (!expand(*tokens))
 		return ;
 	cmd = analyse_tokens(tokens);
+	if (g_var->flag == 7)
+		return ;
 	execute_arguments(cmd, box);
 }
 
@@ -72,6 +74,7 @@ void	shell_loop(t_mini *box)
 	while (1)
 	{
 		handle_signal();
+		g_var->flag = 0;
 		input = readline("minishell > ");
 		if (!input)
 			break ;

@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 00:12:31 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/25 00:31:50 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/27 22:46:37 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ void	init_g_var(t_cmd **token)
 	t_cmd	*current;
 
 	g_var->red_error = 0;
+	g_var->flag = 0;
 	g_var->pre_pipe_infd = -1;
 	g_var->last_child_id = 0;
 	g_var->size = 0;

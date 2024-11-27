@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 19:05:46 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/22 17:12:03 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/28 00:57:02 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ void	child_proces(char *token, char *processed_del, int fd)
 	char	*line;
 
 	line = NULL;
+	signal(SIGINT, ctrl_c);
 	while (1)
 	{
 		line = readline("heredoc > ");
@@ -30,12 +31,8 @@ void	child_proces(char *token, char *processed_del, int fd)
 		write(fd, "\n", 1);
 	}
 	if (!line)
-	{
-		unlink(token);
 		printf("minishell : warning: heredoc delimited by EOF \n");
-		exit (130);
-	}
-	exit(0);
+	exit(g_var->exit_status);
 }
 
 void	heredoc_process(t_cmd **node, t_file **head, t_token **tokens)
@@ -48,21 +45,23 @@ void	heredoc_process(t_cmd **node, t_file **head, t_token **tokens)
 	(*tokens) = (*tokens)->next;
 	processed_del = process_delimiter((*tokens)->value);
 	fd = open((*tokens)->value, O_CREAT | O_TRUNC | O_RDWR, 0777);
+	signal(SIGINT, SIG_IGN);
 	pid = fork();
 	if (!pid)
 		child_proces((*tokens)->value, processed_del, fd);
 	else
 		waitpid(pid, &status, 0);
-	if (WEXITSTATUS(status) == 130)
-	{
-		g_var->exit_status = 130;
-		exit(g_var->exit_status);
-	}
 	(*node)->file = ft_malloc(sizeof(t_file), 1);
 	(*node)->file->type = RE_HEREDOC;
 	(*node)->file->filename = ft_strdup((*tokens)->value);
 	push_t_file(head, (*node)->file);
 	(*tokens) = (*tokens)->next;
+	if (WEXITSTATUS(status) == 7)
+	{
+		g_var->exit_status = 130;
+		unlink((*node)->file->filename);
+		g_var->flag = 7;
+	}
 }
 
 void	red_process(t_token **tokens, t_cmd **node, int *i)

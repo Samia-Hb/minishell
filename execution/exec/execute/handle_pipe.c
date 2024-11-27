@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 00:02:59 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/25 20:01:04 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/26 18:22:33 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ void	execute_pipes(t_cmd *token, int pipe_nb, t_mini *env)
 	
 	token->builtin = check_builtin(token);
 	g_var->size = count_commands(token);
+
 	if (g_var->size == 1 && token->builtin != -1)
 	{
 		files_redirections(token, 1);

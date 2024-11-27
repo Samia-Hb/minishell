@@ -6,11 +6,20 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 17:12:31 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/22 17:13:00 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/28 00:46:08 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
+
+void	ctrl_c(int nb)
+{
+	if (nb == SIGINT)
+	{
+		printf("\n");
+		exit(7);
+	}
+}
 
 char	*process_delimiter(char *tmp)
 {

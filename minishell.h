@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 00:06:05 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/25 18:40:08 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/28 00:45:43 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,6 +160,7 @@ struct s_global
 	char						**en;
 	t_alst						**alist;
 	int							in_fd;
+	int							flag;
 	// int out_fd;
 };
 
@@ -240,6 +241,7 @@ void							push_t_file(t_file **head, t_file *node);
 void							*ft_malloc(size_t size, int ele_nbr);
 void							clean_gc(void);
 t_envi							*init_env(char **envp);
+void							ctrl_c(int nb);
 
 /////////////////////////////builtins///////////////////////////
 
