@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 00:06:05 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/30 11:51:03 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/30 13:35:28 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,7 +144,7 @@ typedef struct garbage_collector
 	struct garbage_collector	*next;
 }								t_gc;
 
-struct s_global
+struct							s_global
 {
 	int							exit_status;
 	int							pre_pipe_infd;
@@ -165,9 +165,9 @@ struct s_global
 	// int out_fd;
 };
 
-extern struct s_global	*g_var;
+extern struct s_global			*g_var;
 
-void	print_cmd(t_cmd *cmd);
+void							print_cmd(t_cmd *cmd);
 t_token							**tokenize(char *input);
 char							*handle_quote(char *str);
 int								is_charactere(char c);
@@ -244,7 +244,8 @@ void							*ft_malloc(size_t size, int ele_nbr);
 void							clean_gc(void);
 t_envi							*init_env(char **envp);
 void							ctrl_c(int nb);
-void							child_process(t_cmd *token, int pipe_nb, int btn, t_mini *env);
+void							child_process(t_cmd *token, int pipe_nb,
+									int btn, t_mini *env);
 
 /////////////////////////////builtins///////////////////////////
 
@@ -344,5 +345,5 @@ char							*get_cmd_path(char *cmd, char **dirs);
 void							lista_add_front(t_alst **lst, t_alst *new);
 t_alst							*lista_new(void *content);
 int								ft_export(char **ptr, t_envi **env);
-void							print_envi(t_envi *env);
+void							handle_signals(int mode);
 #endif

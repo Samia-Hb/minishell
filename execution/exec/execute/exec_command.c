@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec_command.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/11/30 13:27:56 by shebaz            #+#    #+#             */
+/*   Updated: 2024/11/30 13:27:57 by shebaz           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../../minishell.h"
 
 extern char	**environ;
@@ -64,22 +76,6 @@ void	execs(t_cmd *token, int btn, t_mini *env)
 	}
 	else
 		exit(0);
-}
-
-int	init_execute_arguments(void)
-{
-	g_var->exit_status = 0;
-	g_var->pre_pipe_infd = -1;
-	// g_var->in_fd = STDIN_FILENO;
-	// g_var->out_fd = STDOUT_FILENO;
-	return (0);
-}
-
-void	cleanup_execute_arguments(t_cmd *token)
-{
-	if (g_var->pre_pipe_infd > 2)
-		close(g_var->pre_pipe_infd);
-	sig_wait(token);
 }
 
 int	check_builtin(t_cmd *cmd)

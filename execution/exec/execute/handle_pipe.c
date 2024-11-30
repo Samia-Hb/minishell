@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 00:02:59 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/30 12:20:20 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/30 13:40:00 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ void	red_builtin(t_cmd *token, int btn, t_mini *box)
 	files_redirections(token, 1);
 	exec_builtin(btn, token, box);
 }
+
 void	close_files(t_cmd *token)
 {
 	if (token->pipe_fd[1] > 2)
@@ -53,8 +54,11 @@ void	close_files(t_cmd *token)
 
 void	execute_pipes(t_cmd *token, int pipe_nb, t_mini *env)
 {
-	int	original_stdin = dup(STDIN_FILENO);
-	int	btn = check_builtin(token);
+	int	original_stdin;
+	int	btn;
+
+	btn = check_builtin(token);
+	original_stdin = dup(STDIN_FILENO);
 	if (g_var->size != pipe_nb + 1)
 	{
 		if (pipe(token->pipe_fd) == -1)

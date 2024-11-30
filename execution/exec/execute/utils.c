@@ -6,53 +6,11 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 13:07:11 by szeroual          #+#    #+#             */
-/*   Updated: 2024/11/25 00:03:52 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/30 13:38:49 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../minishell.h"
-
-void	handle_signals(int mode)
-{
-	if (mode == 0)
-	{
-		signal(SIGINT, SIG_IGN);
-		signal(SIGQUIT, SIG_IGN);
-	}
-	else
-	{
-		signal(SIGQUIT, SIG_IGN);
-	}
-}
-
-void	sig_wait(t_cmd *token)
-{
-	int		status;
-	t_cmd	*current;
-
-	handle_signals(0);
-	current = token;
-	status = 0;
-	while (current)
-	{
-		waitpid(current->pid, &status, 0);
-		current = current->next;
-	}
-	g_var->exit_status = 128 + WTERMSIG(status);
-	if (WTERMSIG(status) + 128 == 130)
-	{
-		g_var->exit_status = 128 + WTERMSIG(status);
-		write(1, "\n", 1);
-	}
-	else if (WTERMSIG(status) + 128 == 131)
-	{
-		g_var->exit_status = 128 + WTERMSIG(status);
-		write(1, "Quit\n", 6);
-	}
-	else
-		g_var->exit_status = WEXITSTATUS(status);
-	handle_signals(1);
-}
 
 void	print_perror(char *str, int exitt)
 {
@@ -154,76 +112,4 @@ int	get_var_index(char *key)
 		}
 	}
 	return (i);
-}
-
-char	*allocate_folders(char *path, int i)
-{
-	char	*folders;
-
-	folders = malloc(i + 2);
-	if (!folders)
-	{
-		perror("");
-		exit(1);
-	}
-	lista_add_front(g_var->alist, lista_new(folders));
-	my_strncpy(folders, path, i + 1);
-	return (folders);
-}
-
-int	handle_stat_error(char *path, int is_builtin)
-{
-	ft_putstr_fd("minishell: ", 2);
-	perror(path);
-	if (is_builtin)
-	{
-		g_var->red_error = 1;
-		g_var->exit_status = 1;
-		return (0);
-	}
-	else
-	{
-		exit(1);
-	}
-}
-
-int	count_commands(t_cmd *cmd)
-{
-	int		count;
-	t_cmd	*current;
-
-	count = 0;
-	current = cmd;
-	while (current)
-	{
-		count++;
-		current = current->next;
-	}
-	return (count);
-}
-
-char	*put_cmd_status(int status, char *cmd_path, char *cmd)
-{
-	if (status)
-	{
-		if (status == 1 && cmd && cmd[0] != '$')
-		{
-			ft_putstr_fd("minishell: ", 2);
-			ft_putstr_fd(cmd, 2);
-			ft_putstr_fd(": command not found\n", 2);
-			// free_hdfiles();
-			exit(127);
-		}
-		else if (cmd && cmd[0] != '$')
-		{
-			ft_putstr_fd("minishell: ", 2);
-			ft_putstr_fd(cmd, 2);
-			ft_putstr_fd(": permission denied\n", 2);
-			// free_hdfiles();
-			exit(126);
-		}
-		return (NULL);
-	}
-	else
-		return (cmd_path);
 }

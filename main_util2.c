@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_util2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: szeroual <szeroual@student.42.fr>          #+#  +:+       +#+        */
+/*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024-11-20 22:30:12 by szeroual          #+#    #+#             */
-/*   Updated: 2024-11-20 22:30:12 by szeroual         ###   ########.fr       */
+/*   Created: 2024/11/20 22:30:12 by szeroual          #+#    #+#             */
+/*   Updated: 2024/11/30 13:43:16 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,4 +79,10 @@ void	process_env_entry(char *env_entry, t_envi **env_list)
 	new_node = create__node(name, value);
 	add_env_node(env_list, new_node);
 	free(env_entry);
+}
+
+void	error_strdup(void)
+{
+	perror("strdup");
+	exit(EXIT_FAILURE);
 }
