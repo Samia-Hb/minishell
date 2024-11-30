@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 10:40:47 by szeroual          #+#    #+#             */
-/*   Updated: 2024/11/30 11:33:49 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/30 11:52:55 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	child_process(t_cmd *token, int pipe_nb, int btn, t_mini *env)
 
 void	handle_file_redirections(t_cmd *cmd, int btn)
 {
-	files_redirections(cmd, btn != -1, 0);
+	files_redirections(cmd, btn != -1);
 	if (btn == -1)
 		validate_cmd(cmd);
 }

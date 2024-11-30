@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 00:06:05 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/30 11:32:56 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/30 11:51:03 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -245,13 +245,7 @@ void							clean_gc(void);
 t_envi							*init_env(char **envp);
 void							ctrl_c(int nb);
 void							child_process(t_cmd *token, int pipe_nb, int btn, t_mini *env);
-void							append_heredoc_prep(t_cmd *cmd, int **arr, int *size);
-int								*files_redirections(t_cmd *cmd, int builtin, int *size);
-void							append_file_prep(t_cmd *token, char *path, int is_builtin, int **arr, int *size);
-void							out_file_prep(char *path, int is_builtin, int **arr, int *size);
-void							in_herdoc(char *path, int builtin, int **arr, int *size);
-void							in_file_prep(char *path, int is_builtin, int **arr, int *size);
-void							join(int fd, int **arr, int *size);
+
 /////////////////////////////builtins///////////////////////////
 
 int								is_builtin(char *cmd);
@@ -286,8 +280,8 @@ void							execute_pipes(t_cmd *cmd, int pipe_nb,
 									t_mini *box);
 void							exec_builtin(int btn, t_cmd *cmd, t_mini *box);
 void							execs(t_cmd *cmd, int btn, t_mini *box);
-// void							files_redirections(t_cmd *cmd, int builtin);
-// void							append_heredoc_prep(t_cmd *cmd);
+void							files_redirections(t_cmd *cmd, int builtin);
+void							append_heredoc_prep(t_cmd *cmd);
 int								check_file_errors(char *path, int builtin);
 int								check_builtin(t_cmd *cmd);
 int								count_commands(t_cmd *cmd);
@@ -322,11 +316,11 @@ void							execute_pipes(t_cmd *token, int pipe_nb,
 									t_mini *env);
 void							handle_pipe_creation(t_cmd *token, int pipe_nb);
 void							handle_file_descriptors(t_cmd *token);
-// void							files_redirections(t_cmd *cmd, int builtin);
-// void							append_file_prep(t_cmd *token, char *path,
-// 									int is_builtin);
-// void							out_file_prep(char *path, int is_builtin);
-// void							in_file_prep(char *path, int is_builtin);
+void							files_redirections(t_cmd *cmd, int builtin);
+void							append_file_prep(t_cmd *token, char *path,
+									int is_builtin);
+void							out_file_prep(char *path, int is_builtin);
+void							in_file_prep(char *path, int is_builtin);
 void							print_perror(char *str, int exitt);
 void							check_cmd_path(t_cmd *token);
 int								get_var_index(char *key);
