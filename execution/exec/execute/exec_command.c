@@ -70,6 +70,8 @@ int	init_execute_arguments(void)
 {
 	g_var->exit_status = 0;
 	g_var->pre_pipe_infd = -1;
+	// g_var->in_fd = STDIN_FILENO;
+	// g_var->out_fd = STDOUT_FILENO;
 	return (0);
 }
 
@@ -131,15 +133,17 @@ void	execute_arguments(t_cmd *token, t_mini *env)
 		return ;
 	i = 0;
 	current = token;
-	init_execute_arguments();
+	g_var->size = count_commands(token);
+	g_var->pipe_nb = g_var->size - 1;
+	g_var->exit_status = 0;
+	g_var->pre_pipe_infd = -1;
 	while (current && g_var->exit_status == 0)
 	{
 		execute_pipes(current, i, env);
 		current = current->next;
 		i++;
 	}
-	g_var->num = i;
-	if (g_var->exit_status)
-		return ;
-	cleanup_execute_arguments(token);
+	if (g_var->pre_pipe_infd > 2)
+		close(g_var->pre_pipe_infd);
+	sig_wait(token);
 }
