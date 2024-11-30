@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 16:02:59 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/18 23:31:37 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/30 14:41:18 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,5 +65,6 @@ int	ft_unset(char **ptr, t_mini *box)
 			printf("unset: '%s': not a valid identifier\n", ptr[i]);
 		i++;
 	}
+	g_var->envp = box->env;
 	return (0);
 }

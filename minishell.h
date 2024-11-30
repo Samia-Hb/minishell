@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 00:06:05 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/30 13:35:28 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/30 14:35:20 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -346,4 +346,7 @@ void							lista_add_front(t_alst **lst, t_alst *new);
 t_alst							*lista_new(void *content);
 int								ft_export(char **ptr, t_envi **env);
 void							handle_signals(int mode);
+
+
+void print_env(t_envi *envi);
 #endif

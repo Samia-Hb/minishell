@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 00:03:12 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/30 13:39:14 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/30 15:52:07 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,28 @@ void	in_file_prep(char *path, int is_builtin)
 			perror("dup2");
 			exit(1);
 		}
+		if (fd > 2)
+			close(fd);
+	}
+}
+
+void	in_herdoc(char *path, int builtin)
+{
+	int	fd;
+
+	fd = open(path, O_RDONLY);
+	if (fd == -1)
+	{
+		g_var->exit_status = 1;
+		g_var->fd_here_doc = 1;
+		ft_putstr_fd("minishell: ", 2);
+		perror(path);
+		if (!builtin || g_var->size > 1)
+			exit(1);
+	}
+	else
+	{
+		g_var->fd_here_doc = 1;
 		if (fd > 2)
 			close(fd);
 	}
@@ -81,14 +103,20 @@ void	append_file_prep(t_cmd *token, char *path, int is_builtin)
 	}
 	else
 	{
-		if (dup2(fd, STDOUT_FILENO) == -1)
+		g_var->out_fd = 1;
+		if (!is_builtin || g_var->size > 1)
 		{
-			perror("dup2");
-			close(fd);
-			exit(1);
+			if (dup2(fd, STDOUT_FILENO) == -1)
+			{
+				perror("dup2");
+				close(fd);
+				exit(1);
+			}
+			if (fd > 2)
+				close(fd);
 		}
-		if (fd > 2)
-			close(fd);
+		else
+			g_var->out_fd = fd;
 	}
 }
 
@@ -129,4 +157,48 @@ void	files_redirections(t_cmd *cmd, int builtin)
 			append_file_prep(cmd, curr_red->filename, builtin);
 		curr_red = curr_red->next;
 	}
+}
+
+void	lista_add_front(t_alst **lst, t_alst *new)
+{
+	if (!new)
+		return ;
+	if (*lst)
+		new->next = *lst;
+	*lst = new;
+}
+
+t_alst	*lista_new(void *content)
+{
+	t_alst	*list;
+
+	list = malloc(sizeof(t_alst));
+	if (!list)
+		return (NULL);
+	list->content = content;
+	list->next = NULL;
+	return (list);
+}
+
+void	validate_cmd(t_cmd *token)
+{
+	if (ft_strchr(token->arguments[0], '/'))
+		check_cmd_path(token);
+	else
+		check_command_name(token);
+}
+
+void	ft_free_array(char **array)
+{
+	int	i;
+
+	if (!array)
+		return ;
+	i = 0;
+	while (array[i])
+	{
+		free(array[i]);
+		i++;
+	}
+	free(array);
 }

@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 16:00:56 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/25 20:57:09 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/30 16:13:20 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,8 @@ int	ft_pwd(char **args, t_envi *env)
 		perror("pwd; failed");
 		return (1);
 	}
-	write(g_var->out_fd, pwd, ft_strlen(pwd));
-	write(g_var->out_fd, "\n", 1);
+	write(1, pwd, ft_strlen(pwd));
+	write(1, "\n", 1);
 	if (env)
 	{
 		free(env->vale);

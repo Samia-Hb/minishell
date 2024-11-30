@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 22:29:05 by szeroual          #+#    #+#             */
-/*   Updated: 2024/11/30 13:43:08 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/30 15:32:08 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,12 @@ void	init_box(t_mini *box, char **envp)
 	box->last_exit_status = 0;
 }
 
+void	error_strdup(void)
+{
+	perror("strdup");
+	exit(EXIT_FAILURE);
+}
+
 void	initiale_global(t_envi *env)
 {
 	g_var = malloc(sizeof(struct s_global));
@@ -33,8 +39,11 @@ void	initiale_global(t_envi *env)
 	g_var->exit_status = 0;
 	g_var->red_error = 0;
 	g_var->flag = 0;
-	g_var->tmp = 0;
-	g_var->pre_pipe_infd = -1;
+	// g_var->pre_pipe_infd = -1;
+	// g_var->last_child_id = 0;
+	// g_var->size = 0;
+	// g_var->out_fd = 1;
+	// g_var->num = 0;
 }
 
 void	initialisation(t_mini *box, char **envp)

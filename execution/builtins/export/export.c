@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 21:41:35 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/25 20:45:20 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/30 14:41:46 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,5 +133,6 @@ int	ft_export(char **ptr, t_envi **env)
 	}
 	else
 		status = add_one(ptr, env);
+	g_var->envp = *env;
 	return (status);
 }
