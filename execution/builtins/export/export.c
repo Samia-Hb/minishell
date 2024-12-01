@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 21:41:35 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/30 14:41:46 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/01 20:46:30 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,9 @@ int	add_one(char **ptr, t_envi **env)
 	{
 		if (check_each_element(ptr[i]))
 		{
-			printf("minishell: export: `%s': not a valid identifier\n", ptr[i]);
+			ft_putstr_fd("minishell: export: `", 1);
+			ft_putstr_fd(ptr[i], 1);
+			ft_putstr_fd("': not a valid identifier\n", 1);
 			g_var->exit_status = 1;
 			status = 1;
 		}

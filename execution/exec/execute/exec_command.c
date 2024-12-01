@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec_command.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/01 13:35:43 by shebaz            #+#    #+#             */
+/*   Updated: 2024/12/01 20:30:02 by shebaz           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../../minishell.h"
 
 extern char	**environ;
@@ -50,36 +62,22 @@ void	execs(t_cmd *token, int btn, t_mini *env)
 	if (btn != -1)
 	{
 		exec_builtin(btn, token, env);
-		exit(0);
+		exit(g_var->exit_status);
 	}
 	if (token->cmd_path)
 	{
+		// write(2, "yes\n", 4);
 		g_var->en = separate_env(env->env);
 		if (execve(token->cmd_path, token->arguments, g_var->en) == -1)
 		{
 			ft_putstr_fd("minishell: ", 2);
 			ft_putstr_fd("\n", 2);
-			exit(1);
+			exit(g_var->exit_status);
 		}
+		// write(2, "uppp\n",5);
 	}
 	else
-		exit(0);
-}
-
-int	init_execute_arguments(void)
-{
-	g_var->exit_status = 0;
-	g_var->pre_pipe_infd = -1;
-	// g_var->in_fd = STDIN_FILENO;
-	// g_var->out_fd = STDOUT_FILENO;
-	return (0);
-}
-
-void	cleanup_execute_arguments(t_cmd *token)
-{
-	if (g_var->pre_pipe_infd > 2)
-		close(g_var->pre_pipe_infd);
-	sig_wait(token);
+		exit(g_var->exit_status);
 }
 
 int	check_builtin(t_cmd *cmd)
@@ -145,5 +143,5 @@ void	execute_arguments(t_cmd *token, t_mini *env)
 	}
 	if (g_var->pre_pipe_infd > 2)
 		close(g_var->pre_pipe_infd);
-	sig_wait(token);
+	// sig_wait(token);
 }
