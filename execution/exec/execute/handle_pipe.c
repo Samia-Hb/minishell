@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 00:02:59 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/30 16:54:10 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/01 09:10:01 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,132 @@ void	handle_pipe_creation(t_cmd *token, int pipe_nb)
 	}
 }
 
+void	in_file_prep(char *path, int is_builtin)
+{
+	int	fd;
+
+	fd = open(path, O_RDONLY);
+	if (fd == -1)
+	{
+		g_var->exit_status = 1;
+		g_var->red_error = 1;
+		ft_putstr_fd("minishell: ", 2);
+		perror(path);
+		if (!is_builtin || g_var->size > 1)
+			exit(1);
+	}
+	else
+	{
+		if (dup2(fd, 0) == -1)
+		{
+			perror("dup2");
+			exit(1);
+		}
+		if (fd > 2)
+			close(fd);
+	}
+}
+
+
+void	out_file_prep(char *path, int is_builtin)
+{
+	int	fd;
+
+	fd = open(path, O_CREAT | O_WRONLY | O_TRUNC, 0777);
+	if (fd == -1)
+	{
+		g_var->exit_status = 1;
+		g_var->red_error = 1;
+		ft_putstr_fd("minishell: ", 2);
+		perror(path);
+		if (!is_builtin || g_var->size > 1)
+			exit(1);
+	}
+	else
+	{
+		if (dup2(fd, STDOUT_FILENO) == -1)
+		{
+			perror("dup2");
+			exit(1);
+		}
+		if (fd > 2)
+			close(fd);
+	}
+}
+
+void	append_file_prep(t_cmd *token, char *path, int is_builtin)
+{
+	int	fd;
+
+	(void)token;
+	fd = open(path, O_CREAT | O_WRONLY | O_APPEND, 0644);
+	if (fd == -1)
+	{
+		g_var->exit_status = 1;
+		g_var->red_error = 1;
+		ft_putstr_fd("minishell: ", 2);
+		perror(path);
+		if (!is_builtin || g_var->size > 1)
+			exit(1);
+	}
+	else
+	{
+		g_var->out_fd = 1;
+		if (!is_builtin || g_var->size > 1)
+		{
+			if (dup2(fd, STDOUT_FILENO) == -1)
+			{
+				perror("dup2");
+				close(fd);
+				exit(1);
+			}
+			if (fd > 2)
+				close(fd);
+		}
+		else
+			g_var->out_fd = fd;
+	}
+}
+
+void	append_heredoc_prep(t_cmd *cmd)
+{
+	int	fd;
+
+	fd = open(cmd->file->filename, O_RDWR, 0777);
+	if (fd == -1)
+	{
+		write(2, "Error\n", 6);
+		exit(g_var->exit_status);
+	}
+	dup2(fd, STDIN_FILENO);
+	g_var->in_fd = fd;
+	close(fd);
+	unlink(cmd->file->filename);
+}
+
+void	files_redirections(t_cmd *cmd, int builtin)
+{
+	t_file	*curr_red;
+
+	g_var->size = count_commands(cmd);
+	curr_red = cmd->file;
+	while (curr_red)
+	{
+		if (curr_red->type == 1)
+			out_file_prep(curr_red->filename, builtin);
+		else if (curr_red->type == 2)
+			in_file_prep(curr_red->filename, builtin);
+		else if (curr_red->type == 3)
+		{
+			append_heredoc_prep(cmd);
+			unlink(cmd->file->filename);
+		}
+		else if (curr_red->type == 4)
+			append_file_prep(cmd, curr_red->filename, builtin);
+		curr_red = curr_red->next;
+	}
+}
+
 void	red_builtin(t_cmd *token, int btn, t_mini *box)
 {
 	files_redirections(token, 1);
@@ -51,20 +177,35 @@ void	close_files(t_cmd *token)
 		close(g_var->pre_pipe_infd);
 }
 
+
 void	execute_pipes(t_cmd *token, int pipe_nb, t_mini *env)
 {
-	int	original_stdin = dup(STDIN_FILENO);
-	int	btn = check_builtin(token);
-	
-	if (g_var->size != pipe_nb + 1)
+	int	btn;
+	int	original_stdin;
+	int original_stdout;
+
+	original_stdin = dup(STDIN_FILENO);
+	original_stdout = dup(STDOUT_FILENO);
+	btn = check_builtin(token);
+	if (g_var->size == 1 && btn != -1)
 	{
-		if (pipe(token->pipe_fd) == -1)
-			perror("Error");
+		red_builtin(token, btn, env);
+		dup2(original_stdin, STDIN_FILENO);
+		dup2(original_stdout, STDOUT_FILENO);
 	}
-	child_process(token, pipe_nb, btn, env);
-	close_files(token);
-	g_var->pre_pipe_infd = token->pipe_fd[0];
-	if (g_var->last_child_id > 0)
-		waitpid(g_var->last_child_id, NULL, 0);
+	else
+	{
+		if (g_var->size != pipe_nb + 1)
+		{
+			if (pipe(token->pipe_fd) == -1)
+				printf("Pipeline error\n");
+		}
+		child_process(token, pipe_nb, btn, env);
+		close_files(token);
+		g_var->pre_pipe_infd = token->pipe_fd[0];
+		if (g_var->last_child_id > 0)
+			waitpid(g_var->last_child_id, NULL, 0);
+	}
 	close(original_stdin);
+	close(original_stdout);
 }
