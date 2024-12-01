@@ -33,7 +33,7 @@ void	child_process(t_cmd *token, int pipe_nb, int btn, t_mini *env)
 		handle_file_redirections(token, btn);
 		execs(token, btn, env);
 		exit(0);
-	}		
+	}
 }
 
 void	handle_file_redirections(t_cmd *cmd, int btn)

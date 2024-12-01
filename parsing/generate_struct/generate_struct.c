@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 19:05:46 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/28 00:57:02 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/01 13:26:33 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	child_proces(char *token, char *processed_del, int fd)
 	exit(g_var->exit_status);
 }
 
-void	heredoc_process(t_cmd **node, t_file **head, t_token **tokens)
+void	heredoc_process(t_cmd **node, t_file **head, t_token **tokens, int *i)
 {
 	int		fd;
 	char	*processed_del;
@@ -44,16 +44,16 @@ void	heredoc_process(t_cmd **node, t_file **head, t_token **tokens)
 
 	(*tokens) = (*tokens)->next;
 	processed_del = process_delimiter((*tokens)->value);
-	fd = open((*tokens)->value, O_CREAT | O_TRUNC | O_RDWR, 0777);
+	(*node)->file = ft_malloc(sizeof(t_file), 1);
+	(*node)->file->type = RE_HEREDOC;
+	(*node)->file->filename = generate_name(i);
+	fd = open((*node)->file->filename, O_CREAT | O_TRUNC | O_RDWR, 0777);
 	signal(SIGINT, SIG_IGN);
 	pid = fork();
 	if (!pid)
 		child_proces((*tokens)->value, processed_del, fd);
 	else
 		waitpid(pid, &status, 0);
-	(*node)->file = ft_malloc(sizeof(t_file), 1);
-	(*node)->file->type = RE_HEREDOC;
-	(*node)->file->filename = ft_strdup((*tokens)->value);
 	push_t_file(head, (*node)->file);
 	(*tokens) = (*tokens)->next;
 	if (WEXITSTATUS(status) == 7)
@@ -67,13 +67,15 @@ void	heredoc_process(t_cmd **node, t_file **head, t_token **tokens)
 void	red_process(t_token **tokens, t_cmd **node, int *i)
 {
 	t_file	*head;
+	int		j;
 
 	head = ft_malloc(sizeof(t_file), 1);
 	head = NULL;
+	j = 0;
 	while ((*tokens) && (*tokens)->type != TOKEN_PIPE)
 	{
 		if ((*tokens)->type == TOKEN_REDIR_HERE_DOC)
-			heredoc_process(node, &head, tokens);
+			heredoc_process(node, &head, tokens, &j);
 		if ((*tokens) && is_red(*tokens)
 			&& (*tokens)->type != TOKEN_REDIR_HERE_DOC)
 			fill_up_node(node, tokens, &head);

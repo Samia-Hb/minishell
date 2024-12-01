@@ -128,6 +128,7 @@ void	execute_arguments(t_cmd *token, t_mini *env)
 {
 	int		i;
 	t_cmd	*current;
+
 	if (!token)
 		return ;
 	i = 0;

@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 00:06:05 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/30 14:35:20 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/01 13:27:28 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,13 +161,12 @@ struct							s_global
 	t_alst						**alist;
 	int							in_fd;
 	int							flag;
-	int							tmp;
-	// int out_fd;
 };
 
 extern struct s_global			*g_var;
 
 void							print_cmd(t_cmd *cmd);
+char							*generate_name(int *i);
 t_token							**tokenize(char *input);
 char							*handle_quote(char *str);
 int								is_charactere(char c);
@@ -195,7 +194,7 @@ char							*process_delimiter(char *tmp);
 void							handle_heredoc(t_token **tokens, char *input,
 									int *i);
 void							heredoc_process(t_cmd **node, t_file **head,
-									t_token **tokens);
+									t_token **tokens, int *i);
 char							*tidle_expansion(int *i);
 void							fill_up_node(t_cmd **node, t_token **tokens,
 									t_file **head);
@@ -272,6 +271,7 @@ void							ft_remove(char **ptr, t_mini *box, int i);
 
 /////////////////////////////execution///////////////////////////
 
+void							append_heredoc_prep(char *filename);
 void							validate_cmd(t_cmd *cmd);
 char							*allocate_folders(char *path, int i);
 void							check_cmd_path(t_cmd *cmd);
@@ -282,7 +282,6 @@ void							execute_pipes(t_cmd *cmd, int pipe_nb,
 void							exec_builtin(int btn, t_cmd *cmd, t_mini *box);
 void							execs(t_cmd *cmd, int btn, t_mini *box);
 void							files_redirections(t_cmd *cmd, int builtin);
-void							append_heredoc_prep(t_cmd *cmd);
 int								check_file_errors(char *path, int builtin);
 int								check_builtin(t_cmd *cmd);
 int								count_commands(t_cmd *cmd);
@@ -347,6 +346,5 @@ t_alst							*lista_new(void *content);
 int								ft_export(char **ptr, t_envi **env);
 void							handle_signals(int mode);
 
-
-void print_env(t_envi *envi);
+void							print_env(t_envi *envi);
 #endif

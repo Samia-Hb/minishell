@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 17:12:31 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/30 13:37:23 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/01 13:28:51 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,4 +47,24 @@ char	*process_delimiter(char *tmp)
 		result = ft_strjoin(result, hp);
 	}
 	return (result);
+}
+
+char	*generate_name(int *i)
+{
+	char	*filename;
+	char	*str;
+
+	str = ft_itoa(*i);
+	if (access("tmp", F_OK))
+		filename = ft_strjoin("tmp", ft_itoa(*i));
+	else if (!access("tmp", F_OK))
+	{
+		while (access("tmp", F_OK))
+		{
+			str = ft_strjoin(str, str);
+		}
+		filename = ft_strjoin("tmp", ft_itoa(*i));
+	}
+	(*i)++;
+	return (filename);
 }

@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 00:02:59 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/01 09:10:01 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/01 11:49:10 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,6 @@ void	in_file_prep(char *path, int is_builtin)
 	}
 }
 
-
 void	out_file_prep(char *path, int is_builtin)
 {
 	int	fd;
@@ -108,37 +107,30 @@ void	append_file_prep(t_cmd *token, char *path, int is_builtin)
 	}
 	else
 	{
-		g_var->out_fd = 1;
-		if (!is_builtin || g_var->size > 1)
+		if (dup2(fd, STDOUT_FILENO) == -1)
 		{
-			if (dup2(fd, STDOUT_FILENO) == -1)
-			{
-				perror("dup2");
-				close(fd);
-				exit(1);
-			}
-			if (fd > 2)
-				close(fd);
+			perror("dup2");
+			close(fd);
+			exit(1);
 		}
-		else
-			g_var->out_fd = fd;
+		if (fd > 2)
+			close(fd);
 	}
 }
 
-void	append_heredoc_prep(t_cmd *cmd)
+void	append_heredoc_prep(char *filename)
 {
 	int	fd;
 
-	fd = open(cmd->file->filename, O_RDWR, 0777);
+	fd = open(filename, O_RDONLY, 0777);
 	if (fd == -1)
 	{
-		write(2, "Error\n", 6);
+		write(2, "Error up here\n", 15);
 		exit(g_var->exit_status);
 	}
 	dup2(fd, STDIN_FILENO);
-	g_var->in_fd = fd;
 	close(fd);
-	unlink(cmd->file->filename);
+	unlink(filename);
 }
 
 void	files_redirections(t_cmd *cmd, int builtin)
@@ -154,10 +146,7 @@ void	files_redirections(t_cmd *cmd, int builtin)
 		else if (curr_red->type == 2)
 			in_file_prep(curr_red->filename, builtin);
 		else if (curr_red->type == 3)
-		{
-			append_heredoc_prep(cmd);
-			unlink(cmd->file->filename);
-		}
+			append_heredoc_prep(curr_red->filename);
 		else if (curr_red->type == 4)
 			append_file_prep(cmd, curr_red->filename, builtin);
 		curr_red = curr_red->next;
@@ -177,12 +166,11 @@ void	close_files(t_cmd *token)
 		close(g_var->pre_pipe_infd);
 }
 
-
 void	execute_pipes(t_cmd *token, int pipe_nb, t_mini *env)
 {
 	int	btn;
 	int	original_stdin;
-	int original_stdout;
+	int	original_stdout;
 
 	original_stdin = dup(STDIN_FILENO);
 	original_stdout = dup(STDOUT_FILENO);

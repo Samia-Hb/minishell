@@ -6,7 +6,7 @@
 #    By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/25 00:05:54 by shebaz            #+#    #+#              #
-#    Updated: 2024/11/30 15:52:32 by shebaz           ###   ########.fr        #
+#    Updated: 2024/12/01 09:20:43 by shebaz           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,6 +36,7 @@ SRCS  = $(wildcard externel_folder/libftt/*.c) \
         main_util1.c\
         main_util2.c \
         $(wildcard execution/exec/*.c) \
+        utils.c \
         execution/builtins/builtins.c \
 
 OBJS = $(SRCS:.c=.o)

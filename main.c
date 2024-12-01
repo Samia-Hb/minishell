@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 00:12:31 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/30 08:17:48 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/01 11:51:07 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,7 @@ void	print_cmd(t_cmd *cmd)
 		cmd = cmd->next;
 	}
 }
+
 int	main(int argc, char **argv, char **en)
 {
 	t_mini	*box;
