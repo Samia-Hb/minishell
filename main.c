@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 00:12:31 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/02 20:52:06 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/02 21:11:42 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,25 +14,20 @@
 
 struct s_global	*g_var;
 
-// void	init_g_var(t_cmd **token)
-// {
-// 	t_cmd	*current;
+void	init_box(t_mini *box, char **envp)
+{
+	box->env = init_env(envp);
+	box->shell = init_shell();
+	box->ptr = NULL;
+	box->arr = NULL;
+	box->last_exit_status = 0;
+}
 
-// 	g_var->red_error = 0;
-// 	g_var->flag = 0;
-// 	g_var->pre_pipe_infd = -1;
-// 	g_var->last_child_id = 0;
-// 	g_var->size = 0;
-// 	g_var->out_fd = 1;
-// 	g_var->num = 0;
-// 	current = *token;
-// 	while (current)
-// 	{
-// 		current->in_fd = 0;
-// 		current->out_fd = 0;
-// 		current = current->next;
-// 	}
-// }
+void	initialisation(t_mini *box, char **envp)
+{
+	init_box(box, envp);
+	initiale_global(box->env);
+}
 
 void	error_malloc(void)
 {
@@ -58,35 +53,6 @@ t_envi	*init_env(char **en)
 	}
 	return (env_list);
 }
-void	print_cmd(t_cmd *cmd)
-{
-	int	i;
-
-	i = 0;
-	while (cmd)
-	{
-		printf("=======Arguments=======\n");
-		if (cmd->arguments)
-		{
-			i = 0;
-			while (cmd->arguments[i])
-			{
-				printf("arg[%d] == %s\n", i, cmd->arguments[i]);
-				i++;
-			}
-		}
-		if (cmd->file)
-		{
-			while (cmd->file)
-			{
-				printf("filename == %s type == %d\n", cmd->file->filename,
-					cmd->file->type);
-				cmd->file = cmd->file->next;
-			}
-		}
-		cmd = cmd->next;
-	}
-}
 
 int	main(int argc, char **argv, char **en)
 {
@@ -101,3 +67,33 @@ int	main(int argc, char **argv, char **en)
 	shell_loop(box);
 	return (0);
 }
+
+// void	print_cmd(t_cmd *cmd)
+// {
+// 	int	i;
+
+// 	i = 0;
+// 	while (cmd)
+// 	{
+// 		printf("=======Arguments=======\n");
+// 		if (cmd->arguments)
+// 		{
+// 			i = 0;
+// 			while (cmd->arguments[i])
+// 			{
+// 				printf("arg[%d] == %s\n", i, cmd->arguments[i]);
+// 				i++;
+// 			}
+// 		}
+// 		if (cmd->file)
+// 		{
+// 			while (cmd->file)
+// 			{
+// 				printf("filename == %s type == %d\n", cmd->file->filename,
+// 					cmd->file->type);
+// 				cmd->file = cmd->file->next;
+// 			}
+// 		}
+// 		cmd = cmd->next;
+// 	}
+// }
