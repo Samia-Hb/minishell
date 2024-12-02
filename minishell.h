@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 00:06:05 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/01 13:27:28 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/02 17:58:57 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -243,9 +243,7 @@ void							*ft_malloc(size_t size, int ele_nbr);
 void							clean_gc(void);
 t_envi							*init_env(char **envp);
 void							ctrl_c(int nb);
-void							child_process(t_cmd *token, int pipe_nb,
-									int btn, t_mini *env);
-
+void							child_process(t_cmd *token, int btn, t_mini *env);
 /////////////////////////////builtins///////////////////////////
 
 int								is_builtin(char *cmd);

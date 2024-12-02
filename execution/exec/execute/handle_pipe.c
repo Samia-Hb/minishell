@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 00:02:59 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/01 20:59:24 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/02 18:00:09 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ void	execute_pipes(t_cmd *token, int pipe_nb, t_mini *env)
 			if (pipe(token->pipe_fd) == -1)
 				printf("Pipeline error\n");
 		}
-		child_process(token, pipe_nb, btn, env);
+		child_process(token, btn, env);
 		close_files(token);
 		g_var->pre_pipe_infd = token->pipe_fd[0];
 		if (g_var->last_child_id > 0)
@@ -83,11 +83,11 @@ void	execute_pipes(t_cmd *token, int pipe_nb, t_mini *env)
 			waitpid(g_var->last_child_id, &status, 0);
 			if (WIFSIGNALED(status))
 			{
-				printf("STAAAAT = %d\n",WEXITSTATUS(status));
-				if (WEXITSTATUS(status) == 2)
-				{
-					printf("abaaa oui\n");
-				}
+				// printf("abaaa oui\n");
+				// printf("STAAAAT = %d\n",WEXITSTATUS(status));
+				// if (WEXITSTATUS(status) == 2)
+				// {
+				// }
 				g_var->exit_status = WEXITSTATUS(status);
 				// printf("exiiiiit = %d\n", g_var->exit_status);
 				// // printf("check yees\n");
