@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/01 13:35:43 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/02 21:02:59 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/02 21:27:37 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,6 @@ void	execs(t_cmd *token, int btn, t_mini *env)
 {
 	if (btn != -1)
 	{
-		write(2, "yeep\n", 5);
 		exec_builtin(btn, token, env);
 		exit(g_var->exit_status);
 	}

@@ -1,0 +1,13 @@
+42_minishell_tester
+cat
+execution
+externel_folder
+file
+main.c
+main_util1.c
+main_util2.c
+Makefile
+minishell
+minishell.h
+parsing
+utils.c
