@@ -243,7 +243,8 @@ void							*ft_malloc(size_t size, int ele_nbr);
 void							clean_gc(void);
 t_envi							*init_env(char **envp);
 void							ctrl_c(int nb);
-void							child_process(t_cmd *token, int btn, t_mini *env);
+void							child_process(t_cmd *token, int btn,
+									t_mini *env);
 /////////////////////////////builtins///////////////////////////
 
 int								is_builtin(char *cmd);

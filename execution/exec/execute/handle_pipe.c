@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 00:02:59 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/02 18:00:09 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/02 20:57:35 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void	execute_pipes(t_cmd *token, int pipe_nb, t_mini *env)
 {
 	int	original_stdin;
 	int	original_stdout;
-	int status;
+	int	status;
 	int	btn;
 
 	original_stdin = dup(STDIN_FILENO);
@@ -83,16 +83,13 @@ void	execute_pipes(t_cmd *token, int pipe_nb, t_mini *env)
 			waitpid(g_var->last_child_id, &status, 0);
 			if (WIFSIGNALED(status))
 			{
-				// printf("abaaa oui\n");
-				// printf("STAAAAT = %d\n",WEXITSTATUS(status));
-				// if (WEXITSTATUS(status) == 2)
-				// {
-				// }
-				g_var->exit_status = WEXITSTATUS(status);
-				// printf("exiiiiit = %d\n", g_var->exit_status);
-				// // printf("check yees\n");
+				if (WTERMSIG(status) == 2)
+					g_var->exit_status = 130;
+				else if (WTERMSIG(status) == 3)
+					g_var->exit_status = 131;
 			}
-			g_var->exit_status = WEXITSTATUS(status);
+			else
+				g_var->exit_status = WEXITSTATUS(status);
 		}
 	}
 	close(original_stdin);

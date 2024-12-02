@@ -6,55 +6,11 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 13:07:11 by szeroual          #+#    #+#             */
-/*   Updated: 2024/12/01 17:37:31 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/02 21:04:09 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../minishell.h"
-
-// void	handle_signals(int mode)
-// {
-// 	if (mode == 0)
-// 	{
-// 		signal(SIGINT, SIG_IGN);
-// 		signal(SIGQUIT, SIG_IGN);
-// 	}
-// 	else
-// 	{
-// 		signal(SIGQUIT, SIG_IGN);
-// 	}
-// }
-
-// void	sig_wait(t_cmd *token)
-// {
-// 	int		status;
-// 	t_cmd	*current;
-
-// 	handle_signals(0);
-// 	current = token;
-// 	status = 0;
-// 	while (current)
-// 	{
-// 		waitpid(current->pid, &status, 0);
-// 		current = current->next;
-// 	}
-// 	if (g_var->exit_status)
-// 		return ;
-// 	g_var->exit_status = 128 + WTERMSIG(status);
-// 	if (WTERMSIG(status) + 128 == 130)
-// 	{
-// 		g_var->exit_status = 128 + WTERMSIG(status);
-// 		write(1, "\n", 1);
-// 	}
-// 	else if (WTERMSIG(status) + 128 == 131)
-// 	{
-// 		g_var->exit_status = 128 + WTERMSIG(status);
-// 		write(1, "Quit\n", 6);
-// 	}
-// 	else
-// 		g_var->exit_status = WEXITSTATUS(status);
-// 	handle_signals(1);
-// }
 
 void	print_perror(char *str, int exitt)
 {

@@ -6,13 +6,13 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 10:40:47 by szeroual          #+#    #+#             */
-/*   Updated: 2024/12/02 17:58:18 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/02 21:03:15 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../minishell.h"
 
-void sig(int sig)
+void	sig(int sig)
 {
 	if (sig == SIGINT)
 	{
@@ -24,7 +24,6 @@ void sig(int sig)
 		printf("Quit (core dumped)\n");
 		g_var->exit_status = 131;
 	}
-	exit(g_var->exit_status);
 }
 
 void	child_process(t_cmd *token, int btn, t_mini *env)

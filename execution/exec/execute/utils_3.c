@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/01 13:42:07 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/01 17:38:06 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/02 21:03:56 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ void	cleanup_execute_arguments(t_cmd *token)
 	(void)token;
 	if (g_var->pre_pipe_infd > 2)
 		close(g_var->pre_pipe_infd);
-	// sig_wait(token);
 }
 
 void	lista_add_front(t_alst **lst, t_alst *new)

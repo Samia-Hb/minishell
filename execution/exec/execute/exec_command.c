@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/01 13:35:43 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/01 23:00:16 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/02 21:02:59 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,12 +61,12 @@ void	execs(t_cmd *token, int btn, t_mini *env)
 {
 	if (btn != -1)
 	{
+		write(2, "yeep\n", 5);
 		exec_builtin(btn, token, env);
 		exit(g_var->exit_status);
 	}
 	if (token->cmd_path)
 	{
-		// write(2, "yes\n", 4);
 		g_var->en = separate_env(env->env);
 		if (execve(token->cmd_path, token->arguments, g_var->en) == -1)
 		{
@@ -74,7 +74,6 @@ void	execs(t_cmd *token, int btn, t_mini *env)
 			ft_putstr_fd("\n", 2);
 			exit(g_var->exit_status);
 		}
-		// write(2, "uppp\n",5);
 	}
 	else
 		exit(g_var->exit_status);
@@ -143,5 +142,4 @@ void	execute_arguments(t_cmd *token, t_mini *env)
 	}
 	if (g_var->pre_pipe_infd > 2)
 		close(g_var->pre_pipe_infd);
-	// sig_wait(token);
 }
