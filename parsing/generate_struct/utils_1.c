@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 21:39:01 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/09 13:26:04 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/03 12:00:33 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	fill_up_node(t_cmd **node, t_token **tokens, t_file **head)
 {
-	(*node)->file = ft_malloc(sizeof(t_file), 1);
+	(*node)->file = ft_calloc(1, sizeof(t_file));
 	(*node)->file->type = get_red_type(*tokens);
 	if ((*tokens)->next)
 	{

@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 10:37:38 by szeroual          #+#    #+#             */
-/*   Updated: 2024/12/01 14:11:32 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/03 11:54:49 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,10 @@ char	*construct_full_path(char *dir, char *cmd)
 {
 	char	*full_path;
 
-	full_path = malloc(strlen(dir) + strlen(cmd) + 2);
+	full_path = ft_calloc(strlen(dir) + strlen(cmd) + 2, sizeof(char));
 	if (!full_path)
 	{
-		perror("malloc failed");
+		perror("Calloc failed");
 		return (NULL);
 	}
 	strcpy(full_path, dir);

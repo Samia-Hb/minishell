@@ -3,14 +3,32 @@
 /*                                                        :::      ::::::::   */
 /*   ft_calloc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: szeroual <szeroual@student.42.fr>          +#+  +:+       +#+        */
+/*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/14 12:15:32 by szeroual          #+#    #+#             */
-/*   Updated: 2023/12/08 16:31:38 by szeroual         ###   ########.fr       */
+/*   Updated: 2024/12/03 12:50:19 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+
+// void	adde_node(void *data)
+// {
+// 	t_gc	*node;
+
+// 	node = malloc(1 * sizeof(t_gc));
+// 	node->ptr = data;
+// 	if (!g_var)
+// 	{
+// 		g_var = ft_calloc(1, sizeof(struct s_global));
+// 		g_var->head = node;
+// 	}
+// 	else
+// 	{
+// 		node->next = g_var->head;
+// 		g_var->head = node;
+// 	}
+// }
 
 void	*ft_calloc(size_t count, size_t size)
 {
@@ -22,8 +40,7 @@ void	*ft_calloc(size_t count, size_t size)
 	total_size = count * size;
 	result = malloc(total_size);
 	if (result != NULL)
-	{
 		ft_memset(result, 0, total_size);
-	}
+	add_node(result);
 	return (result);
 }

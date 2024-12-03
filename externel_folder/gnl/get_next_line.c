@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: szeroual <szeroual@student.42.fr>          +#+  +:+       +#+        */
+/*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 01:42:53 by szeroual          #+#    #+#             */
-/*   Updated: 2024/10/15 23:08:01 by szeroual         ###   ########.fr       */
+/*   Updated: 2024/12/03 11:56:39 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ char	*readfile(int fd, char *str)
 	ssize_t		readbytes;
 
 	readbytes = 1;
-	buff = malloc((size_t)BUFFER_SIZE + 1);
+	buff = ft_calloc((size_t)BUFFER_SIZE + 1, sizeof(char));
 	if (!buff)
 		return (NULL);
 	while (readbytes != 0 && !ft_strchr(str, '\n'))
@@ -49,7 +49,7 @@ char	*extarct_line(char *buff)
 		i++;
 	if (buff[i] == '\n')
 		i++;
-	line = malloc(i + 1);
+	line = ft_calloc(i + 1, sizeof(char));
 	if (!line)
 		return (NULL);
 	i = 0;

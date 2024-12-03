@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/01 13:36:31 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/01 14:35:34 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/03 11:55:23 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ char	*allocate_folders(char *path, int i)
 {
 	char	*folders;
 
-	folders = malloc(i + 2);
+	folders = ft_calloc(i + 2, sizeof(char));
 	if (!folders)
 	{
 		perror("");

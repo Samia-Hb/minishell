@@ -6,13 +6,13 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 00:12:31 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/03 00:36:44 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/03 12:49:49 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-struct s_global	*g_var;
+struct s_global	*g_var = NULL;
 
 void	init_box(t_mini *box, char **envp)
 {
@@ -60,7 +60,7 @@ int	main(int argc, char **argv, char **en)
 
 	(void)argc;
 	(void)argv;
-	box = malloc(sizeof(t_mini));
+	box = ft_calloc(1, sizeof(t_mini));
 	if (!box)
 		error_malloc();
 	initialisation(box, en);

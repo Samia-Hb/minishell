@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 19:09:51 by szeroual          #+#    #+#             */
-/*   Updated: 2024/11/06 21:08:55 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/03 11:57:41 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ static int	allocate_substr(char **ar, const char *str, char c)
 			j = 0;
 			while (str[i + j] != c && str[i + j])
 				j++;
-			ar[k] = ft_malloc(sizeof(char), j + 1);
+			ar[k] = ft_calloc(j + 1, sizeof(char));
 			str_cpy(ar[k], str + i, c);
 			i += j;
 			k++;
@@ -89,7 +89,7 @@ char	**ft_split(char const *s, char c)
 	if (!s)
 		return (NULL);
 	wc = separate_string(s, c);
-	ar = ft_malloc(sizeof(char *), (wc + 1));
+	ar = ft_calloc((wc + 1), sizeof(char *));
 	if (!ar)
 		return (NULL);
 	if (allocate_substr(ar, s, c) == 0)

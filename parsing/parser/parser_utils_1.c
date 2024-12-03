@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 20:25:49 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/25 20:50:25 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/03 12:02:32 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ int	check_token(char *str, char c)
 		i++;
 		j++;
 	}
-	copied = ft_malloc(sizeof(char), j);
+	copied = ft_calloc(j, sizeof(char));
 	if (copied == NULL)
 		return (0);
 	ft_strncpy(copied, str + 1, j);

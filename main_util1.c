@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 22:29:05 by szeroual          #+#    #+#             */
-/*   Updated: 2024/12/03 10:54:22 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/03 12:52:31 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,10 @@ void	error_strdup(void)
 
 void	initiale_global(t_envi *env)
 {
-	g_var = malloc(sizeof(struct s_global));
+	g_var = ft_calloc(1 ,sizeof(struct s_global));
 	if (!g_var)
 	{
-		perror("malloc failed");
+		perror("calloc failed");
 		exit(EXIT_FAILURE);
 	}
 	g_var->envp = env;
@@ -74,6 +74,7 @@ void	shell_loop(t_mini *box)
 			break ;
 		}
 		handle_input(input, box);
-		free(input);
+		// free(input);
+		clean_gc();
 	}
 }

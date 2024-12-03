@@ -6,38 +6,64 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 22:30:12 by szeroual          #+#    #+#             */
-/*   Updated: 2024/12/03 10:31:52 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/03 12:52:15 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	add_node(void *data)
-{
-	t_gc	*node;
+// void	add_node(void *data)
+// {
+// 	t_gc	*node;
 
-	node = malloc(sizeof(t_gc));
-	node->ptr = data;
-	if (!g_var)
-	{
-		g_var = malloc(sizeof(struct s_global));
-		g_var->head = node;
-	}
-	else
-	{
-		node->next = g_var->head;
-		g_var->head = node;
-	}
+// 	node = malloc(1 * sizeof(t_gc));
+// 	node->ptr = data;
+// 	if (!g_var)
+// 	{
+// 		g_var = malloc(1 * sizeof(struct s_global));
+// 		g_var->head = node;
+// 	}
+// 	else
+// 	{
+// 		node->next = g_var->head;
+// 		g_var->head = node;
+// 	}
+// }
+
+void    add_node(void *data)
+{
+    t_gc    *node;
+
+    node = malloc(1 * sizeof(t_gc));
+    if (!node)
+        return;
+    node->ptr = data;
+    node->next = NULL;
+    if (!g_var)
+    {
+        g_var = malloc(sizeof(struct s_global));
+        if (!g_var)
+        {
+            free(node);
+            return;
+        }
+        g_var->head = node;
+    }
+    else
+    {
+        node->next = g_var->head;
+        g_var->head = node;
+    }
 }
 
 t_shell	*init_shell(void)
 {
 	t_shell	*shell;
 
-	shell = malloc(sizeof(t_shell));
+	shell = ft_calloc(1, sizeof(t_shell));
 	if (!shell)
 	{
-		perror("malloc");
+		perror("calloc");
 		exit(EXIT_FAILURE);
 	}
 	shell->exit_status = 0;
@@ -49,10 +75,10 @@ t_envi	*create__node(char *name, char *value)
 {
 	t_envi	*new_node;
 
-	new_node = malloc(sizeof(t_envi));
+	new_node = ft_calloc(1, sizeof(t_envi));
 	if (!new_node)
 	{
-		perror("malloc");
+		perror("calloc");
 		exit(EXIT_FAILURE);
 	}
 	new_node->name = strdup(name);

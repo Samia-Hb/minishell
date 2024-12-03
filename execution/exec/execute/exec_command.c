@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/01 13:35:43 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/03 01:03:35 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/03 11:55:11 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ char	**separate_env(t_envi *env)
 		count++;
 		tmp = tmp->next;
 	}
-	the_env = malloc(sizeof(char *) * (count + 1));
+	the_env = ft_calloc((count + 1) , sizeof(char *));
 	if (!the_env)
 	{
 		perror("Error allocating memory");
@@ -41,7 +41,7 @@ char	**separate_env(t_envi *env)
 	{
 		name_len = strlen(env->name);
 		value_len = strlen(env->vale);
-		the_env[i] = malloc(name_len + value_len + 2);
+		the_env[i] = ft_calloc(name_len + value_len + 2, sizeof(char));
 		if (!the_env[i])
 		{
 			perror("Error allocating memory for environment variable string");

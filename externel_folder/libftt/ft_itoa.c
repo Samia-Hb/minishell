@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: szeroual <szeroual@student.42.fr>          +#+  +:+       +#+        */
+/*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 19:15:20 by szeroual          #+#    #+#             */
-/*   Updated: 2023/12/08 16:29:36 by szeroual         ###   ########.fr       */
+/*   Updated: 2024/12/03 11:56:59 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ char	*ft_itoa(int n)
 
 	len = check_length(n);
 	i = 0;
-	str = (char *)malloc((len + 1) * sizeof(char));
+	str = (char *)ft_calloc((len + 1) , sizeof(char));
 	if (!str)
 		return (NULL);
 	str[len] = '\0';

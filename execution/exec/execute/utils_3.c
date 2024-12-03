@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/01 13:42:07 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/03 11:14:50 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/03 11:55:35 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ t_alst	*lista_new(void *content)
 {
 	t_alst	*list;
 
-	list = malloc(sizeof(t_alst));
+	list = ft_calloc(1, sizeof(t_alst));
 	if (!list)
 		return (NULL);
 	list->content = content;

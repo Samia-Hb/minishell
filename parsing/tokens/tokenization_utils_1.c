@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 15:20:22 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/20 22:55:20 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/03 12:03:06 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ char	*heredoc_token(char *input, int l)
 	int		i;
 
 	i = 0;
-	full_token = ft_malloc(sizeof(char), l);
+	full_token = ft_calloc(l, sizeof(char));
 	if (!full_token)
 		return (NULL);
 	while (i < l)

@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 13:36:28 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/06 16:06:07 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/03 12:04:29 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ char	*char_to_string(char c, char c2)
 
 	if (!c2)
 	{
-		string = ft_malloc(sizeof(char), 2);
+		string = ft_calloc(2, sizeof(char));
 		if (!string)
 		{
 			printf("Error: memory allocation failed\n");
@@ -65,7 +65,7 @@ char	*char_to_string(char c, char c2)
 		string[1] = '\0';
 		return (string);
 	}
-	string = ft_malloc(sizeof(char), 3);
+	string = ft_calloc(3, sizeof(char));
 	if (!string)
 	{
 		printf("Error: memory allocation failed\n");
@@ -107,7 +107,7 @@ char	*handle_dollar(char *str)
 	i = 0;
 	while (str[i] && !isspace(str[i]))
 		i++;
-	word = ft_malloc(sizeof(char), i + 1);
+	word = ft_calloc(i + 1, sizeof(char));
 	if (!word)
 		return (NULL);
 	word = strncpy(word, str, i);
