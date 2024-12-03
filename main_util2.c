@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 22:30:12 by szeroual          #+#    #+#             */
-/*   Updated: 2024/12/03 12:52:15 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/03 13:01:29 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ void    add_node(void *data)
     node->next = NULL;
     if (!g_var)
     {
-        g_var = malloc(sizeof(struct s_global));
         if (!g_var)
         {
             free(node);
