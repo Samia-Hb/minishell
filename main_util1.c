@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 22:29:05 by szeroual          #+#    #+#             */
-/*   Updated: 2024/12/03 12:52:31 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/03 13:09:02 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void	shell_loop(t_mini *box)
 			g_var->exit_status = 0;
 		i++;
 		handle_signal();
-		g_var->flag = 0;
+		// g_var->flag = 0;
 		input = readline("minishell > ");
 		if (!input)
 		{

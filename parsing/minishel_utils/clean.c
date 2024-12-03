@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 13:39:34 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/03 13:06:02 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/03 13:23:48 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,29 +34,6 @@ void	*ft_malloc(size_t size, int ele_nbr)
 	return (ptr);
 }
 
-void	clean_gc(void)
-{
-	t_gc	*temp;
-
-	t_gc *var =  g_var->head;
-	while (var)
-	{
-		if (var->ptr)
-			free(var->ptr);
-		temp = var;
-		if (var)
-			free(var);
-		var = var->next;
-	}
-	// if(var)
-	// 	free(var);
-	// if(temp)
-	// 	free(temp);
-}
-// if (g_var->head)
-// 	free(g_var->head);
-// if (g_var)
-// 	free(g_var);
 
 void clean_gc(void)
 {
@@ -64,19 +41,33 @@ void clean_gc(void)
     t_gc *next;
 
     if (!g_var)
-        return; // Nothing to clean if g_var is NULL
-
+        return;
     current = g_var->head;
     while (current)
     {
-        next = current->next; // Save the next node
+        next = current->next;
         if (current->ptr)
-            free(current->ptr); // Free the allocated memory
-        free(current);          // Free the current node
-        current = next;         // Move to the next node
+            free(current->ptr);
+        free(current);         
+        current = next;
     }
-
-    g_var->head = NULL; // Reset the head pointer
-    free(g_var);        // Free the global structure itself
-    g_var = NULL;       // Avoid dangling pointer
+	if (g_var->envp)
+	{
+		t_envi *n = g_var->envp;
+		t_envi *n1 = g_var->envp->next; 
+		while (n)
+		{
+			if(g_var->envp->next)
+				n1 = g_var->envp->next; 
+			if (n->name)
+				free(n->name);
+			if (n->vale)
+				free(n->vale);
+			free(n);      
+			n = n1;
+		}
+	}
+	if (g_var->en)
+		ft_free_array(g_var->en);
+    free(g_var);
 }
