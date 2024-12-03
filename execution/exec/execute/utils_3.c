@@ -6,18 +6,11 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/01 13:42:07 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/02 21:03:56 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/03 11:14:50 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../minishell.h"
-
-int	init_execute_arguments(void)
-{
-	g_var->exit_status = 0;
-	g_var->pre_pipe_infd = -1;
-	return (0);
-}
 
 void	cleanup_execute_arguments(t_cmd *token)
 {

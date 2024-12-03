@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 19:05:46 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/01 13:26:33 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/03 09:39:33 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ void	heredoc_process(t_cmd **node, t_file **head, t_token **tokens, int *i)
 	int		pid;
 	int		status;
 
+	status = 0;
 	(*tokens) = (*tokens)->next;
 	processed_del = process_delimiter((*tokens)->value);
 	(*node)->file = ft_malloc(sizeof(t_file), 1);

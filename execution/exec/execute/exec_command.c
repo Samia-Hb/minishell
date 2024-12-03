@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/01 13:35:43 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/02 21:27:37 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/03 01:03:35 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void	execs(t_cmd *token, int btn, t_mini *env)
 		exec_builtin(btn, token, env);
 		exit(g_var->exit_status);
 	}
-	if (token->cmd_path)
+	else if (token->cmd_path)
 	{
 		g_var->en = separate_env(env->env);
 		if (execve(token->cmd_path, token->arguments, g_var->en) == -1)
@@ -131,9 +131,8 @@ void	execute_arguments(t_cmd *token, t_mini *env)
 	current = token;
 	g_var->size = count_commands(token);
 	g_var->pipe_nb = g_var->size - 1;
-	g_var->exit_status = 0;
 	g_var->pre_pipe_infd = -1;
-	while (current && g_var->exit_status == 0)
+	while (current)
 	{
 		execute_pipes(current, i, env);
 		current = current->next;

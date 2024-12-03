@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/01 13:37:08 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/01 13:45:21 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/03 11:34:25 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	check_cmd_path(t_cmd *token)
 			exit(126);
 		}
 		else
-			print_perror(token->arguments[0], 1);
+			print_perror(token->arguments[0], 0);
 	}
 	else
 		print_perror(token->arguments[0], 1);

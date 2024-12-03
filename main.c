@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 00:12:31 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/02 21:11:42 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/03 00:36:44 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,33 +67,3 @@ int	main(int argc, char **argv, char **en)
 	shell_loop(box);
 	return (0);
 }
-
-// void	print_cmd(t_cmd *cmd)
-// {
-// 	int	i;
-
-// 	i = 0;
-// 	while (cmd)
-// 	{
-// 		printf("=======Arguments=======\n");
-// 		if (cmd->arguments)
-// 		{
-// 			i = 0;
-// 			while (cmd->arguments[i])
-// 			{
-// 				printf("arg[%d] == %s\n", i, cmd->arguments[i]);
-// 				i++;
-// 			}
-// 		}
-// 		if (cmd->file)
-// 		{
-// 			while (cmd->file)
-// 			{
-// 				printf("filename == %s type == %d\n", cmd->file->filename,
-// 					cmd->file->type);
-// 				cmd->file = cmd->file->next;
-// 			}
-// 		}
-// 		cmd = cmd->next;
-// 	}
-// }

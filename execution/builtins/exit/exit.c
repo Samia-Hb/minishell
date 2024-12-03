@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 21:45:07 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/25 21:34:02 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/03 10:55:48 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,8 @@ int	ft_exit(char **args)
 
 	exit_status = g_var->exit_status;
 	ft_putstr_fd("exit\n", 1);
+	if (!args[1])
+		exit(g_var->exit_status);
 	if (args[1])
 	{
 		if (!is_numeric(args[1]))
@@ -64,8 +66,8 @@ int	ft_exit(char **args)
 			ft_putstr_fd("bash: exit: too many arguments\n", 2), 1);
 	else if (args[1] && !is_numeric(args[1]))
 		ft_putstr_fd("exit: numeric argument required\n", 2);
-	if (!is_numeric(args[1]) || exit_status < INT_MIN || exit_status > INT_MAX)
+	else if (!is_numeric(args[1]) || exit_status < INT_MIN
+		|| exit_status > INT_MAX)
 		exit_status = 2;
 	exit(exit_status);
-	return (0);
 }

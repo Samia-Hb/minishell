@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 15:54:46 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/30 10:18:52 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/02 22:40:18 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,12 @@ int	first_non_option(char **args)
 	return (i);
 }
 
+void	ft_write(char *line)
+{
+	write(2, line, strlen(line));
+	write(2, "\n", 1);
+}
+
 int	ft_echo(char **args)
 {
 	int	i;
@@ -50,6 +56,8 @@ int	ft_echo(char **args)
 		return (0);
 	}
 	i = first_non_option(args);
+	if (g_var->exit_status == 1)
+		g_var->exit_status = 0;
 	while (args && args[i])
 	{
 		write(1, args[i], ft_strlen(args[i]));

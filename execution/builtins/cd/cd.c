@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 15:55:41 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/23 16:36:28 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/02 22:44:19 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,8 @@ int	ft_cd(char **ptr, t_envi *envi)
 	if (get_size(ptr) > 2)
 	{
 		g_var->exit_status = 1;
-		return (printf("cd: too many arguments\n"), 1);
+		ft_putstr_fd("cd: too many arguments\n", 2);
+		return (1);
 	}
 	if (ptr[0] && !ptr[1])
 	{

@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 22:29:05 by szeroual          #+#    #+#             */
-/*   Updated: 2024/12/02 21:11:56 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/03 10:54:22 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,14 +57,22 @@ void	handle_input(char *input, t_mini *box)
 void	shell_loop(t_mini *box)
 {
 	char	*input;
+	int		i;
 
+	i = 0;
 	while (1)
 	{
+		if (!(i % 2) && i)
+			g_var->exit_status = 0;
+		i++;
 		handle_signal();
 		g_var->flag = 0;
 		input = readline("minishell > ");
 		if (!input)
+		{
+			printf("exit\n");
 			break ;
+		}
 		handle_input(input, box);
 		free(input);
 	}

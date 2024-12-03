@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 13:39:34 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/25 19:55:42 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/03 10:42:00 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	clean_gc(void)
 	while (g_var->head)
 	{
 		if (g_var->head)
-			free(g_var->head->ptr);
+			free(g_var->head);
 		temp = g_var->head;
 		g_var->head = g_var->head->next;
 		if (temp)

@@ -6,11 +6,29 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 22:30:12 by szeroual          #+#    #+#             */
-/*   Updated: 2024/11/30 15:54:20 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/03 10:31:52 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	add_node(void *data)
+{
+	t_gc	*node;
+
+	node = malloc(sizeof(t_gc));
+	node->ptr = data;
+	if (!g_var)
+	{
+		g_var = malloc(sizeof(struct s_global));
+		g_var->head = node;
+	}
+	else
+	{
+		node->next = g_var->head;
+		g_var->head = node;
+	}
+}
 
 t_shell	*init_shell(void)
 {

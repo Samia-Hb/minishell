@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 00:06:05 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/02 17:58:57 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/03 10:26:31 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -245,6 +245,7 @@ t_envi							*init_env(char **envp);
 void							ctrl_c(int nb);
 void							child_process(t_cmd *token, int btn,
 									t_mini *env);
+void							add_node(void *data);
 /////////////////////////////builtins///////////////////////////
 
 int								is_builtin(char *cmd);
@@ -267,7 +268,7 @@ void							swap_nodes(t_envi *a, t_envi *b);
 t_envi							*cpy_list(t_envi *env);
 int								check_each_element(char *str);
 void							ft_remove(char **ptr, t_mini *box, int i);
-
+void							ft_free_array(char **array);
 /////////////////////////////execution///////////////////////////
 
 void							append_heredoc_prep(char *filename);

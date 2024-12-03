@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 17:12:31 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/01 13:28:51 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/03 09:41:24 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,10 +54,11 @@ char	*generate_name(int *i)
 	char	*filename;
 	char	*str;
 
+	filename = NULL;
 	str = ft_itoa(*i);
 	if (access("tmp", F_OK))
 		filename = ft_strjoin("tmp", ft_itoa(*i));
-	else if (!access("tmp", F_OK))
+	else if (access("tmp", F_OK) == 0)
 	{
 		while (access("tmp", F_OK))
 		{

@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 13:07:11 by szeroual          #+#    #+#             */
-/*   Updated: 2024/12/02 21:04:09 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/03 11:33:40 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,13 @@ void	print_perror(char *str, int exitt)
 {
 	ft_putstr_fd("minishell: ", 2);
 	perror(str);
-	g_var->exit_status = 127;
 	if (exitt)
 	{
+		g_var->exit_status = 127;
 		exit(127);
 	}
+	g_var->exit_status = 126;
+	exit(126);
 }
 
 char	*get_cmd_path(char *cmd, char **dirs)

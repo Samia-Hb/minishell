@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 00:02:59 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/02 20:57:35 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/03 11:12:15 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ void	execute_pipes(t_cmd *token, int pipe_nb, t_mini *env)
 		if (g_var->size != pipe_nb + 1)
 		{
 			if (pipe(token->pipe_fd) == -1)
-				printf("Pipeline error\n");
+				write(2, "Error\n", 6);
 		}
 		child_process(token, btn, env);
 		close_files(token);
@@ -88,7 +88,7 @@ void	execute_pipes(t_cmd *token, int pipe_nb, t_mini *env)
 				else if (WTERMSIG(status) == 3)
 					g_var->exit_status = 131;
 			}
-			else
+			else if(WEXITSTATUS(status))
 				g_var->exit_status = WEXITSTATUS(status);
 		}
 	}
