@@ -6,28 +6,35 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/14 12:15:32 by szeroual          #+#    #+#             */
-/*   Updated: 2024/12/03 12:50:19 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/03 22:13:41 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-// void	adde_node(void *data)
+// void    add_node(void *data)
 // {
-// 	t_gc	*node;
+//     t_gc    *node;
 
-// 	node = malloc(1 * sizeof(t_gc));
-// 	node->ptr = data;
-// 	if (!g_var)
-// 	{
-// 		g_var = ft_calloc(1, sizeof(struct s_global));
-// 		g_var->head = node;
-// 	}
-// 	else
-// 	{
-// 		node->next = g_var->head;
-// 		g_var->head = node;
-// 	}
+//     node = malloc(1 * sizeof(t_gc));
+//     if (!node)
+//         return;
+//     node->ptr = data;
+//     node->next = NULL;
+//     if (!g_var)
+//     {
+//         if (!g_var)
+//         {
+//             free(node);
+//             return;
+//         }
+//         g_var->head = node;
+//     }
+//     else
+//     {
+//         node->next = g_var->head;
+//         g_var->head = node;
+//     }
 // }
 
 void	*ft_calloc(size_t count, size_t size)

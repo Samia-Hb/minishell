@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 22:29:05 by szeroual          #+#    #+#             */
-/*   Updated: 2024/12/03 14:43:22 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/05 20:46:54 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	error_strdup(void)
 
 void	initiale_global(t_envi *env)
 {
-	g_var = ft_calloc(1 ,sizeof(struct s_global));
+	g_var = ft_malloc(1, sizeof(struct s_global));
 	if (!g_var)
 	{
 		perror("calloc failed");
@@ -30,9 +30,10 @@ void	initiale_global(t_envi *env)
 	g_var->exit_status = 0;
 	g_var->red_error = 0;
 	g_var->flag = 0;
+	g_var->pid_size = 0;
 }
 
-void	handle_input(char *input, t_mini *box)
+void	handle_input(char *input, t_envi *envp)
 {
 	t_token	**tokens;
 	t_cmd	*cmd;
@@ -51,10 +52,10 @@ void	handle_input(char *input, t_mini *box)
 	cmd = analyse_tokens(tokens);
 	if (g_var->flag == 7)
 		return ;
-	execute_arguments(cmd, box);
+	execute_arguments(cmd, envp);
 }
 
-void	shell_loop(t_mini *box)
+void	shell_loop(t_envi *envp)
 {
 	char	*input;
 	int		i;
@@ -71,10 +72,10 @@ void	shell_loop(t_mini *box)
 		if (!input)
 		{
 			printf("exit\n");
+			rl_clear_history();
 			clean_gc();
 			break ;
 		}
-		handle_input(input, box);
+		handle_input(input, envp);
 	}
-	clean_gc();
 }

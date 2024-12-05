@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 19:05:46 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/03 12:00:19 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/05 20:39:10 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,9 @@ void	child_proces(char *token, char *processed_del, int fd)
 	}
 	if (!line)
 		printf("minishell : warning: heredoc delimited by EOF \n");
-	exit(g_var->exit_status);
+	close(fd);
+	clean_gc();
+	exit(0);
 }
 
 void	heredoc_process(t_cmd **node, t_file **head, t_token **tokens, int *i)
@@ -45,7 +47,7 @@ void	heredoc_process(t_cmd **node, t_file **head, t_token **tokens, int *i)
 	status = 0;
 	(*tokens) = (*tokens)->next;
 	processed_del = process_delimiter((*tokens)->value);
-	(*node)->file = ft_calloc(1, sizeof(t_file));
+	(*node)->file = ft_malloc(1, sizeof(t_file));
 	(*node)->file->type = RE_HEREDOC;
 	(*node)->file->filename = generate_name(i);
 	fd = open((*node)->file->filename, O_CREAT | O_TRUNC | O_RDWR, 0777);
@@ -57,12 +59,7 @@ void	heredoc_process(t_cmd **node, t_file **head, t_token **tokens, int *i)
 		waitpid(pid, &status, 0);
 	push_t_file(head, (*node)->file);
 	(*tokens) = (*tokens)->next;
-	if (WEXITSTATUS(status) == 7)
-	{
-		g_var->exit_status = 130;
-		unlink((*node)->file->filename);
-		g_var->flag = 7;
-	}
+	exit_status(status, (*node)->file->filename);
 }
 
 void	red_process(t_token **tokens, t_cmd **node, int *i)
@@ -70,7 +67,7 @@ void	red_process(t_token **tokens, t_cmd **node, int *i)
 	t_file	*head;
 	int		j;
 
-	head = ft_calloc(1, sizeof(t_file));
+	head = ft_malloc(1, sizeof(t_file));
 	head = NULL;
 	j = 0;
 	while ((*tokens) && (*tokens)->type != TOKEN_PIPE)
@@ -95,7 +92,7 @@ void	create_node_arguments(t_cmd **node, t_token **tokens)
 	int	j;
 
 	i = 0;
-	(*node)->arguments = ft_calloc(nbr_argument(*tokens) + 1, sizeof(char *));
+	(*node)->arguments = ft_malloc(nbr_argument(*tokens) + 1, sizeof(char *));
 	while (*tokens && (*tokens)->type != TOKEN_PIPE)
 	{
 		j = 0;
@@ -121,7 +118,7 @@ t_cmd	*analyse_tokens(t_token **tokens)
 	head = NULL;
 	while (*tokens)
 	{
-		node = ft_calloc(1, sizeof(t_cmd));
+		node = ft_malloc(1, sizeof(t_cmd));
 		node->arguments = NULL;
 		node->file = NULL;
 		if ((*tokens)->type == TOKEN_COMMAND

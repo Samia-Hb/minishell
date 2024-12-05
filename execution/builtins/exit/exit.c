@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 21:45:07 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/03 10:55:48 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/05 20:06:50 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@ int	is_numeric(const char *str)
 		}
 		str++;
 	}
+	g_var->exit_status = 2;
+	exit(g_var->exit_status);
 	return (1);
 }
 
@@ -52,11 +54,7 @@ int	ft_exit(char **args)
 		exit(g_var->exit_status);
 	if (args[1])
 	{
-		if (!is_numeric(args[1]))
-		{
-			g_var->exit_status = 2;
-			exit(g_var->exit_status);
-		}
+		is_numeric(args[1]);
 		exit_status = atoll(args[1]);
 	}
 	if (exit_status < INT_MIN || exit_status > INT_MAX)

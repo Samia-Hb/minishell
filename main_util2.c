@@ -6,82 +6,39 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 22:30:12 by szeroual          #+#    #+#             */
-/*   Updated: 2024/12/03 13:01:29 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/05 13:48:19 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// void	add_node(void *data)
+// t_shell	*init_shell(void)
 // {
-// 	t_gc	*node;
+// 	t_shell	*shell;
 
-// 	node = malloc(1 * sizeof(t_gc));
-// 	node->ptr = data;
-// 	if (!g_var)
+// 	shell = ft_malloc(1, sizeof(t_shell));
+// 	if (!shell)
 // 	{
-// 		g_var = malloc(1 * sizeof(struct s_global));
-// 		g_var->head = node;
+// 		perror("calloc");
+// 		exit(EXIT_FAILURE);
 // 	}
-// 	else
-// 	{
-// 		node->next = g_var->head;
-// 		g_var->head = node;
-// 	}
+// 	shell->exit_status = 0;
+// 	shell->args = NULL;
+// 	return (shell);
 // }
-
-void    add_node(void *data)
-{
-    t_gc    *node;
-
-    node = malloc(1 * sizeof(t_gc));
-    if (!node)
-        return;
-    node->ptr = data;
-    node->next = NULL;
-    if (!g_var)
-    {
-        if (!g_var)
-        {
-            free(node);
-            return;
-        }
-        g_var->head = node;
-    }
-    else
-    {
-        node->next = g_var->head;
-        g_var->head = node;
-    }
-}
-
-t_shell	*init_shell(void)
-{
-	t_shell	*shell;
-
-	shell = ft_calloc(1, sizeof(t_shell));
-	if (!shell)
-	{
-		perror("calloc");
-		exit(EXIT_FAILURE);
-	}
-	shell->exit_status = 0;
-	shell->args = NULL;
-	return (shell);
-}
 
 t_envi	*create__node(char *name, char *value)
 {
 	t_envi	*new_node;
 
-	new_node = ft_calloc(1, sizeof(t_envi));
+	new_node = ft_malloc(1, sizeof(t_envi));
 	if (!new_node)
 	{
 		perror("calloc");
 		exit(EXIT_FAILURE);
 	}
-	new_node->name = strdup(name);
-	new_node->vale = strdup(value);
+	new_node->name = ft_strdup(name);
+	new_node->vale = ft_strdup(value);
 	if (!new_node->name || !new_node->vale)
 	{
 		perror("strdup");

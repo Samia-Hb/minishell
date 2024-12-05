@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/01 13:35:43 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/03 11:55:11 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/05 19:20:38 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,38 @@
 
 extern char	**environ;
 
+char	**fill_up_envi(t_envi *env, char **the_env)
+{
+	int		i;
+	size_t	name_len;
+	size_t	value_len;
+
+	i = 0;
+	while (env)
+	{
+		name_len = ft_strlen(env->name);
+		value_len = ft_strlen(env->vale);
+		the_env[i] = ft_malloc(name_len + value_len + 2, sizeof(char));
+		if (!the_env[i])
+		{
+			perror("Error allocating memory for environment variable string");
+			return (NULL);
+		}
+		ft_strcpy(the_env[i], env->name);
+		the_env[i][name_len] = '=';
+		ft_strcpy(the_env[i] + name_len + 1, env->vale);
+		env = env->next;
+		i++;
+	}
+	the_env[i] = NULL;
+	return (the_env);
+}
+
 char	**separate_env(t_envi *env)
 {
 	int		count;
 	t_envi	*tmp;
 	char	**the_env;
-	int		i;
-	size_t	name_len;
-	size_t	value_len;
 
 	count = 0;
 	tmp = env;
@@ -30,43 +54,27 @@ char	**separate_env(t_envi *env)
 		count++;
 		tmp = tmp->next;
 	}
-	the_env = ft_calloc((count + 1) , sizeof(char *));
+	the_env = ft_malloc((count + 1), sizeof(char *));
 	if (!the_env)
 	{
 		perror("Error allocating memory");
 		return (NULL);
 	}
-	i = 0;
-	while (env)
-	{
-		name_len = strlen(env->name);
-		value_len = strlen(env->vale);
-		the_env[i] = ft_calloc(name_len + value_len + 2, sizeof(char));
-		if (!the_env[i])
-		{
-			perror("Error allocating memory for environment variable string");
-			return (NULL);
-		}
-		strcpy(the_env[i], env->name);
-		the_env[i][name_len] = '=';
-		strcpy(the_env[i] + name_len + 1, env->vale);
-		env = env->next;
-		i++;
-	}
-	the_env[i] = NULL;
-	return (the_env);
+	return (fill_up_envi(env, the_env));
 }
 
-void	execs(t_cmd *token, int btn, t_mini *env)
+void	execs(t_cmd *token, int btn, t_envi *env)
 {
 	if (btn != -1)
 	{
 		exec_builtin(btn, token, env);
-		exit(g_var->exit_status);
+		clean_gc();
+		rl_clear_history();
+		exit(0);
 	}
 	else if (token->cmd_path)
 	{
-		g_var->en = separate_env(env->env);
+		g_var->en = separate_env(env);
 		if (execve(token->cmd_path, token->arguments, g_var->en) == -1)
 		{
 			ft_putstr_fd("minishell: ", 2);
@@ -75,56 +83,36 @@ void	execs(t_cmd *token, int btn, t_mini *env)
 		}
 	}
 	else
-		exit(g_var->exit_status);
+		exit(0);
 }
 
-int	check_builtin(t_cmd *cmd)
-{
-	if (!cmd->arguments || !cmd->arguments[0])
-		return (-1);
-	if (!ft_strcmp(cmd->arguments[0], "cd"))
-		return (1);
-	else if (!ft_strcmp(cmd->arguments[0], "echo"))
-		return (2);
-	else if (!ft_strcmp(cmd->arguments[0], "env"))
-		return (3);
-	else if (!ft_strcmp(cmd->arguments[0], "exit"))
-		return (4);
-	else if (!ft_strcmp(cmd->arguments[0], "export"))
-		return (5);
-	else if (!ft_strcmp(cmd->arguments[0], "pwd"))
-		return (6);
-	else if (!ft_strcmp(cmd->arguments[0], "unset"))
-		return (7);
-	return (-1);
-}
-
-void	exec_builtin(int btn, t_cmd *cmd, t_mini *box)
+void	exec_builtin(int btn, t_cmd *cmd, t_envi *envi)
 {
 	if (btn == 1)
-		ft_cd(cmd->arguments, box->env);
+		ft_cd(cmd->arguments, envi);
 	else if (btn == 2)
 		ft_echo(cmd->arguments);
 	else if (btn == 3)
-		ft_env(box->env);
+		ft_env(envi);
 	else if (btn == 4)
 		ft_exit(cmd->arguments);
 	else if (btn == 5)
-		ft_export(cmd->arguments, &box->env);
+		ft_export(cmd->arguments, &envi);
 	else if (btn == 6)
-		ft_pwd(cmd->arguments, box->env);
+		ft_pwd(cmd->arguments, envi);
 	else if (btn == 7)
-		ft_unset(cmd->arguments, box);
+		ft_unset(cmd->arguments, &envi);
 	if (g_var->out_fd > 2)
 		close(g_var->out_fd);
 	g_var->out_fd = 1;
 }
 
-void	execute_arguments(t_cmd *token, t_mini *env)
+void	execute_arguments(t_cmd *token, t_envi *env)
 {
 	int		i;
 	t_cmd	*current;
 
+	(void)env;
 	if (!token)
 		return ;
 	i = 0;
@@ -134,7 +122,7 @@ void	execute_arguments(t_cmd *token, t_mini *env)
 	g_var->pre_pipe_infd = -1;
 	while (current)
 	{
-		execute_pipes(current, i, env);
+		execute_pipes(current, i, g_var->envp);
 		current = current->next;
 		i++;
 	}

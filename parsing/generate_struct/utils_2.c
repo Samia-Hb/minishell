@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 17:12:31 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/03 09:41:24 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/05 20:39:05 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ void	ctrl_c(int nb)
 	if (nb == SIGINT)
 	{
 		printf("\n");
+		clean_gc();
 		exit(7);
 	}
 }
@@ -68,4 +69,14 @@ char	*generate_name(int *i)
 	}
 	(*i)++;
 	return (filename);
+}
+
+void	exit_status(int status, char *filename)
+{
+	if (WEXITSTATUS(status) == 7)
+	{
+		g_var->exit_status = 130;
+		unlink(filename);
+		g_var->flag = 7;
+	}
 }

@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 21:17:57 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/03 12:01:24 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/05 13:08:11 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ char	**handle_that_shit(char *input)
 	i = 0;
 	j = 0;
 	size = get_size_arr(input);
-	result = ft_calloc((size + 1), sizeof(char *));
+	result = ft_malloc((size + 1), sizeof(char *));
 	if (!result)
 		printf("Allocation Failed\n");
 	while (input[i])

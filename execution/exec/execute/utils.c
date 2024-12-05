@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 13:07:11 by szeroual          #+#    #+#             */
-/*   Updated: 2024/12/03 11:33:40 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/05 19:29:41 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,25 @@ void	print_perror(char *str, int exitt)
 	}
 	g_var->exit_status = 126;
 	exit(126);
+}
+
+int	path_status(char *cmd_path)
+{
+	int	status;
+
+	status = 1;
+	if (access(cmd_path, F_OK))
+		status = 1;
+	else if (access(cmd_path, X_OK))
+		status = 2;
+	else
+		status = 0;
+	if (status)
+	{
+		free(cmd_path);
+		cmd_path = NULL;
+	}
+	return (status);
 }
 
 char	*get_cmd_path(char *cmd, char **dirs)
@@ -42,17 +61,9 @@ char	*get_cmd_path(char *cmd, char **dirs)
 		if (!temp)
 			return (NULL);
 		cmd_path = ft_strjoin(temp, cmd);
-		free(temp);
 		if (!cmd_path)
-		{
 			return (NULL);
-		}
-		if (access(cmd_path, F_OK))
-			status = 1;
-		else if (access(cmd_path, X_OK))
-			status = 2;
-		else
-			status = 0;
+		status = path_status(cmd_path);
 		if (status)
 		{
 			free(cmd_path);
@@ -60,14 +71,4 @@ char	*get_cmd_path(char *cmd, char **dirs)
 		}
 	}
 	return (put_cmd_status(status, cmd_path, cmd));
-}
-
-void	my_strncpy(char *dest, char *src, int n)
-{
-	int	i;
-
-	i = -1;
-	while (++i < n)
-		dest[i] = src[i];
-	dest[i] = 0;
 }

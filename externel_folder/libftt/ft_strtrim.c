@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/17 13:20:58 by szeroual          #+#    #+#             */
-/*   Updated: 2024/12/03 11:59:16 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/05 13:07:45 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ char	*ft_strtrim(char const *s1, char const *set)
 		start++;
 	while ((end > start) && ft_check(set, s1[end]))
 		end--;
-	p = ft_calloc(end - start + 2, sizeof(char));
+	p = ft_malloc(end - start + 2, sizeof(char));
 	if (!p)
 		return (NULL);
 	ft_strlcpy(p, s1 + start, end - start + 2);

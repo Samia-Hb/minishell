@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 19:03:34 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/03 12:02:50 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/05 13:08:26 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ char	*find_command_path(char **dir, char *command)
 	i = 0;
 	while (dir[i])
 	{
-		full_path = ft_calloc(ft_strlen(dir[i])
+		full_path = ft_malloc(ft_strlen(dir[i])
 				+ ft_strlen(command) + 2, sizeof(char));
 		if (!full_path)
 		{

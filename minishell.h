@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 00:06:05 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/03 12:44:02 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/05 20:39:41 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,12 +70,6 @@ typedef struct s_alst
 	struct s_alst				*next;
 }								t_alst;
 
-typedef struct s_shell
-{
-	int							exit_status;
-	char						**args;
-}								t_shell;
-
 typedef struct s_env
 {
 	char						*name;
@@ -87,9 +81,6 @@ typedef struct s_env
 typedef struct s_mini
 {
 	t_envi						*env;
-	t_shell						*shell;
-	char						**ptr;
-	char						**arr;
 	int							last_exit_status;
 }								t_mini;
 
@@ -161,11 +152,12 @@ struct							s_global
 	t_alst						**alist;
 	int							in_fd;
 	int							flag;
+	int							pid_size;
+	int							*pid_table;
 };
 
 extern struct s_global			*g_var;
 
-void							print_cmd(t_cmd *cmd);
 char							*generate_name(int *i);
 t_token							**tokenize(char *input);
 char							*handle_quote(char *str);
@@ -225,30 +217,26 @@ char							quote_type(const char *str);
 char							*char_to_string(char c, char c2);
 int								get_token_type(const char *token, char c);
 void							handle_signal(void);
-void							handle_ctrl_d(void);
 void							handle_ctrl_c(void);
 int								expand(t_token *tokens);
 char							*ft_getenv(char *word);
 t_cmd							*analyse_tokens(t_token **tokens);
 void							handle_ctrl_c(void);
-void							handle_ctrl_d(void);
 int								ft_is_separator(char c);
-void							print_cmd(t_cmd *cmd);
 int								is_red(t_token *token);
 int								get_red_type(t_token *token);
 int								nbr_argument(t_token *tokens);
 void							push_back(t_cmd **lst, t_cmd *node);
 void							push_t_file(t_file **head, t_file *node);
-void							*ft_malloc(size_t size, int ele_nbr);
+void							*ft_malloc(int ele_nbr, size_t size);
 void							clean_gc(void);
 t_envi							*init_env(char **envp);
 void							ctrl_c(int nb);
-void							child_process(t_cmd *token, int btn,
-									t_mini *env);
+void							child_process(t_cmd *token, int btn);
 void							add_node(void *data);
+void							exit_status(int status, char *filename);
 /////////////////////////////builtins///////////////////////////
 
-int								is_builtin(char *cmd);
 void							ft_putstr_fd(char *str, int fd);
 int								ft_cd(char **ptr, t_envi *envi);
 void							update_env(t_envi *envi);
@@ -256,7 +244,6 @@ t_envi							*search_env(t_envi *envi, char *name);
 int								is_n_option(char *arg);
 int								first_non_option(char **args);
 int								ft_echo(char **args);
-int								ft_unset(char **ptr, t_mini *box);
 int								ft_pwd(char **args, t_envi *env);
 int								ft_exit(char **args);
 int								ft_env(t_envi *env);
@@ -267,7 +254,7 @@ int								ft_utils(char *ptr);
 void							swap_nodes(t_envi *a, t_envi *b);
 t_envi							*cpy_list(t_envi *env);
 int								check_each_element(char *str);
-void							ft_remove(char **ptr, t_mini *box, int i);
+void							ft_remove(char **ptr, t_envi **envi, int i);
 void							ft_free_array(char **array);
 /////////////////////////////execution///////////////////////////
 
@@ -275,17 +262,16 @@ void							append_heredoc_prep(char *filename);
 void							validate_cmd(t_cmd *cmd);
 char							*allocate_folders(char *path, int i);
 void							check_cmd_path(t_cmd *cmd);
-void							execute_arguments(t_cmd *cmd, t_mini *box);
-void							sig_wait(t_cmd *cmd);
-void							execute_pipes(t_cmd *cmd, int pipe_nb,
-									t_mini *box);
-void							exec_builtin(int btn, t_cmd *cmd, t_mini *box);
-void							execs(t_cmd *cmd, int btn, t_mini *box);
+int								ft_unset(char **ptr, t_envi **envi);
+void							execute_pipes(t_cmd *token, int pipe_nb,
+									t_envi *env);
+void							execute_arguments(t_cmd *token, t_envi *env);
+void							exec_builtin(int btn, t_cmd *cmd, t_envi *envi);
+void							execs(t_cmd *token, int btn, t_envi *env);
 void							files_redirections(t_cmd *cmd, int builtin);
 int								check_file_errors(char *path, int builtin);
 int								check_builtin(t_cmd *cmd);
 int								count_commands(t_cmd *cmd);
-void							error_pipe(void);
 void							close_files(t_cmd *token);
 t_envi							*create_env_node(char *name, char *value);
 t_envi							*create__node(char *name, char *value);
@@ -296,24 +282,13 @@ void							search_command_in_paths(t_cmd *cmd,
 									char **path_dirs);
 void							handle_command_not_found(t_cmd *cmd);
 void							free_path_dirs(char **path_dirs);
-int								is_executable(char *path);
 char							*construct_full_path(char *dir, char *cmd);
 void							error_strdup(void);
-void							initialisation(t_mini *box, char **envp);
-void							handle_input(char *input, t_mini *box);
-void							shell_loop(t_mini *box);
+void							shell_loop(t_envi *envi);
 void							process_env_entry(char *env_entry,
 									t_envi **env_list);
-t_shell							*init_shell(void);
 void							handle_file_redirections(t_cmd *cmd, int btn);
-void							child(t_cmd *cmd, int pipe_nb, int btn,
-									t_mini *box);
-void							execs(t_cmd *token, int btn, t_mini *env);
-int								init_execute_arguments(void);
 void							cleanup_execute_arguments(t_cmd *token);
-void							execute_arguments(t_cmd *token, t_mini *env);
-void							execute_pipes(t_cmd *token, int pipe_nb,
-									t_mini *env);
 void							handle_pipe_creation(t_cmd *token, int pipe_nb);
 void							handle_file_descriptors(t_cmd *token);
 void							files_redirections(t_cmd *cmd, int builtin);
@@ -328,7 +303,6 @@ void							check_command_name(t_cmd *token);
 char							*allocate_folders(char *path, int i);
 int								handle_stat_error(char *path, int is_builtin);
 void							handle_file_redirections(t_cmd *token, int btn);
-void							init_g_var(t_cmd **token);
 char							*put_cmd_status(int status, char *cmd_path,
 									char *cmd);
 char							*construct_full_path(char *dir, char *cmd);
@@ -344,7 +318,4 @@ char							*get_cmd_path(char *cmd, char **dirs);
 void							lista_add_front(t_alst **lst, t_alst *new);
 t_alst							*lista_new(void *content);
 int								ft_export(char **ptr, t_envi **env);
-void							handle_signals(int mode);
-
-void							print_env(t_envi *envi);
 #endif

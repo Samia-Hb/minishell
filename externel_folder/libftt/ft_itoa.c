@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 19:15:20 by szeroual          #+#    #+#             */
-/*   Updated: 2024/12/03 11:56:59 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/05 18:58:45 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ char	*ft_itoa(int n)
 
 	len = check_length(n);
 	i = 0;
-	str = (char *)ft_calloc((len + 1) , sizeof(char));
+	str = (char *)ft_malloc((len + 1), sizeof(char));
 	if (!str)
 		return (NULL);
 	str[len] = '\0';

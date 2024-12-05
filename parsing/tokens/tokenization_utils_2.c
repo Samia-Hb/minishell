@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 13:37:34 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/03 12:03:52 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/05 13:08:36 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ t_token	*create_token(t_token_type type, const char *value)
 {
 	t_token	*token;
 
-	token = ft_calloc(1, sizeof(t_token));
+	token = ft_malloc(1, sizeof(t_token));
 	if (!token)
 	{
 		printf("Error: Memory allocation failed\n");
@@ -71,7 +71,7 @@ char	*handle_parentheses(char *str, char c)
 			i++;
 		j++;
 	}
-	word = ft_calloc(j + 1, sizeof(char));
+	word = ft_malloc(j + 1, sizeof(char));
 	if (!word)
 	{
 		printf("Error: memory allocation failed\n");
@@ -92,7 +92,7 @@ char	*handle_quote(char *str)
 
 	i = 0;
 	j = 0;
-	word = ft_calloc(ft_strlen(str) + 1, sizeof(char));
+	word = ft_malloc(ft_strlen(str) + 1, sizeof(char));
 	quote = str[i];
 	while (str[i] && !ft_is_separator(str[i]))
 	{

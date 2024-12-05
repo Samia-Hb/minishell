@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 00:12:31 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/03 14:36:09 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/05 19:05:31 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,9 @@
 
 struct s_global	*g_var = NULL;
 
-void	init_box(t_mini *box, char **envp)
+void	initialisation(char **envp)
 {
-	box->env = init_env(envp);
-	box->shell = init_shell();
-	box->ptr = NULL;
-	box->arr = NULL;
-	box->last_exit_status = 0;
-}
-
-void	initialisation(t_mini *box, char **envp)
-{
-	init_box(box, envp);
-	initiale_global(box->env);
+	initiale_global(init_env(envp));
 }
 
 void	error_malloc(void)
@@ -56,14 +46,9 @@ t_envi	*init_env(char **en)
 
 int	main(int argc, char **argv, char **en)
 {
-	t_mini	*box;
-
 	(void)argc;
 	(void)argv;
-	box = ft_calloc(1, sizeof(t_mini));
-	if (!box)
-		error_malloc();
-	initialisation(box, en);
-	shell_loop(box);
+	initialisation(en);
+	shell_loop(g_var->envp);
 	return (0);
 }
