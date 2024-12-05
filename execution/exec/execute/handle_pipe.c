@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_pipe.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
+/*   By: szeroual <szeroual@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 00:02:59 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/05 20:36:12 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/05 22:48:38 by szeroual         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	parent_process(void)
 		else if (WTERMSIG(status) == 3)
 			g_var->exit_status = 131;
 	}
-	else if (WEXITSTATUS(status))
+	else 
 		g_var->exit_status = WEXITSTATUS(status);
 }
 
@@ -76,10 +76,11 @@ void	execute_pipes(t_cmd *token, int pipe_nb, t_envi *env)
 				write(2, "Error\n", 6);
 		}
 		child_process(token, check_builtin(token));
+		g_var->pid_array[pipe_nb] = g_var->last_child_id;
 		close_files(token);
 		g_var->pre_pipe_infd = token->pipe_fd[0];
-		if (g_var->last_child_id > 0)
-			parent_process();
+		
+		// parent_process();
 	}
 	save_retrive(original_stdin, original_stdout, 1);
 }

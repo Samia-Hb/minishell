@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_command.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
+/*   By: szeroual <szeroual@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/01 13:35:43 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/05 19:20:38 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/05 22:43:39 by szeroual         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,9 +120,19 @@ void	execute_arguments(t_cmd *token, t_envi *env)
 	g_var->size = count_commands(token);
 	g_var->pipe_nb = g_var->size - 1;
 	g_var->pre_pipe_infd = -1;
+	g_var->pid_array = ft_calloc(g_var->pipe_nb, sizeof(int));
 	while (current)
 	{
 		execute_pipes(current, i, g_var->envp);
+		current = current->next;
+		i++;
+	}
+	i = 0;
+	current = token;
+	while (current)
+	{
+		g_var->last_child_id = g_var->pid_array[i];
+		parent_process();
 		current = current->next;
 		i++;
 	}
