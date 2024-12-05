@@ -6,7 +6,7 @@
 /*   By: szeroual <szeroual@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 00:02:59 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/05 22:48:38 by szeroual         ###   ########.fr       */
+/*   Updated: 2024/12/05 23:41:34 by szeroual         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,8 +79,6 @@ void	execute_pipes(t_cmd *token, int pipe_nb, t_envi *env)
 		g_var->pid_array[pipe_nb] = g_var->last_child_id;
 		close_files(token);
 		g_var->pre_pipe_infd = token->pipe_fd[0];
-		
-		// parent_process();
 	}
 	save_retrive(original_stdin, original_stdout, 1);
 }
