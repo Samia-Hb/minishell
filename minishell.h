@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: szeroual <szeroual@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sanaa <sanaa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 00:06:05 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/05 22:39:52 by szeroual         ###   ########.fr       */
+/*   Updated: 2024/12/06 11:56:00 by sanaa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,6 +154,7 @@ struct							s_global
 	int							flag;
 	int							pid_size;
 	int							*pid_table;
+	int 						interactive;
 	int							*pid_array;
 };
 
@@ -246,7 +247,7 @@ int								is_n_option(char *arg);
 int								first_non_option(char **args);
 int								ft_echo(char **args);
 int								ft_pwd(char **args, t_envi *env);
-int								ft_exit(char **args);
+void								ft_exit(char **av);
 int								ft_env(t_envi *env);
 void							add_env_variable(t_envi **env, char *name,
 									char *value);

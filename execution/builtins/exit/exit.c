@@ -3,69 +3,90 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: szeroual <szeroual@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sanaa <sanaa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 21:45:07 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/05 23:43:00 by szeroual         ###   ########.fr       */
+/*   Updated: 2024/12/06 11:51:39 by sanaa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../minishell.h"
 
-int	is_digit(char c)
+static int	grr(char *str)
 {
-	if (c <= '0' || c >= '9')
-		return (0);
-	return (1);
+	ft_putstr_fd("minishell: exit: ", 2);
+	ft_putstr_fd(str, 2);
+	ft_putstr_fd(": numeric argument required\n", 2);
+	return (2);
 }
 
-int	is_numeric(const char *str)
+static int	check_long(int sign, long long res, char *str, int i)
 {
-	if (!str || *str == '\0')
-		return (0);
-	if (*str == '+' || *str == '-')
-		str++;
-	if (*str == '\0')
+	if (sign == 1 && res > (LLONG_MAX - (str[i] - '0')) / 10)
 	{
-		printf("minishell: exit: %s: numeric argument required\n", str);
-		return (0);
+		ft_putstr_fd("minishell: exit: ", 2);
+		ft_putstr_fd(str, 2);
+		ft_putstr_fd(": numeric argument required\n", 2);
+		return (1);
 	}
-	while (*str)
+	else if (sign == -1 && (-res) < (LLONG_MIN + (str[i] - '0')) / 10)
 	{
-		if (!is_digit(*str))
-		{
-			printf("minishell: exit: %s:numeric argument required\n", str);
-			return (0);
-		}
-		str++;
+		ft_putstr_fd("minishell: exit: ", 2);
+		ft_putstr_fd(str, 2);
+		ft_putstr_fd(": numeric argument required\n", 2);
+		return (1);
 	}
-	g_var->exit_status = 2;
-	exit(g_var->exit_status);
-	return (1);
+	return (0);
 }
 
-int	ft_exit(char **args)
+static int	normii(char *str, int i, int res, int sign)
 {
-	int	exit_status;
+	if (str[i] != '\0')
+		return (grr(str));
+	return ((res * sign));
+}
 
-	exit_status = g_var->exit_status;
-	ft_putstr_fd("exit\n", 1);
-	if (!args[1])
-		exit(g_var->exit_status);
-	if (args[1])
+static int	atoi_exit(char *str)
+{
+	long long	res;
+	int			sign;
+	int			i;
+
+	i = 0;
+	res = 0;
+	sign = 1;
+	while (str[i] == ' ' || (str[i] >= 9 && str[i] <= 13))
+		i++;
+	if (str[i] == '-')
+		sign *= -1;
+	if (str[i] == '-' || str[i] == '+')
+		i++;
+	if (!str[i])
+		return (grr(str));
+	while (str[i] && str[i] >= '0' && str[i] <= '9')
 	{
-		is_numeric(args[1]);
-		exit_status = atoll(args[1]);
+		if (check_long(sign, res, str, i))
+			return (2);
+		res = res * 10 + str[i] - '0';
+		i++;
 	}
-	if (exit_status < INT_MIN || exit_status > INT_MAX)
-		ft_putstr_fd("exit: numeric argument required", 2);
-	else if (args[1] && args[2])
-		return (g_var->exit_status = 1,
-			ft_putstr_fd("bash: exit: too many arguments\n", 2), 1);
-	else if (args[1] && !is_numeric(args[1]))
-		ft_putstr_fd("exit: numeric argument required\n", 2);
-	else if (!is_numeric(args[1]) || exit_status < INT_MIN
-		|| exit_status > INT_MAX)
-		exit_status = 2;
-	exit(exit_status);
+	return (normii(str, i, res, sign));
+}
+
+void	ft_exit(char **av)
+{
+	int	exit_s;
+
+	if (!av[1])
+		exit_s = g_var->exit_status;
+	else if (av[2])
+	{
+		ft_putstr_fd("minishell: exit: too many arguments\n", 2);
+		return ;
+	}
+	else
+		exit_s = atoi_exit(av[1]);
+	if (g_var->interactive != 1)
+		printf("exit\n");
+	exit((unsigned char)exit_s);
 }
