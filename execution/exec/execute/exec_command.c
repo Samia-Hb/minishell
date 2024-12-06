@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_command.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: szeroual <szeroual@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sanaa <sanaa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/01 13:35:43 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/05 22:43:39 by szeroual         ###   ########.fr       */
+/*   Updated: 2024/12/06 11:26:21 by sanaa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,35 +107,57 @@ void	exec_builtin(int btn, t_cmd *cmd, t_envi *envi)
 	g_var->out_fd = 1;
 }
 
-void	execute_arguments(t_cmd *token, t_envi *env)
+void initialize_execution(t_cmd *token)
 {
-	int		i;
-	t_cmd	*current;
+    if (!token)
+        return;
+    g_var->size = count_commands(token);
+    g_var->pipe_nb = g_var->size - 1;
+    g_var->pre_pipe_infd = -1;
+    g_var->pid_array = ft_calloc(g_var->pipe_nb, sizeof(int));
+}
 
-	(void)env;
-	if (!token)
-		return ;
-	i = 0;
-	current = token;
-	g_var->size = count_commands(token);
-	g_var->pipe_nb = g_var->size - 1;
-	g_var->pre_pipe_infd = -1;
-	g_var->pid_array = ft_calloc(g_var->pipe_nb, sizeof(int));
-	while (current)
-	{
-		execute_pipes(current, i, g_var->envp);
-		current = current->next;
-		i++;
-	}
-	i = 0;
-	current = token;
-	while (current)
-	{
-		g_var->last_child_id = g_var->pid_array[i];
-		parent_process();
-		current = current->next;
-		i++;
-	}
-	if (g_var->pre_pipe_infd > 2)
-		close(g_var->pre_pipe_infd);
+void execute_pipes_loop(t_cmd *token)
+{
+    int i = 0;
+    t_cmd *current = token;
+
+    while (current)
+    {
+        execute_pipes(current, i, g_var->envp);
+        current = current->next;
+        i++;
+    }
+}
+
+void handle_parent_process(t_cmd *token)
+{
+    int i = 0;
+    t_cmd *current = token;
+
+    while (current)
+    {
+        g_var->last_child_id = g_var->pid_array[i];
+        parent_process();
+        current = current->next;
+        i++;
+    }
+}
+
+void close_file_descriptors()
+{
+    if (g_var->pre_pipe_infd > 2)
+        close(g_var->pre_pipe_infd);
+}
+
+void execute_arguments(t_cmd *token, t_envi *env)
+{
+    (void)env;
+    if (!token)
+        return;
+
+    initialize_execution(token);
+    execute_pipes_loop(token);
+    handle_parent_process(token);
+    close_file_descriptors();
 }
