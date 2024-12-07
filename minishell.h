@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sanaa <sanaa@student.42.fr>                +#+  +:+       +#+        */
+/*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 00:06:05 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/06 11:56:00 by sanaa            ###   ########.fr       */
+/*   Updated: 2024/12/06 18:21:44 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,11 +78,11 @@ typedef struct s_env
 	struct s_env				*prv;
 }								t_envi;
 
-typedef struct s_mini
-{
-	t_envi						*env;
-	int							last_exit_status;
-}								t_mini;
+// typedef struct s_mini
+// {
+// 	t_envi						*env;
+// 	int							last_exit_status;
+// }								t_mini;
 
 typedef struct token
 {
@@ -154,7 +154,7 @@ struct							s_global
 	int							flag;
 	int							pid_size;
 	int							*pid_table;
-	int 						interactive;
+	int							interactive;
 	int							*pid_array;
 };
 
@@ -247,7 +247,7 @@ int								is_n_option(char *arg);
 int								first_non_option(char **args);
 int								ft_echo(char **args);
 int								ft_pwd(char **args, t_envi *env);
-void								ft_exit(char **av);
+void							ft_exit(char **av);
 int								ft_env(t_envi *env);
 void							add_env_variable(t_envi **env, char *name,
 									char *value);
@@ -320,6 +320,7 @@ char							*get_cmd_path(char *cmd, char **dirs);
 void							lista_add_front(t_alst **lst, t_alst *new);
 t_alst							*lista_new(void *content);
 int								ft_export(char **ptr, t_envi **env);
-
-void	parent_process(void);
+char							**separate_env(t_envi *env);
+void							parent_process(void);
+void							close_file_descriptors(void);
 #endif

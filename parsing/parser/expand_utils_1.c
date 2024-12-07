@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 20:13:54 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/23 15:01:56 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/07 11:12:09 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,10 @@ char	*dollar_expand(char *input, int *i)
 		return ("$");
 	result = expand_cases(input, dollar_count, i, &flag);
 	if (flag)
+	{
+		g_var->exit_status = 0;
 		return (result);
+	}
 	word = get_word_to_expand(input, i, &result);
 	if (!(dollar_count % 2))
 		result = ft_strjoin(result, word);
@@ -93,6 +96,7 @@ char	*dollar_expand(char *input, int *i)
 		if (!result)
 			result = ft_strdup("");
 	}
+	g_var->exit_status = 0;
 	return (ft_strdup(result));
 }
 

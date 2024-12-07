@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_cmd_name.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: szeroual <szeroual@student.42.fr>          +#+  +:+       +#+        */
+/*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 10:37:38 by szeroual          #+#    #+#             */
-/*   Updated: 2024/12/05 23:42:23 by szeroual         ###   ########.fr       */
+/*   Updated: 2024/12/06 18:49:18 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,18 +28,18 @@ char	*construct_full_path(char *dir, char *cmd)
 	return (full_path);
 }
 
-void	free_path_dirs(char **path_dirs)
-{
-	int	i;
+// void	free_path_dirs(char **path_dirs)
+// {
+// 	int	i;
 
-	i = 0;
-	while (path_dirs[i])
-	{
-		free(path_dirs[i]);
-		i++;
-	}
-	free(path_dirs);
-}
+// 	i = 0;
+// 	while (path_dirs[i])
+// 	{
+// 		free(path_dirs[i]);
+// 		i++;
+// 	}
+// 	free(path_dirs);
+// }
 
 void	handle_command_not_found(t_cmd *cmd)
 {
@@ -59,21 +59,15 @@ void	search_command_in_paths(t_cmd *cmd, char **path_dirs)
 	{
 		full_path = construct_full_path(path_dirs[i], cmd->arguments[0]);
 		if (!full_path)
-		{
-			free_path_dirs(path_dirs);
 			return ;
-		}
 		if (!access(full_path, X_OK))
 		{
 			cmd->cmd_path = full_path;
-			free_path_dirs(path_dirs);
 			return ;
 		}
-		free(full_path);
 		i++;
 	}
 	handle_command_not_found(cmd);
-	free_path_dirs(path_dirs);
 }
 
 void	check_command_name(t_cmd *cmd)

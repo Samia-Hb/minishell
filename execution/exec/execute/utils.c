@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: szeroual <szeroual@student.42.fr>          +#+  +:+       +#+        */
+/*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 13:07:11 by szeroual          #+#    #+#             */
-/*   Updated: 2024/12/05 23:42:13 by szeroual         ###   ########.fr       */
+/*   Updated: 2024/12/06 18:18:42 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,12 @@ void	print_perror(char *str, int exitt)
 	}
 	g_var->exit_status = 126;
 	exit(126);
+}
+
+void	close_file_descriptors(void)
+{
+	if (g_var->pre_pipe_infd > 2)
+		close(g_var->pre_pipe_infd);
 }
 
 int	path_status(char *cmd_path)
@@ -71,4 +77,25 @@ char	*get_cmd_path(char *cmd, char **dirs)
 		}
 	}
 	return (put_cmd_status(status, cmd_path, cmd));
+}
+
+void	exec_builtin(int btn, t_cmd *cmd, t_envi *envi)
+{
+	if (btn == 1)
+		ft_cd(cmd->arguments, envi);
+	else if (btn == 2)
+		ft_echo(cmd->arguments);
+	else if (btn == 3)
+		ft_env(envi);
+	else if (btn == 4)
+		ft_exit(cmd->arguments);
+	else if (btn == 5)
+		ft_export(cmd->arguments, &envi);
+	else if (btn == 6)
+		ft_pwd(cmd->arguments, envi);
+	else if (btn == 7)
+		ft_unset(cmd->arguments, &envi);
+	if (g_var->out_fd > 2)
+		close(g_var->out_fd);
+	g_var->out_fd = 1;
 }
