@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 13:36:28 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/05 13:08:52 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/07 19:24:43 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,24 +113,3 @@ char	*handle_dollar(char *str)
 	word = strncpy(word, str, i);
 	return (word);
 }
-// int	find_delimiter_in_lines(char *string, char *delimiter, int *l)
-// {
-// 	int		i;
-// 	char	**splitted;
-
-// 	splitted = ft_split(string, '\n');
-// 	if (!splitted)
-// 	{
-// 		printf("Allocation Failed\n");
-// 		exit(0);
-// 	}
-// 	i = 0;
-// 	while (splitted[i])
-// 	{
-// 		*l = *l + strlen(splitted[i]);
-// 		if (!ft_strcmp(splitted[i], delimiter))
-// 			return (1);
-// 		i++;
-// 	}
-// 	return (0);
-// }
