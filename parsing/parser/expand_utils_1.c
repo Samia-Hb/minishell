@@ -6,22 +6,11 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 20:13:54 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/20 18:34:20 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/07 11:28:49 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
-
-char	*tidle_expansion(int *i)
-{
-	char	*result;
-
-	result = getenv("HOME");
-	if (!result)
-		return (ft_strdup(""));
-	*i += 1;
-	return (ft_strdup(result));
-}
 
 int	rare_case(char *input)
 {
@@ -67,6 +56,19 @@ char	*expand_cases(char *input, int dollar_count, int *i, int *flag)
 	return (result);
 }
 
+char	*handle_thing(char *word, char *result)
+{
+	char	*output;
+
+	if (!ft_strncmp(word, "?", 1))
+		output = ft_strjoin(result, word);
+	else
+		output = ft_strjoin(result, ft_getenv(word));
+	if (!output)
+		output = ft_strdup("");
+	return (output);
+}
+
 char	*dollar_expand(char *input, int *i)
 {
 	char	*word;
@@ -80,19 +82,16 @@ char	*dollar_expand(char *input, int *i)
 		return ("$");
 	result = expand_cases(input, dollar_count, i, &flag);
 	if (flag)
+	{
+		g_var->exit_status = 0;
 		return (result);
+	}
 	word = get_word_to_expand(input, i, &result);
 	if (!(dollar_count % 2))
 		result = ft_strjoin(result, word);
 	else
-	{
-		if (!ft_strncmp(word, "?", 1))
-			result = ft_strjoin(result, word);
-		else
-			result = ft_strjoin(result, ft_getenv(word));
-		if (!result)
-			result = ft_strdup("");
-	}
+		result = handle_thing(word, result);
+	g_var->exit_status = 0;
 	return (ft_strdup(result));
 }
 

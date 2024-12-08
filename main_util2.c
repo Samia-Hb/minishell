@@ -3,48 +3,29 @@
 /*                                                        :::      ::::::::   */
 /*   main_util2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: szeroual <szeroual@student.42.fr>          #+#  +:+       +#+        */
+/*   By: szeroual <szeroual@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024-11-20 22:30:12 by szeroual          #+#    #+#             */
-/*   Updated: 2024-11-20 22:30:12 by szeroual         ###   ########.fr       */
+/*   Created: 2024/11/20 22:30:12 by szeroual          #+#    #+#             */
+/*   Updated: 2024/12/08 16:02:08 by szeroual         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_shell	*init_shell(void)
-{
-	t_shell	*shell;
-
-	shell = malloc(sizeof(t_shell));
-	if (!shell)
-	{
-		perror("malloc");
-		exit(EXIT_FAILURE);
-	}
-	shell->exit_status = 0;
-	shell->args = NULL;
-	return (shell);
-}
-
 t_envi	*create__node(char *name, char *value)
 {
 	t_envi	*new_node;
-
-	new_node = malloc(sizeof(t_envi));
+	new_node = ft_malloc(1 , sizeof(t_envi));
 	if (!new_node)
 	{
-		perror("malloc");
+		perror("calloc");
 		exit(EXIT_FAILURE);
 	}
-	new_node->name = strdup(name);
-	new_node->vale = strdup(value);
+	new_node->name = ft_strdup(name);
+	new_node->vale = ft_strdup(value);
 	if (!new_node->name || !new_node->vale)
 	{
 		perror("strdup");
-		free(new_node->name);
-		free(new_node->vale);
-		free(new_node);
 		exit(EXIT_FAILURE);
 	}
 	new_node->next = NULL;

@@ -6,51 +6,74 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 19:05:46 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/20 22:28:43 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/05 20:39:10 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-void	heredoc_process(t_cmd **node, t_file **head, t_token **tokens)
+void	child_proces(char *token, char *processed_del, int fd)
 {
-	int		fd;
-	char	*processed_del;
 	char	*line;
 
-	(*tokens) = (*tokens)->next;
-	processed_del = process_delimiter((*tokens)->value);
-	fd = open((*tokens)->value, O_CREAT | O_TRUNC | O_RDWR, 0777);
+	line = NULL;
+	signal(SIGINT, ctrl_c);
 	while (1)
 	{
-		handle_signal();
 		line = readline("heredoc > ");
 		if (!line)
-			exit (g_var->exit_status);
+			break ;
 		if (!ft_strcmp(line, processed_del))
 			break ;
-		if (!is_quoted((*tokens)->value))
+		if (!is_quoted(token))
 			line = parse_line(line);
 		write(fd, line, ft_strlen(line));
 		write(fd, "\n", 1);
 	}
-	(*node)->file = ft_malloc(sizeof(t_file), 1);
-	(*node)->file->type = RE_HEREDOC;
-	(*node)->file->filename = ft_strdup((*tokens)->value);
+	if (!line)
+		printf("minishell : warning: heredoc delimited by EOF \n");
+	close(fd);
+	clean_gc();
+	exit(0);
+}
+
+void	heredoc_process(t_cmd **node, t_file **head, t_token **tokens, int *i)
+{
+	int		fd;
+	char	*processed_del;
+	int		pid;
+	int		status;
+
+	status = 0;
 	(*tokens) = (*tokens)->next;
+	processed_del = process_delimiter((*tokens)->value);
+	(*node)->file = ft_malloc(1, sizeof(t_file));
+	(*node)->file->type = RE_HEREDOC;
+	(*node)->file->filename = generate_name(i);
+	fd = open((*node)->file->filename, O_CREAT | O_TRUNC | O_RDWR, 0777);
+	signal(SIGINT, SIG_IGN);
+	pid = fork();
+	if (!pid)
+		child_proces((*tokens)->value, processed_del, fd);
+	else
+		waitpid(pid, &status, 0);
 	push_t_file(head, (*node)->file);
+	(*tokens) = (*tokens)->next;
+	exit_status(status, (*node)->file->filename);
 }
 
 void	red_process(t_token **tokens, t_cmd **node, int *i)
 {
 	t_file	*head;
+	int		j;
 
-	head = ft_malloc(sizeof(t_file), 1);
+	head = ft_malloc(1, sizeof(t_file));
 	head = NULL;
+	j = 0;
 	while ((*tokens) && (*tokens)->type != TOKEN_PIPE)
 	{
 		if ((*tokens)->type == TOKEN_REDIR_HERE_DOC)
-			heredoc_process(node, &head, tokens);
+			heredoc_process(node, &head, tokens, &j);
 		if ((*tokens) && is_red(*tokens)
 			&& (*tokens)->type != TOKEN_REDIR_HERE_DOC)
 			fill_up_node(node, tokens, &head);
@@ -63,41 +86,13 @@ void	red_process(t_token **tokens, t_cmd **node, int *i)
 	(*node)->file = head;
 }
 
-char	*process_delimiter(char *tmp)
-{
-	int		i;
-	int		j;
-	char	*result;
-	char	*hp;
-
-	i = 0;
-	result = ft_strdup("");
-	while (tmp[i])
-	{
-		if (tmp[i] == '$' && tmp[i + 1]
-			&& (tmp[i + 1] == '"' || tmp[i + 1] == '\''))
-			i++;
-		j = i;
-		if (tmp[i] == '"' || tmp[i] == '\'')
-			hp = get_inside_quote(tmp, &i, &j);
-		else
-		{
-			while (tmp[i] && tmp[i] != '"' && tmp[i] != '\'')
-				i++;
-			hp = ft_strndup(tmp + j, i - j);
-		}
-		result = ft_strjoin(result, hp);
-	}
-	return (result);
-}
-
 void	create_node_arguments(t_cmd **node, t_token **tokens)
 {
 	int	i;
 	int	j;
 
 	i = 0;
-	(*node)->arguments = ft_malloc(sizeof(char *), nbr_argument(*tokens) + 1);
+	(*node)->arguments = ft_malloc(nbr_argument(*tokens) + 1, sizeof(char *));
 	while (*tokens && (*tokens)->type != TOKEN_PIPE)
 	{
 		j = 0;
@@ -123,7 +118,7 @@ t_cmd	*analyse_tokens(t_token **tokens)
 	head = NULL;
 	while (*tokens)
 	{
-		node = ft_malloc(sizeof(t_cmd), 1);
+		node = ft_malloc(1, sizeof(t_cmd));
 		node->arguments = NULL;
 		node->file = NULL;
 		if ((*tokens)->type == TOKEN_COMMAND

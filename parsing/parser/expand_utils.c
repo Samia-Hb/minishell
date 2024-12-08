@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 19:19:37 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/20 18:34:45 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/05 13:08:15 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ char	*get_word_to_expand(char *str, int *j, char **result)
 	while (str[*j] && !is_special(str[*j]))
 		(*j)++;
 	length = (*j) - k;
-	word = ft_malloc(sizeof(char), length + 1);
+	word = ft_malloc(length + 1, sizeof(char));
 	if (!word)
 		return (NULL);
 	while (i < length)

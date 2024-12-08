@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 14:00:16 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/20 23:09:15 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/11/23 17:36:24 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int	check_symbol_nbr(char *str)
 	}
 	if (counter > 2)
 	{
-		printf("Syntax Error .\n");
+		printf("minishell: syntax error near unexpected token.\n");
 		return (1);
 	}
 	return (0);

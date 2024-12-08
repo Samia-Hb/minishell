@@ -6,24 +6,28 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 13:39:34 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/19 13:22:12 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/07 14:26:52 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-void	*ft_malloc(size_t size, int ele_nbr)
+void	add_node(void *data)
 {
 	t_gc	*node;
-	void	*ptr;
 
-	ptr = malloc(ele_nbr * size);
-	node = malloc(sizeof(t_gc));
-	node->ptr = ptr;
+	node = malloc(1 * sizeof(t_gc));
+	if (!node)
+		return ;
+	node->ptr = data;
 	node->next = NULL;
 	if (!g_var)
 	{
-		g_var = malloc(sizeof(t_globalvar));
+		if (!g_var)
+		{
+			free(node);
+			return ;
+		}
 		g_var->head = node;
 	}
 	else
@@ -31,25 +35,64 @@ void	*ft_malloc(size_t size, int ele_nbr)
 		node->next = g_var->head;
 		g_var->head = node;
 	}
+}
+
+void	*ft_malloc(int ele_nbr, size_t size)
+{
+	void	*ptr;
+
+	ptr = malloc(ele_nbr * size);
+	if (ptr != NULL)
+		ft_memset(ptr, 0, ele_nbr * size);
+	add_node(ptr);
 	return (ptr);
+}
+
+void	ft_free_envp(t_envi *envp)
+{
+	t_envi	*current;
+	t_envi	*next;
+
+	current = envp;
+	while (current)
+	{
+		next = current->next;
+		if (current->name)
+		{
+			free(current->name);
+			current->name = NULL;
+		}
+		if (current->vale)
+		{
+			free(current->vale);
+			current->vale = NULL;
+		}
+		free(current);
+		current = next;
+	}
 }
 
 void	clean_gc(void)
 {
-	t_gc	*temp;
+	t_gc	*current;
+	t_gc	*next;
 
-	while (g_var->head)
-	{
-		if (g_var->head)
-			free(g_var->head->ptr);
-		temp = g_var->head;
-		g_var->head = g_var->head->next;
-		if (temp)
-			free(temp);
+	if (!g_var)
+		return ;
+	if (g_var->en)
+		ft_free_array(g_var->en);
+	current = g_var->head;
+	if(current)
+	{		
+		while (current)
+		{
+			next = current->next;
+			if (current->ptr)
+				free(current->ptr);
+			free(current);
+			current = next;
+		}
 	}
-	if (g_var->head)
-		free(g_var->head);
-	if (g_var)
-		free(g_var);
+	free(g_var);
+	g_var = NULL;
 }
-// 8177 in 385

@@ -1,47 +1,83 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   handle_pipe.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/11/25 00:02:59 by shebaz            #+#    #+#             */
+/*   Updated: 2024/12/07 11:03:50 by shebaz           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-#include"../../../minishell.h"
+#include "../../../minishell.h"
 
-void	handle_file_descriptors(t_cmd *token)
+void	red_builtin(t_cmd *token, int btn, t_envi *envi)
+{
+	files_redirections(token, 1);
+	exec_builtin(btn, token, envi);
+}
+
+void	close_files(t_cmd *token)
 {
 	if (token->pipe_fd[1] > 2)
 		close(token->pipe_fd[1]);
 	if (g_var->pre_pipe_infd > 2)
 		close(g_var->pre_pipe_infd);
-	g_var->pre_pipe_infd = token->pipe_fd[0];
 }
 
-void	handle_pipe_creation(t_cmd *token, int pipe_nb)
+void	parent_process(void)
 {
-	if (g_var->size != pipe_nb + 1)
+	int	status;
+
+	waitpid(g_var->last_child_id, &status, 0);
+	if (WIFSIGNALED(status))
 	{
-		if (pipe(token->pipe_fd) == -1)
+		if (WTERMSIG(status) == 2)
+			g_var->exit_status = 130;
+		else if (WTERMSIG(status) == 3)
+			g_var->exit_status = 131;
+	}
+	else if (WEXITSTATUS(status))
+		g_var->exit_status = WEXITSTATUS(status);
+}
+
+void	save_retrive(int original_stdin, int original_stdout, int nbr)
+{
+	if (nbr == 1)
+	{
+		close(original_stdin);
+		close(original_stdout);
+	}
+	else if (nbr == 2)
+	{
+		dup2(original_stdin, STDIN_FILENO);
+		dup2(original_stdout, STDOUT_FILENO);
+	}
+}
+
+void	execute_pipes(t_cmd *token, int pipe_nb, t_envi *env)
+{
+	int	original_stdin;
+	int	original_stdout;
+
+	original_stdin = dup(STDIN_FILENO);
+	original_stdout = dup(STDOUT_FILENO);
+	if (g_var->size == 1 && check_builtin(token) != -1)
+	{
+		red_builtin(token, check_builtin(token), env);
+		save_retrive(original_stdin, original_stdin, 2);
+	}
+	else
+	{
+		if (g_var->size != pipe_nb + 1)
 		{
-			perror("pipe");
-			exit(1);
+			if (pipe(token->pipe_fd) == -1)
+				write(2, "Error\n", 6);
 		}
+		child_process(token, check_builtin(token));
+		close_files(token);
+		g_var->pre_pipe_infd = token->pipe_fd[0];
 	}
-	else
-	{
-		token->pipe_fd[0] = 0;
-		token->pipe_fd[1] = 0;
-	}
-}
-
-void	execute_pipes(t_cmd *token, int pipe_nb, t_mini *env)
-{
-	token->builtin = check_builtin(token);
-	g_var->size = count_commands(token);
-	if (g_var->size == 1 && token->builtin != -1)
-	{
-		// printf("check\n");
-		// exit(1);
-		files_redirections(token, 1);
-		exec_builtin(token->builtin, token, env);
-	}
-	else
-	{
-		handle_pipe_creation(token, pipe_nb);
-		child_process(token, token->builtin, env);
-		handle_file_descriptors(token);
-	}
+	save_retrive(original_stdin, original_stdout, 1);
 }

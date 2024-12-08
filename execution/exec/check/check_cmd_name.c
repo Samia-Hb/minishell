@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 10:37:38 by szeroual          #+#    #+#             */
-/*   Updated: 2024/11/21 15:38:13 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/06 18:49:18 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,10 @@ char	*construct_full_path(char *dir, char *cmd)
 {
 	char	*full_path;
 
-	full_path = malloc(strlen(dir) + strlen(cmd) + 2);
+	full_path = ft_malloc(strlen(dir) + strlen(cmd) + 2, sizeof(char));
 	if (!full_path)
 	{
-		perror("malloc failed");
+		perror("Calloc failed");
 		return (NULL);
 	}
 	strcpy(full_path, dir);
@@ -28,18 +28,18 @@ char	*construct_full_path(char *dir, char *cmd)
 	return (full_path);
 }
 
-void	free_path_dirs(char **path_dirs)
-{
-	int	i;
+// void	free_path_dirs(char **path_dirs)
+// {
+// 	int	i;
 
-	i = 0;
-	while (path_dirs[i])
-	{
-		free(path_dirs[i]);
-		i++;
-	}
-	free(path_dirs);
-}
+// 	i = 0;
+// 	while (path_dirs[i])
+// 	{
+// 		free(path_dirs[i]);
+// 		i++;
+// 	}
+// 	free(path_dirs);
+// }
 
 void	handle_command_not_found(t_cmd *cmd)
 {
@@ -49,10 +49,6 @@ void	handle_command_not_found(t_cmd *cmd)
 	g_var->exit_status = 127;
 }
 
-int	is_executable(char *path)
-{
-    return (access(path, X_OK) == 0);
-}
 void	search_command_in_paths(t_cmd *cmd, char **path_dirs)
 {
 	char	*full_path;
@@ -63,21 +59,15 @@ void	search_command_in_paths(t_cmd *cmd, char **path_dirs)
 	{
 		full_path = construct_full_path(path_dirs[i], cmd->arguments[0]);
 		if (!full_path)
-		{
-			free_path_dirs(path_dirs);
 			return ;
-		}
-		if (is_executable(full_path))
+		if (!access(full_path, X_OK))
 		{
 			cmd->cmd_path = full_path;
-			free_path_dirs(path_dirs);
 			return ;
 		}
-		free(full_path);
 		i++;
 	}
 	handle_command_not_found(cmd);
-	free_path_dirs(path_dirs);
 }
 
 void	check_command_name(t_cmd *cmd)

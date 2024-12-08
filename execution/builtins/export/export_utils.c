@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
+/*   By: szeroual <szeroual@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 23:02:01 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/18 23:12:41 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/05 23:43:12 by szeroual         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ t_envi	*add_new_var(char *name, char *vale)
 {
 	t_envi	*lst;
 
-	lst = malloc(sizeof(t_envi));
+	lst = ft_malloc(1, sizeof(t_envi));
 	if (!lst)
 	{
 		perror("allocation error");

@@ -12,8 +12,6 @@
 
 #include "../../../minishell.h"
 
-
-
 int	check_path(char *path, int is_builtin)
 {
 	char		*folders;
@@ -30,4 +28,3 @@ int	check_path(char *path, int is_builtin)
 		return (handle_stat_error(path, is_builtin));
 	return (1);
 }
-

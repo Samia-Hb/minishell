@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 22:25:31 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/17 11:16:09 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/05 13:08:19 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ char	**unquoted_result(char **input)
 
 	i = 0;
 	j = 0;
-	output = ft_malloc(sizeof(char *), get_size(input) + 1);
+	output = ft_malloc(get_size(input) + 1, sizeof(char *));
 	while (input[i])
 	{
 		j = 0;

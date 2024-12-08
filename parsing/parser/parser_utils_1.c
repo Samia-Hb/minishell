@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 20:25:49 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/20 22:46:51 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/05 13:08:23 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	handle_consecutive_operator(t_token *tokens)
 			|| (is_red(current) && is_red(prev)) || (prev->type == TOKEN_PIPE
 				&& current->type == TOKEN_PIPE))
 		{
-			printf("Syntax Error .\n");
+			printf("minishell: syntax error near unexpected token\n");
 			return (1);
 		}
 		prev = current;
@@ -61,7 +61,7 @@ int	handle_operators_bg_en(t_token *tokens)
 			&& last_node->type != TOKEN_REDIR_HERE_DOC
 			&& last_node->type != DELIMITER) || tokens->type == TOKEN_PIPE)
 	{
-		printf("Syntax Error.\n");
+		printf("minishell: syntax error near unexpected token.\n");
 		return (1);
 	}
 	return (0);
@@ -81,7 +81,7 @@ int	check_token(char *str, char c)
 		i++;
 		j++;
 	}
-	copied = ft_malloc(sizeof(char), j);
+	copied = ft_malloc(j, sizeof(char));
 	if (copied == NULL)
 		return (0);
 	ft_strncpy(copied, str + 1, j);
