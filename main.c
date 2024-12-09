@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 00:12:31 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/05 19:05:31 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/09 15:03:52 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,14 +28,14 @@ void	error_malloc(void)
 t_envi	*init_env(char **en)
 {
 	t_envi	*env_list;
-	int		i;
 	char	*env_entry;
+	int		i;
 
 	env_list = NULL;
 	i = 0;
 	while (en[i])
 	{
-		env_entry = strdup(en[i]);
+		env_entry = ft_strdup(en[i]);
 		if (!env_entry)
 			error_strdup();
 		process_env_entry(env_entry, &env_list);
@@ -50,5 +50,6 @@ int	main(int argc, char **argv, char **en)
 	(void)argv;
 	initialisation(en);
 	shell_loop(g_var->envp);
+	// clean_gc();
 	return (0);
 }

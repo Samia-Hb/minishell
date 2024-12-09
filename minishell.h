@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 00:06:05 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/07 19:25:28 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/08 15:18:33 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ typedef enum t_TokenType
 	TOKEN_BUILT_IN,
 	TOKEN_ARGUMENT,
 	TOKEN_UNKNOWN
-}								t_token_type;
+}							t_token_type;
 
 typedef enum t_type
 {

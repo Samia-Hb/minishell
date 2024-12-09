@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 13:39:34 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/07 11:02:15 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/09 15:20:35 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,5 +87,7 @@ void	clean_gc(void)
 		current = next;
 	}
 	free(g_var);
-	g_var = NULL;
+	// if(g_var->head)
+	// 	free(g_var->head);
+	// g_var = NULL;
 }

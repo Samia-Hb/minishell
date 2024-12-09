@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 19:05:46 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/05 20:39:10 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/09 15:02:27 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	child_proces(char *token, char *processed_del, int fd)
 	if (!line)
 		printf("minishell : warning: heredoc delimited by EOF \n");
 	close(fd);
-	clean_gc();
+	// clean_gc();
 	exit(0);
 }
 

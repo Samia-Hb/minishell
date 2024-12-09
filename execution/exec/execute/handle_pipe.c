@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 00:02:59 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/07 11:03:50 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/09 15:00:26 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ void	parent_process(void)
 {
 	int	status;
 
+	status = 0;
 	waitpid(g_var->last_child_id, &status, 0);
 	if (WIFSIGNALED(status))
 	{

@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 10:40:47 by szeroual          #+#    #+#             */
-/*   Updated: 2024/12/06 21:45:39 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/09 15:02:08 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	child_process(t_cmd *token, int btn)
 			close(token->pipe_fd[1]);
 		handle_file_redirections(token, btn);
 		execs(token, btn, g_var->envp);
-		clean_gc();
+		// clean_gc();
 		exit(g_var->exit_status);
 	}
 }
