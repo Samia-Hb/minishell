@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 00:06:05 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/09 16:29:19 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/09 18:37:56 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -278,16 +278,12 @@ void							initiale_global(t_envi *env);
 void							search_command_in_paths(t_cmd *cmd,
 									char **path_dirs);
 void							handle_command_not_found(t_cmd *cmd);
-// void							free_path_dirs(char **path_dirs);
 char							*construct_full_path(char *dir, char *cmd);
 void							error_strdup(void);
 void							shell_loop(t_envi *envi);
 void							process_env_entry(char *env_entry,
 									t_envi **env_list);
 void							handle_file_redirections(t_cmd *cmd, int btn);
-// void							cleanup_execute_arguments(t_cmd *token);
-// void							handle_pipe_creation(t_cmd *token, int pipe_nb);
-// void							handle_file_descriptors(t_cmd *token);
 void							files_redirections(t_cmd *cmd, int builtin);
 void							append_file_prep(t_cmd *token, char *path,
 									int is_builtin);
@@ -303,7 +299,6 @@ void							handle_file_redirections(t_cmd *token, int btn);
 char							*put_cmd_status(int status, char *cmd_path,
 									char *cmd);
 char							*construct_full_path(char *dir, char *cmd);
-void							free_path_dirs(char **path_dirs);
 void							handle_command_not_found(t_cmd *cmd);
 void							search_command_in_paths(t_cmd *cmd,
 									char **path_dirs);
