@@ -6,7 +6,7 @@
 #    By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/25 00:05:54 by shebaz            #+#    #+#              #
-#    Updated: 2024/12/09 16:22:55 by shebaz           ###   ########.fr        #
+#    Updated: 2024/12/09 18:50:36 by shebaz           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,7 +33,6 @@ SRCS  = $(wildcard externel_folder/libftt/*.c) \
         execution/builtins/exit/exit.c \
         execution/builtins/pwd/pwd.c \
         execution/builtins/unset/unset.c \
-        execution/builtins/builtins.c \
         main_util2.c \
         main_util1.c\
         main.c \

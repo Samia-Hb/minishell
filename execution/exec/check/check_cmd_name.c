@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 10:37:38 by szeroual          #+#    #+#             */
-/*   Updated: 2024/12/06 18:49:18 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/09 18:47:22 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,19 +27,6 @@ char	*construct_full_path(char *dir, char *cmd)
 	strcat(full_path, cmd);
 	return (full_path);
 }
-
-// void	free_path_dirs(char **path_dirs)
-// {
-// 	int	i;
-
-// 	i = 0;
-// 	while (path_dirs[i])
-// 	{
-// 		free(path_dirs[i]);
-// 		i++;
-// 	}
-// 	free(path_dirs);
-// }
 
 void	handle_command_not_found(t_cmd *cmd)
 {
