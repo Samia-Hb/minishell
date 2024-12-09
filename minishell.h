@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 00:06:05 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/08 15:18:33 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/09 16:29:19 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ typedef enum t_TokenType
 	TOKEN_BUILT_IN,
 	TOKEN_ARGUMENT,
 	TOKEN_UNKNOWN
-}							t_token_type;
+}								t_token_type;
 
 typedef enum t_type
 {
@@ -158,6 +158,7 @@ char							*generate_name(int *i);
 t_token							**tokenize(char *input);
 char							*handle_quote(char *str);
 int								is_charactere(char c);
+char							*ft_strdup_1(const char *s1);
 void							case_function(char *input, char **result,
 									int *j);
 int								is_special(char c);
@@ -240,7 +241,7 @@ t_envi							*search_env(t_envi *envi, char *name);
 int								is_n_option(char *arg);
 int								first_non_option(char **args);
 int								ft_echo(char **args);
-int								ft_pwd(char **args, t_envi *env);
+int								ft_pwd(char **args);
 void							ft_exit(char **av);
 int								ft_env(t_envi *env);
 void							add_env_variable(t_envi **env, char *name,
@@ -313,7 +314,7 @@ int								check_path(char *path, int is_builtin);
 char							*get_cmd_path(char *cmd, char **dirs);
 void							lista_add_front(t_alst **lst, t_alst *new);
 t_alst							*lista_new(void *content);
-int								ft_export(char **ptr, t_envi **env);
+int								ft_export(char **ptr);
 char							**separate_env(t_envi *env);
 void							parent_process(void);
 void							close_file_descriptors(void);

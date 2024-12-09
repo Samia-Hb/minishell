@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: szeroual <szeroual@student.42.fr>          +#+  +:+       +#+        */
+/*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 21:41:35 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/05 23:43:17 by szeroual         ###   ########.fr       */
+/*   Updated: 2024/12/09 15:49:06 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ int	add_one(char **ptr, t_envi **env)
 	return (status);
 }
 
-int	ft_export(char **ptr, t_envi **env)
+int	ft_export(char **ptr)
 {
 	t_envi	*newenv;
 	int		status;
@@ -117,7 +117,7 @@ int	ft_export(char **ptr, t_envi **env)
 	status = 0;
 	if (!ptr[1])
 	{
-		newenv = sort_env(*env);
+		newenv = sort_env(g_var->envp);
 		if (!newenv)
 		{
 			perror("Failed to sort environment");
@@ -133,7 +133,6 @@ int	ft_export(char **ptr, t_envi **env)
 		}
 	}
 	else
-		status = add_one(ptr, env);
-	g_var->envp = *env;
+		status = add_one(ptr, &g_var->envp);
 	return (status);
 }

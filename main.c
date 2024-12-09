@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 00:12:31 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/09 15:03:52 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/09 16:33:21 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,5 @@ int	main(int argc, char **argv, char **en)
 	(void)argv;
 	initialisation(en);
 	shell_loop(g_var->envp);
-	// clean_gc();
 	return (0);
 }

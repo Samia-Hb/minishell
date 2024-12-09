@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 17:12:31 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/09 15:02:34 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/09 16:33:15 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	ctrl_c(int nb)
 	if (nb == SIGINT)
 	{
 		printf("\n");
-		// clean_gc();
+		clean_gc();
 		exit(7);
 	}
 }

@@ -6,32 +6,17 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 22:30:12 by szeroual          #+#    #+#             */
-/*   Updated: 2024/12/08 15:30:36 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/09 16:24:55 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// t_shell	*init_shell(void)
-// {
-// 	t_shell	*shell;
-
-// 	shell = ft_malloc(1, sizeof(t_shell));
-// 	if (!shell)
-// 	{
-// 		perror("calloc");
-// 		exit(EXIT_FAILURE);
-// 	}
-// 	shell->exit_status = 0;
-// 	shell->args = NULL;
-// 	return (shell);
-// }
-
 t_envi	*create__node(char *name, char *value)
 {
 	t_envi	*new_node;
 
-	new_node = ft_malloc(1, sizeof(t_envi));
+	new_node = malloc(1 * sizeof(t_envi));
 	if (!new_node)
 	{
 		perror("calloc");

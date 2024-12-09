@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 13:07:11 by szeroual          #+#    #+#             */
-/*   Updated: 2024/12/06 18:18:42 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/09 16:52:22 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,11 @@ void	print_perror(char *str, int exitt)
 	if (exitt)
 	{
 		g_var->exit_status = 127;
+		clean_gc();
 		exit(127);
 	}
 	g_var->exit_status = 126;
+	clean_gc();
 	exit(126);
 }
 
@@ -90,9 +92,9 @@ void	exec_builtin(int btn, t_cmd *cmd, t_envi *envi)
 	else if (btn == 4)
 		ft_exit(cmd->arguments);
 	else if (btn == 5)
-		ft_export(cmd->arguments, &envi);
+		ft_export(cmd->arguments);
 	else if (btn == 6)
-		ft_pwd(cmd->arguments, envi);
+		ft_pwd(cmd->arguments);
 	else if (btn == 7)
 		ft_unset(cmd->arguments, &envi);
 	if (g_var->out_fd > 2)

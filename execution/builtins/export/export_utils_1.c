@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_utils_1.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: szeroual <szeroual@student.42.fr>          +#+  +:+       +#+        */
+/*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 23:04:40 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/05 23:43:08 by szeroual         ###   ########.fr       */
+/*   Updated: 2024/12/09 16:29:37 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,14 +60,14 @@ t_envi	*create_env_node(char *name, char *value)
 
 	if (!name)
 		return (NULL);
-	new_node = ft_malloc(1, sizeof(t_envi));
+	new_node = malloc(1 * sizeof(t_envi));
 	if (!new_node)
 	{
 		perror("error");
 		exit(0);
 	}
-	new_node->name = ft_strdup(name);
-	new_node->vale = ft_strdup(value);
+	new_node->name = ft_strdup_1(name);
+	new_node->vale = ft_strdup_1(value);
 	new_node->next = NULL;
 	return (new_node);
 }

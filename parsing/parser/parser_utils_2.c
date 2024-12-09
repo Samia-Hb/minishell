@@ -6,11 +6,22 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 14:00:16 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/23 17:36:24 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/09 16:36:47 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
+
+char	*tidle_expansion(int *i)
+{
+	char	*result;
+
+	result = getenv("HOME");
+	if (!result)
+		return (ft_strdup(""));
+	*i += 1;
+	return (ft_strdup(result));
+}
 
 char	*ft_getenv(char *word)
 {

@@ -6,13 +6,13 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 16:00:56 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/09 15:28:00 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/09 15:31:54 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../minishell.h"
 
-int	ft_pwd(char **args, t_envi *env)
+int	ft_pwd(char **args)
 {
 	char	buff[1024];
 	char	*pwd;
