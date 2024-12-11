@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 22:29:05 by szeroual          #+#    #+#             */
-/*   Updated: 2024/12/09 16:31:00 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/11 23:44:41 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,8 @@ char	*ft_strdup_1(const char *s1)
 
 	i = 0;
 	s2 = malloc((ft_strlen(s1) + 1) * sizeof(char));
-	if (s2 == NULL)
-	{
+	if (!s2)
 		return (NULL);
-	}
 	while (s1[i] != '\0')
 	{
 		s2[i] = s1[i];
@@ -63,10 +61,7 @@ void	handle_input(char *input, t_envi *envp)
 	add_history(input);
 	tokens = tokenize(input);
 	if (check_syntax_errors(*tokens))
-	{
-		g_var->exit_status = 2;
 		return ;
-	}
 	if (!expand(*tokens))
 		return ;
 	cmd = analyse_tokens(tokens);
@@ -78,6 +73,7 @@ void	handle_input(char *input, t_envi *envp)
 void	shell_loop(t_envi *envp)
 {
 	char	*input;
+	int		exit_status;
 
 	while (1)
 	{
@@ -86,10 +82,11 @@ void	shell_loop(t_envi *envp)
 		input = readline("minishell > ");
 		if (!input)
 		{
+			exit_status = g_var->exit_status;
 			printf("exit\n");
 			rl_clear_history();
 			clean_gc();
-			break ;
+			exit(exit_status);
 		}
 		handle_input(input, envp);
 	}

@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 13:46:11 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/23 17:35:00 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/11 22:11:21 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,17 +78,24 @@ int	random_case(t_token *tokens)
 
 int	check_syntax_errors(t_token *tokens)
 {
+	int	tmp;
+
+	tmp = 0;
 	if (handle_quotes(tokens))
-		return (1);
+		tmp = 1;
 	if (handle_paren(tokens))
-		return (2);
+		tmp = 1;
 	if (handle_operators_bg_en(tokens))
-		return (5);
+		tmp = 1;
 	if (handle_consecutive_operator(tokens))
-		return (4);
+		tmp = 1;
 	if (random_case(tokens))
-		return (2);
+		tmp = 1;
 	if (file_expansion_null(tokens))
-		return (2);
-	return (0);
+		tmp = 2;
+	if (tmp == 1)
+		g_var->exit_status = 2;
+	else if (tmp == 2)
+		g_var->exit_status = 1;
+	return (tmp);
 }

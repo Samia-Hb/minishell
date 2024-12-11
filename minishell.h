@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 00:06:05 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/09 18:40:56 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/11 22:45:48 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -232,6 +232,7 @@ void							ctrl_c(int nb);
 void							child_process(t_cmd *token, int btn);
 void							add_node(void *data);
 void							exit_status(int status, char *filename);
+char							*expand_heredoc(char *token);
 /////////////////////////////builtins///////////////////////////
 
 void							ft_putstr_fd(char *str, int fd);

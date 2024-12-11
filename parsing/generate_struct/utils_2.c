@@ -6,11 +6,37 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 17:12:31 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/09 16:33:15 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/11 22:45:18 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
+
+char	*expand_heredoc(char *token)
+{
+	char	*result;
+	char	*tmp;
+	int		i;
+
+	result = ft_strdup("");
+	i = 0;
+	while (token[i])
+	{
+		if (token[i] == '"' || token[i] == '\'')
+			tmp = double_quote_expansion(token, &i);
+		else if (token[i] == '~')
+			tmp = tidle_expansion(&i);
+		else if (token[i] == '$')
+			tmp = dollar_expand(token, &i);
+		else
+		{
+			tmp = char_to_string(token[i], 0);
+			i++;
+		}
+		result = ft_strjoin(result, tmp);
+	}
+	return (result);
+}
 
 void	ctrl_c(int nb)
 {

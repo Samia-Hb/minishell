@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 21:41:35 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/09 15:49:06 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/11 22:28:56 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	process_existing_env(t_envi **env, char *arr[2])
 	while (tmp)
 	{
 		if (!strcmp(tmp->name, arr[0]))
-			tmp->vale = ft_strdup(arr[1]);
+			tmp->vale = ft_strdup_1(arr[1]);
 		tmp = tmp->next;
 	}
 }

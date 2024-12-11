@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 21:39:01 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/05 13:08:07 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/11 22:45:28 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,6 @@ char	*parse_line(char *input)
 {
 	char	*result;
 
-	result = expand_non_operator(input);
+	result = expand_heredoc(input);
 	return (result);
 }
