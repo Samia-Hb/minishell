@@ -33,33 +33,14 @@ void	update_or_add_env_part1(t_envi **env, const char *var, t_envi **prev,
 	while (*current)
 	{
 		if (ft_strcmp((*current)->name, var) == 0)
+		{
+			printf("Found existing node: %s\n", var);
 			return ;
+		}
 		*prev = *current;
 		*current = (*current)->next;
 	}
 }
-
-// void	update_or_add_env(t_envi **env, const char *var, const char *vale,
-// 		int had_equals)
-// {
-// 	t_envi	*current;
-// 	t_envi	*prev;
-// 	t_envi	*new_node;
-
-// 	update_or_add_env_part1(env, var, &prev, &current);
-// 	if (current)
-// 	{
-// 		update_existing_node(current, vale, had_equals);
-// 		return ;
-// 	}
-// 	new_node = create_and_init_node(var, vale, had_equals);
-// 	if (!new_node)
-// 		return ;
-// 	if (prev)
-// 		prev->next = new_node;
-// 	else
-// 		*env = new_node;
-// }
 
 void	init_copy_env(t_envi **new_env, t_envi **last_node)
 {
@@ -108,30 +89,31 @@ t_envi	*copy_env(t_envi *env)
 }
 void	process_cmd(t_envi **env, char **cmd, int i)
 {
-	char	*eq_pos;
-	char	*var;
-	char	*vale;
-	int		had_equals;
+    char	*eq_pos;
+    char	*var;
+    char	*vale;
+    int		had_equals;
 
-	eq_pos = ft_strchr(cmd[i], '=');
-	var = cmd[i];
-	vale = NULL;
-	had_equals = 0;
-	if (eq_pos)
-	{
-		*eq_pos = '\0';
-		vale = eq_pos + 1;
-		had_equals = 1;
-	}
-	if (!is_valid_identifier(var))
-	{
-		handle_invalid_identifier(cmd[i]);
-		if (eq_pos)
-			*eq_pos = '=';
-		return ;
-	}
-	update_or_add_env(env, var, vale, had_equals);
-	if (eq_pos)
-		*eq_pos = '=';
+    eq_pos = ft_strchr(cmd[i], '=');
+    var = cmd[i];
+    vale = NULL;
+    had_equals = 0;
+    if (eq_pos)
+    {
+        *eq_pos = '\0';
+        vale = eq_pos + 1;
+        had_equals = 1;
+    }
+    if (!is_valid_identifier(var))
+    {
+        handle_invalid_identifier(cmd[i]);
+        if (eq_pos)
+            *eq_pos = '=';
+        return ;
+    }
+    update_or_add_env(env, var, vale, had_equals);
+    printf("Processing command: var = %s, vale = %s, had_equals = %d\n", var, vale, had_equals);
+    if (eq_pos)
+        *eq_pos = '=';
 }
 

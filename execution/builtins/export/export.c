@@ -6,7 +6,7 @@
 /*   By: sanaa <sanaa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 21:41:35 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/11 23:56:43 by sanaa            ###   ########.fr       */
+/*   Updated: 2024/12/12 21:05:24 by sanaa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,7 @@ void	ft_export(t_envi **env, char **cmd)
 	i = 1;
 	while (cmd[i])
 	{
+		printf("cmd[1] = %s\n", cmd[i]);
 		process_cmd(env, cmd, i);
 		i++;
 	}

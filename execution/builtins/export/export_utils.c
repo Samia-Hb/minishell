@@ -27,7 +27,9 @@ t_envi	*create_new_node(const char *var, const char *vale, int had_equals)
 char	*set_node_vale(const char *vale)
 {
 	if (vale)
+	{
 		return (ft_strdup(vale));
+	}
 	return (ft_strdup(""));
 }
 
@@ -42,13 +44,13 @@ void	free_node_contents(t_envi *node)
 
 void	update_existing_node(t_envi *current, const char *vale, int had_equals)
 {
-	if (had_equals == 1)
-	{
-		free(current->vale);
-		current->vale = set_node_vale(vale);
-		if (!current->vale)
-			perror("malloc");
-	}
+    if (had_equals == 1)
+    {
+        free(current->vale);
+        current->vale = set_node_vale(vale);
+        if (!current->vale)
+            perror("malloc");
+    }
 }
 
 void	sync_env_array(t_envi *env)
