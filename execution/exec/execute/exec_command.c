@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/01 13:35:43 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/09 16:51:08 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/12 17:35:23 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ void	execs(t_cmd *token, int btn, t_envi *env)
 	if (btn != -1)
 	{
 		exec_builtin(btn, token, env);
+		ft_free_envp(env);
 		clean_gc();
 		rl_clear_history();
 		exit(0);
@@ -38,6 +39,7 @@ void	execs(t_cmd *token, int btn, t_envi *env)
 	else
 	{
 		exit_status = g_var->exit_status;
+		ft_free_envp(env);
 		clean_gc();
 		exit(exit_status);
 	}

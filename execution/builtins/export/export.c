@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 21:41:35 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/12 16:09:09 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/12 16:52:25 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,11 @@ void	process_existing_env(t_envi **env, char *arr[2])
 	while (tmp)
 	{
 		if (!strcmp(tmp->name, arr[0]))
+		{
+			if (tmp->vale)
+				free(tmp->vale);
 			tmp->vale = ft_strdup_1(arr[1]);
+		}
 		tmp = tmp->next;
 	}
 }
@@ -76,7 +80,6 @@ int	process_single_env(char *ptr_i, t_envi **env)
 			process_existing_env(env, arr);
 		else
 			add_env_variable(env, arr[0], arr[1]);
-		// ft_free_envp(new);
 	}
 	return (status);
 }
@@ -106,7 +109,6 @@ int	add_one(char **ptr, t_envi **env)
 		}
 		i++;
 	}
-	// g_var->envp = *env;
 	return (status);
 }
 
@@ -116,7 +118,6 @@ int	ft_export(char **ptr)
 	int		status;
 
 	status = 0;
-	newenv = NULL;
 	if (!ptr[1])
 	{
 		newenv = sort_env(g_var->envp);
@@ -133,9 +134,9 @@ int	ft_export(char **ptr)
 			printf("\n");
 			newenv = newenv->next;
 		}
+		ft_free_envp(newenv);
 	}
 	else
 		status = add_one(ptr, &g_var->envp);
-	ft_free_envp(newenv);
 	return (status);
 }

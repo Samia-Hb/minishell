@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 00:03:12 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/01 13:43:32 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/12 20:58:30 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,11 @@ void	in_file_prep(char *path, int is_builtin)
 		ft_putstr_fd("minishell: ", 2);
 		perror(path);
 		if (!is_builtin || g_var->size > 1)
+		{
+			ft_free_envp(g_var->envp);
+			clean_gc();
 			exit(1);
+		}
 	}
 	else
 	{
@@ -36,6 +40,7 @@ void	in_file_prep(char *path, int is_builtin)
 		if (fd > 2)
 			close(fd);
 	}
+	close(fd);
 }
 
 void	out_file_prep(char *path, int is_builtin)
@@ -50,7 +55,11 @@ void	out_file_prep(char *path, int is_builtin)
 		ft_putstr_fd("minishell: ", 2);
 		perror(path);
 		if (!is_builtin || g_var->size > 1)
+		{
+			ft_free_envp(g_var->envp);
+			clean_gc();
 			exit(1);
+		}
 	}
 	else
 	{
@@ -77,7 +86,11 @@ void	append_file_prep(t_cmd *token, char *path, int is_builtin)
 		ft_putstr_fd("minishell: ", 2);
 		perror(path);
 		if (!is_builtin || g_var->size > 1)
+		{
+			ft_free_envp(g_var->envp);
+			clean_gc();
 			exit(1);
+		}
 	}
 	else
 	{
@@ -100,6 +113,8 @@ void	append_heredoc_prep(char *filename)
 	if (fd == -1)
 	{
 		write(2, "Error up here\n", 15);
+		ft_free_envp(g_var->envp);
+		clean_gc();
 		exit(g_var->exit_status);
 	}
 	dup2(fd, STDIN_FILENO);

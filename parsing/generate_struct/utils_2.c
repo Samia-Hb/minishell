@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 17:12:31 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/11 22:45:18 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/12 17:20:45 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ void	ctrl_c(int nb)
 	if (nb == SIGINT)
 	{
 		printf("\n");
+		ft_free_envp(g_var->envp);
 		clean_gc();
 		exit(7);
 	}

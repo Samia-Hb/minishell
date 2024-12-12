@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 13:39:34 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/12 16:17:19 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/12 16:52:02 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,6 @@ void	*ft_malloc(int ele_nbr, size_t size)
 	add_node(ptr);
 	return (ptr);
 }
-
 
 void	ft_free_envp(t_envi *envp)
 {

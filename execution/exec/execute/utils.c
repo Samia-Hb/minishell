@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 13:07:11 by szeroual          #+#    #+#             */
-/*   Updated: 2024/12/09 16:52:22 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/12 17:45:26 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,12 @@ void	print_perror(char *str, int exitt)
 	if (exitt)
 	{
 		g_var->exit_status = 127;
+		ft_free_envp(g_var->envp);
 		clean_gc();
 		exit(127);
 	}
 	g_var->exit_status = 126;
+	ft_free_envp(g_var->envp);
 	clean_gc();
 	exit(126);
 }

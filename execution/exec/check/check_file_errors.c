@@ -6,30 +6,30 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 10:38:44 by szeroual          #+#    #+#             */
-/*   Updated: 2024/12/11 21:59:23 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/12 17:26:12 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../minishell.h"
 
-int	check_file_errors(char *path, int builtin)
-{
-	if (path && (path[0] == '$' || (path[0] == '"' && path[1] == '$')))
-	{
-		g_var->red_error = 1;
-		g_var->exit_status = 1;
-		if (path[0] == '$' && path[1])
-		{
-			ft_putstr_fd("minishell: ", 2);
-			ft_putstr_fd(path, 2);
-			ft_putstr_fd(" ambiguous redirect\n", 2);
-		}
-		else
-			ft_putstr_fd("minishell: No such file or directory\n", 2);
-		if (builtin)
-			return (1);
-		else
-			exit(1);
-	}
-	return (0);
-}
+// int	check_file_errors(char *path, int builtin)
+// {
+// 	if (path && (path[0] == '$' || (path[0] == '"' && path[1] == '$')))
+// 	{
+// 		g_var->red_error = 1;
+// 		g_var->exit_status = 1;
+// 		if (path[0] == '$' && path[1])
+// 		{
+// 			ft_putstr_fd("minishell: ", 2);
+// 			ft_putstr_fd(path, 2);
+// 			ft_putstr_fd(" ambiguous redirect\n", 2);
+// 		}
+// 		else
+// 			ft_putstr_fd("minishell: No such file or directory\n", 2);
+// 		if (builtin)
+// 			return (1);
+// 		else
+// 			exit(1);
+// 	}
+// 	return (0);
+// }
