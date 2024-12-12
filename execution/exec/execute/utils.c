@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sanaa <sanaa@student.42.fr>                +#+  +:+       +#+        */
+/*   By: szeroual <szeroual@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 13:07:11 by szeroual          #+#    #+#             */
-/*   Updated: 2024/12/11 22:27:07 by sanaa            ###   ########.fr       */
+/*   Updated: 2024/12/12 20:50:18 by szeroual         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ void	exec_builtin(int btn, t_cmd *cmd, t_envi *envi)
             g_var->exit_status = exit_status;
     }
     else if (btn == 5)
-        ft_export(cmd->arguments, &envi);
+        ft_export(&envi, cmd->arguments);
     else if (btn == 6)
         ft_pwd(cmd->arguments);
     else if (btn == 7)

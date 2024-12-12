@@ -1,4 +1,6 @@
-t_envi	*create_and_init_node(const char *var, const char *vale,
+#include "../../../minishell.h"
+
+// t_envi	*create_and_init_node(const char *var, const char *vale,
 // 		int had_equals)
 // {
 // 	t_envi	*new_node;
@@ -21,7 +23,7 @@ t_envi	*create_and_init_node(const char *var, const char *vale,
 // 	}
 // 	new_node->next = NULL;
 // 	return (new_node);
-// }#include "../../../minishell.h"
+// }
 
 // 
 
@@ -49,34 +51,34 @@ void	update_or_add_env(t_envi **env, const char *var, const char *vale,
 		*env = new_node;
 }
 
-void	process_cmd(t_envi **env, char **cmd, int i)
-{
-	char	*eq_pos;
-	char	*var;
-	char	*vale;
-	int		had_equals;
+// void	process_cmd(t_envi **env, char **cmd, int i)
+// {
+// 	char	*eq_pos;
+// 	char	*var;
+// 	char	*vale;
+// 	int		had_equals;
 
-	eq_pos = ft_strchr(cmd[i], '=');
-	var = cmd[i];
-	vale = NULL;
-	had_equals = 0;
-	if (eq_pos)
-	{
-		*eq_pos = '\0';
-		vale = eq_pos + 1;
-		had_equals = 1;
-	}
-	if (!is_valid_identifier(var))
-	{
-		handle_invalid_identifier(cmd[i]);
-		if (eq_pos)
-			*eq_pos = '=';
-		return ;
-	}
-	update_or_add_env(env, var, vale, had_equals);
-	if (eq_pos)
-		*eq_pos = '=';
-}
+// 	eq_pos = ft_strchr(cmd[i], '=');
+// 	var = cmd[i];
+// 	vale = NULL;
+// 	had_equals = 0;
+// 	if (eq_pos)
+// 	{
+// 		*eq_pos = '\0';
+// 		vale = eq_pos + 1;
+// 		had_equals = 1;
+// 	}
+// 	if (!is_valid_identifier(var))
+// 	{
+// 		handle_invalid_identifier(cmd[i]);
+// 		if (eq_pos)
+// 			*eq_pos = '=';
+// 		return ;
+// 	}
+// 	update_or_add_env(env, var, vale, had_equals);
+// 	if (eq_pos)
+// 		*eq_pos = '=';
+// }
 
 void	handle_invalid_identifier(const char *cmd)
 {

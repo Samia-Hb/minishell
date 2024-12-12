@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sanaa <sanaa@student.42.fr>                +#+  +:+       +#+        */
+/*   By: szeroual <szeroual@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 00:06:05 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/11 23:56:48 by sanaa            ###   ########.fr       */
+/*   Updated: 2024/12/12 20:51:11 by szeroual         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -314,7 +314,6 @@ char							**separate_env(t_envi *env);
 void							parent_process(void);
 void							close_file_descriptors(void);
 void	ft_free_envp(t_envi *envp);
-t_envi	*create_and_init_node(const char *var, const char *vale, int had_equals);
 void	free_node_contents(t_envi *node);
 void	update_existing_node(t_envi *current, const char *vale, int had_equals);
 void	handle_invalid_identifier(const char *cmd);
@@ -338,4 +337,5 @@ t_envi	*create_and_init_node(const char *var, const char *vale,
 void	handle_invalid_identifier(const char *cmd);
 void	ft_export(t_envi **env, char **cmd);
 int	is_valid_identifier(const char *str);
+void	ft_export(t_envi **env, char **cmd);
 #endif
