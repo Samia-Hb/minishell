@@ -1,91 +1,62 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   export_utils.c                                     :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: szeroual <szeroual@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/18 23:02:01 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/05 23:43:12 by szeroual         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../../../minishell.h"
 
-void	swap_nodes(t_envi *a, t_envi *b)
+t_envi	*create_new_node(const char *var, const char *vale, int had_equals)
 {
-	char	*tmp_name;
-	char	*tmp_vale;
+	t_envi	*new_node;
 
-	tmp_name = a->name;
-	tmp_vale = a->vale;
-	a->name = b->name;
-	a->vale = b->vale;
-	b->name = tmp_name;
-	b->vale = tmp_vale;
-}
-
-int	ft_utils(char *ptr)
-{
-	int	i;
-
-	i = 0;
-	if (!isalpha(ptr[0]) && ptr[0] != '_')
-		return (0);
-	while (ptr[++i] && ptr[i] != '=')
+	new_node = (t_envi *)malloc(sizeof(t_envi));
+	if (!new_node)
 	{
-		if (ptr[i] == '+')
-			break ;
-		else if (!isalnum(ptr[i]) && ptr[i] != '_')
-			return (0);
-	}
-	if (ptr[i] && ptr[i] == '+' && ptr[i + 1] != '=')
-		return (0);
-	return (1);
-}
-
-void	add_back(t_envi **node, t_envi *new)
-{
-	t_envi	*last;
-
-	if (!*node)
-	{
-		*node = new;
-		return ;
-	}
-	last = *node;
-	while (last->next)
-		last = last->next;
-	last->next = new;
-	new->prv = last;
-}
-
-t_envi	*add_new_var(char *name, char *vale)
-{
-	t_envi	*lst;
-
-	lst = ft_malloc(1, sizeof(t_envi));
-	if (!lst)
-	{
-		perror("allocation error");
+		perror("malloc");
 		return (NULL);
 	}
-	lst->name = ft_strdup(name);
-	lst->vale = ft_strdup(vale);
-	lst->next = NULL;
-	lst->prv = NULL;
-	return (lst);
+	new_node->name = ft_strdup(var);
+	if (had_equals == 1)
+		new_node->vale = set_node_vale(vale);
+	else
+		new_node->vale = NULL;
+	if (!new_node->name || (had_equals && !new_node->vale))
+	{
+		free_node_contents(new_node);
+		return (NULL);
+	}
+	new_node->next = NULL;
+	return (new_node);
 }
 
-t_envi	*cpy_list(t_envi *env)
+char	*set_node_vale(const char *vale)
 {
-	t_envi	*new_list;
+	if (vale)
+		return (ft_strdup(vale));
+	return (ft_strdup(""));
+}
 
-	new_list = NULL;
-	while (env)
+void	free_node_contents(t_envi *node)
+{
+	if (!node)
+		return ;
+	free(node->name);
+	free(node->vale);
+	free(node);
+}
+
+void	update_existing_node(t_envi *current, const char *vale, int had_equals)
+{
+	if (had_equals == 1)
 	{
-		add_back(&new_list, add_new_var(env->name, env->vale));
-		env = env->next;
+		free(current->vale);
+		current->vale = set_node_vale(vale);
+		if (!current->vale)
+			perror("malloc");
 	}
-	return (new_list);
+}
+
+void	sync_env_array(t_envi *env)
+{
+	char	**new_env;
+
+	new_env = separate_env(env);
+	if (!new_env)
+		return ;
+	// free_env_array(g_var->en);
 }

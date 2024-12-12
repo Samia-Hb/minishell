@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sanaa <sanaa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 13:07:11 by szeroual          #+#    #+#             */
-/*   Updated: 2024/12/07 13:29:04 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/11 22:27:07 by sanaa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,24 +78,31 @@ char	*get_cmd_path(char *cmd, char **dirs)
 	}
 	return (put_cmd_status(status, cmd_path, cmd));
 }
-
 void	exec_builtin(int btn, t_cmd *cmd, t_envi *envi)
 {
-	if (btn == 1)
-		ft_cd(cmd->arguments, envi);
-	else if (btn == 2)
-		ft_echo(cmd->arguments);
-	else if (btn == 3)
-		ft_env(envi);
-	else if (btn == 4)
-		ft_exit(cmd->arguments);
-	else if (btn == 5)
-		ft_export(cmd->arguments, &envi);
-	else if (btn == 6)
-		ft_pwd(cmd->arguments);
-	else if (btn == 7)
-		ft_unset(cmd->arguments, &envi);
-	if (g_var->out_fd > 2)
-		close(g_var->out_fd);
-	g_var->out_fd = 1;
+    int exit_status;
+
+    if (btn == 1)
+        ft_cd(cmd->arguments, envi);
+    else if (btn == 2)
+        ft_echo(cmd->arguments);
+    else if (btn == 3)
+        ft_env(envi);
+    else if (btn == 4)
+    {
+        exit_status = ft_exit(cmd->arguments);
+        if (exit_status == 2)
+            exit(exit_status);
+        else if (exit_status == 1)
+            g_var->exit_status = exit_status;
+    }
+    else if (btn == 5)
+        ft_export(cmd->arguments, &envi);
+    else if (btn == 6)
+        ft_pwd(cmd->arguments);
+    else if (btn == 7)
+        ft_unset(cmd->arguments, &envi);
+    if (g_var->out_fd > 2)
+        close(g_var->out_fd);
+    g_var->out_fd = 1;
 }

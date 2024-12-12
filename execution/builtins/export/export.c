@@ -3,137 +3,111 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: szeroual <szeroual@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sanaa <sanaa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 21:41:35 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/05 23:43:17 by szeroual         ###   ########.fr       */
+/*   Updated: 2024/12/11 23:56:43 by sanaa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../minishell.h"
 
-int	check_each_element(char *str)
+void	swap_nodes(t_envi *a, t_envi *b)
 {
-	char	*arr[2];
-	char	*tmp;
-	int		i;
+	char	*temp_name;
+	char	*temp_vale;
 
-	i = 0;
-	tmp = ft_strdup(str);
-	if (!ft_strlen(str))
-		return (1);
-	arr[0] = strtok(tmp, "=");
-	if (!arr[0])
-		return (1);
-	while (arr[0][i])
+	temp_name = a->name;
+	temp_vale = a->vale;
+	a->name = b->name;
+	a->vale = b->vale;
+	b->name = temp_name;
+	b->vale = temp_vale;
+}
+int	is_valid_identifier(const char *str)
+{
+	if (!str || !*str || !(ft_isalpha(*str) || *str == '_'))
+		return (0);
+	while (*++str)
+		if (!(ft_isalnum(*str) || *str == '_'))
+			return (0);
+	return (1);
+}
+t_envi	*bubble_sort_env(t_envi *env)
+{
+	int		swapped;
+	t_envi	*ptr1;
+	t_envi	*lptr;
+
+	if (!env)
+		return (NULL);
+	lptr = NULL;
+	while (1)
 	{
-		if (is_number(str[i]))
-			return (1);
-		while (arr[0][i])
+		swapped = 0;
+		ptr1 = env;
+		while (ptr1->next != lptr)
 		{
-			if ((is_special(str[i]) && str[i] != '\\' && str[i] != '$')
-				|| str[0] == '$' || str[0] == '=' || str[i] == '*'
-				|| str[i] == '@')
-				return (1);
-			i++;
+			if (ft_strcmp(ptr1->name, ptr1->next->name) > 0)
+			{
+				swap_nodes(ptr1, ptr1->next);
+				swapped = 1;
+			}
+			ptr1 = ptr1->next;
 		}
+		lptr = ptr1;
+		if (!swapped)
+			break ;
 	}
-	return (0);
+	return (env);
 }
 
-void	process_existing_env(t_envi **env, char *arr[2])
+void	print_export(t_envi *env)
 {
-	t_envi	*tmp;
+	t_envi	*current;
 
-	tmp = (*env);
-	while (tmp)
+	current = bubble_sort_env(env);
+	while (current)
 	{
-		if (!strcmp(tmp->name, arr[0]))
-			tmp->vale = ft_strdup(arr[1]);
-		tmp = tmp->next;
+		ft_putstr_fd("declare -x ", 1);
+		ft_putstr_fd(current->name, 1);
+		if (current->vale != NULL)
+		{
+			ft_putstr_fd("=\"", 1);
+			ft_putstr_fd(current->vale, 1);
+			ft_putstr_fd("\"", 1);
+		}
+		ft_putstr_fd("\n", 1);
+		current = current->next;
 	}
 }
 
-int	process_single_env(char *ptr_i, t_envi **env)
+void	handle_no_cmd(t_envi **env)
 {
-	char	*arr[2];
-	t_envi	*new;
-	int		status;
-	char	*tmp;
+	t_envi	*env_copy;
 
-	status = 0;
-	tmp = ft_strdup(ptr_i);
-	arr[0] = strtok(ptr_i, "=");
-	arr[1] = strtok(NULL, "=");
-	if (!arr[1] && tmp[strlen(tmp) - 1] != '=')
-		return (status);
-	else if (!arr[1] && tmp[strlen(tmp) - 1] == '=')
-		arr[1] = ft_strdup("");
-	if (ft_utils(arr[0]))
-	{
-		new = search_env(*env, arr[0]);
-		if (new)
-			process_existing_env(env, arr);
-		else
-			add_env_variable(env, arr[0], arr[1]);
-	}
-	return (status);
+	env_copy = copy_env(*env);
+	if (!env_copy)
+		return ;
+	print_export(env_copy);
+	// free_env(env_copy);
 }
 
-int	add_one(char **ptr, t_envi **env)
+void	ft_export(t_envi **env, char **cmd)
 {
 	int	i;
-	int	status;
-	int	result;
 
-	i = 1;
-	status = 0;
-	while (ptr[i])
+	g_var->exit_status = 0;
+	if (cmd[1] == NULL)
 	{
-		if (check_each_element(ptr[i]))
-		{
-			ft_putstr_fd("minishell: export: `", 2);
-			ft_putstr_fd(ptr[i], 2);
-			ft_putstr_fd("': not a valid identifier\n", 2);
-			g_var->exit_status = 1;
-		}
-		else
-		{
-			result = process_single_env(ptr[i], env);
-			if (result)
-				status = result;
-		}
+		handle_no_cmd(env);
+		return ;
+	}
+	i = 1;
+	while (cmd[i])
+	{
+		process_cmd(env, cmd, i);
 		i++;
 	}
-	g_var->envp = *env;
-	return (status);
-}
-
-int	ft_export(char **ptr, t_envi **env)
-{
-	t_envi	*newenv;
-	int		status;
-
-	status = 0;
-	if (!ptr[1])
-	{
-		newenv = sort_env(*env);
-		if (!newenv)
-		{
-			perror("Failed to sort environment");
-			return (1);
-		}
-		while (newenv)
-		{
-			printf("declare -x %s", newenv->name);
-			if (newenv->vale)
-				printf("=\"%s\"", newenv->vale);
-			printf("\n");
-			newenv = newenv->next;
-		}
-	}
-	else
-		status = add_one(ptr, env);
-	g_var->envp = *env;
-	return (status);
+	sync_env_array(*env);
 }

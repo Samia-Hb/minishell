@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sanaa <sanaa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 00:06:05 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/07 13:28:42 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/11 23:56:48 by sanaa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -241,7 +241,8 @@ int								is_n_option(char *arg);
 int								first_non_option(char **args);
 int								ft_echo(char **args);
 int								ft_pwd(char **args);
-void							ft_exit(char **av);
+int	ft_exit(char **args);
+
 int								ft_env(t_envi *env);
 void							add_env_variable(t_envi **env, char *name,
 									char *value);
@@ -279,6 +280,7 @@ void							search_command_in_paths(t_cmd *cmd,
 void							handle_command_not_found(t_cmd *cmd);
 char							*construct_full_path(char *dir, char *cmd);
 void							error_strdup(void);
+void	print_sorted_env(t_envi *env);
 void							shell_loop(t_envi *envi);
 void							process_env_entry(char *env_entry,
 									t_envi **env_list);
@@ -308,9 +310,32 @@ int								check_path(char *path, int is_builtin);
 char							*get_cmd_path(char *cmd, char **dirs);
 void							lista_add_front(t_alst **lst, t_alst *new);
 t_alst							*lista_new(void *content);
-int								ft_export(char **ptr, t_envi **env);
 char							**separate_env(t_envi *env);
 void							parent_process(void);
 void							close_file_descriptors(void);
 void	ft_free_envp(t_envi *envp);
+t_envi	*create_and_init_node(const char *var, const char *vale, int had_equals);
+void	free_node_contents(t_envi *node);
+void	update_existing_node(t_envi *current, const char *vale, int had_equals);
+void	handle_invalid_identifier(const char *cmd);
+void	process_cmd(t_envi **env, char **cmd, int i);
+t_envi	*copy_env(t_envi *env);
+t_envi	*process_env_node(t_envi *current, t_envi **last_node);
+void	init_copy_env(t_envi **new_env, t_envi **last_node);
+void	update_or_add_env(t_envi **env, const char *var, const char *vale,
+		int had_equals);
+void	update_or_add_env_part1(t_envi **env, const char *var, t_envi **prev,
+		t_envi **current);
+t_envi	*create_and_init_node(const char *var, const char *vale,
+		int had_equals);
+void	free_node_contents(t_envi *node);
+t_envi	*create_new_node(const char *var, const char *vale, int had_equals);
+char	*set_node_vale(const char *vale);
+void	update_existing_node(t_envi *current, const char *vale, int had_equals);
+void	sync_env_array(t_envi *env);
+t_envi	*create_and_init_node(const char *var, const char *vale,
+		int had_equals);
+void	handle_invalid_identifier(const char *cmd);
+void	ft_export(t_envi **env, char **cmd);
+int	is_valid_identifier(const char *str);
 #endif
