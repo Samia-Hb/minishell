@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 22:30:12 by szeroual          #+#    #+#             */
-/*   Updated: 2024/12/09 16:24:55 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/12 00:30:31 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ t_envi	*create__node(char *name, char *value)
 		perror("calloc");
 		exit(EXIT_FAILURE);
 	}
-	new_node->name = ft_strdup(name);
-	new_node->vale = ft_strdup(value);
+	new_node->name = ft_strdup_1(name);
+	new_node->vale = ft_strdup_1(value);
 	if (!new_node->name || !new_node->vale)
 	{
 		perror("strdup");
@@ -40,9 +40,7 @@ t_envi	*create__node(char *name, char *value)
 void	add_env_node(t_envi **env_list, t_envi *new_node)
 {
 	if (*env_list)
-	{
 		(*env_list)->prv = new_node;
-	}
 	new_node->next = *env_list;
 	*env_list = new_node;
 }

@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 10:40:47 by szeroual          #+#    #+#             */
-/*   Updated: 2024/12/09 16:32:58 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/12 00:34:47 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ char	**separate_env(t_envi *env)
 		count++;
 		tmp = tmp->next;
 	}
-	the_env = ft_malloc((count + 1), sizeof(char *));
+	the_env = malloc((count + 1) * sizeof(char *));
 	if (!the_env)
 	{
 		perror("Error allocating memory");

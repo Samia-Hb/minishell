@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 22:29:05 by szeroual          #+#    #+#             */
-/*   Updated: 2024/12/11 23:44:41 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/12 00:44:40 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,7 @@ void	shell_loop(t_envi *envp)
 			printf("exit\n");
 			rl_clear_history();
 			clean_gc();
+			ft_free_envp(envp);
 			exit(exit_status);
 		}
 		handle_input(input, envp);

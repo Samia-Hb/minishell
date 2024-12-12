@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 13:39:34 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/09 16:34:07 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/12 00:43:58 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ void	*ft_malloc(int ele_nbr, size_t size)
 	return (ptr);
 }
 
+
 void	ft_free_envp(t_envi *envp)
 {
 	t_envi	*current;
@@ -75,8 +76,8 @@ void	clean_gc(void)
 		return ;
 	if (g_var->en)
 		ft_free_array(g_var->en);
-	if (g_var->envp)
-		ft_free_envp(g_var->envp);
+	// if (g_var->envp)
+	// 	ft_free_envp(g_var->envp);
 	current = g_var->head;
 	while (current)
 	{

@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 23:02:01 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/09 16:25:26 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/12 00:32:56 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,8 +70,8 @@ t_envi	*add_new_var(char *name, char *vale)
 		perror("allocation error");
 		return (NULL);
 	}
-	lst->name = ft_strdup(name);
-	lst->vale = ft_strdup(vale);
+	lst->name = ft_strdup_1(name);
+	lst->vale = ft_strdup_1(vale);
 	lst->next = NULL;
 	lst->prv = NULL;
 	return (lst);

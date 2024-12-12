@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 00:06:05 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/11 22:45:48 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/12 00:43:00 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -233,6 +233,7 @@ void							child_process(t_cmd *token, int btn);
 void							add_node(void *data);
 void							exit_status(int status, char *filename);
 char							*expand_heredoc(char *token);
+void							ft_free_envp(t_envi *envp);
 /////////////////////////////builtins///////////////////////////
 
 void							ft_putstr_fd(char *str, int fd);
