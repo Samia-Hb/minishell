@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 13:39:34 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/12 00:43:58 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/12 16:17:19 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,8 +76,6 @@ void	clean_gc(void)
 		return ;
 	if (g_var->en)
 		ft_free_array(g_var->en);
-	// if (g_var->envp)
-	// 	ft_free_envp(g_var->envp);
 	current = g_var->head;
 	while (current)
 	{
