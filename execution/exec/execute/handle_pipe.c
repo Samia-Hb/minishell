@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 00:02:59 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/12 17:35:52 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/12 23:53:12 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 void	red_builtin(t_cmd *token, int btn, t_envi *envi)
 {
 	files_redirections(token, 1);
+	if (g_var->exit_status)
+		return ;
 	exec_builtin(btn, token, envi);
 }
 
@@ -80,5 +82,6 @@ void	execute_pipes(t_cmd *token, int pipe_nb, t_envi *env)
 		close_files(token);
 		g_var->pre_pipe_infd = token->pipe_fd[0];
 	}
+	close(STDERR_FILENO);
 	save_retrive(original_stdin, original_stdout, 1);
 }

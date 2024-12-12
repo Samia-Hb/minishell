@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 10:37:38 by szeroual          #+#    #+#             */
-/*   Updated: 2024/12/09 18:47:22 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/12 23:36:43 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,9 @@ char	*construct_full_path(char *dir, char *cmd)
 		perror("Calloc failed");
 		return (NULL);
 	}
-	strcpy(full_path, dir);
-	strcat(full_path, "/");
-	strcat(full_path, cmd);
+	ft_strcpy(full_path, dir);
+	full_path = ft_strcat(full_path, "/");
+	full_path = ft_strcat(full_path, cmd);
 	return (full_path);
 }
 

@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/14 13:47:35 by szeroual          #+#    #+#             */
-/*   Updated: 2024/12/05 19:07:54 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/12 22:56:56 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,5 +58,6 @@ void	*ft_memmove(void *dst, const void *src, size_t len);
 char	**ft_split(char const *s, char c);
 int		ft_strcmp(const char *s1, const char *s2);
 char	*ft_strndup(const char *s1, int n);
+char	*ft_strcat(char *dest, const char *src);
 
 #endif

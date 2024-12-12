@@ -18,7 +18,7 @@
 
 //     node = malloc(1 * sizeof(t_gc));
 //     if (!node)
-//         return;
+//         return ;
 //     node->ptr = data;
 //     node->next = NULL;
 //     if (!g_var)
@@ -26,7 +26,7 @@
 //         if (!g_var)
 //         {
 //             free(node);
-//             return;
+//             return ;
 //         }
 //         g_var->head = node;
 //     }

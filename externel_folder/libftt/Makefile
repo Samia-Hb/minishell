@@ -6,7 +6,7 @@
 #    By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/18 12:22:39 by szeroual          #+#    #+#              #
-#    Updated: 2024/10/26 20:32:31 by shebaz           ###   ########.fr        #
+#    Updated: 2024/12/12 22:57:09 by shebaz           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ CFLAGS = -Wall -Wextra -Werror
 
 AR = ar rcs
 
-SRC = ft_strndup.c ft_strncpy.c ft_strcmp.c ft_isdigit.c ft_substr.c \
+SRC = ft_strndup.c ft_strncpy.c ft_strcmp.c ft_strcat.c ft_isdigit.c ft_substr.c \
 	ft_strdup.c ft_strlen.c ft_memcpy.c ft_strjoin.c ft_atoi.c ft_bzero.c \
 	ft_isalpha.c ft_calloc.c ft_itoa.c ft_isascii.c ft_isprint.c ft_memset.c \
 	ft_strlcpy.c ft_strncmp.c ft_strnstr.c ft_strrchr.c ft_tolower.c ft_toupper.c \
