@@ -114,6 +114,9 @@ void	process_cmd(t_envi **env, char **cmd, int i)
     update_or_add_env(env, var, vale, had_equals);
     printf("Processing command: var = %s, vale = %s, had_equals = %d\n", var, vale, had_equals);
     if (eq_pos)
+	{
+		printf("eq_pos = %s\n", eq_pos);
         *eq_pos = '=';
+	}
 }
 

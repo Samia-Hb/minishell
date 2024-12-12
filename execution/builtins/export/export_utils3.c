@@ -7,7 +7,6 @@ void	update_or_add_env(t_envi **env, const char *var, const char *vale, int had_
     t_envi	*prev;
     t_envi	*new_node;
 
-    printf("update_or_add_env: var = %s, vale = %s, had_equals = %d\n", var, vale, had_equals);
     update_or_add_env_part1(env, var, &prev, &current);
     if (current)
     {
@@ -15,14 +14,13 @@ void	update_or_add_env(t_envi **env, const char *var, const char *vale, int had_
         return ;
     }
     new_node = create_new_node(var, vale, had_equals);
-    if (!new_node)
+    if (!new_node || !new_node->vale)
         return ;
     if (prev)
         prev->next = new_node;
     else
         *env = new_node;
 }
-
 
 void	handle_invalid_identifier(const char *cmd)
 {

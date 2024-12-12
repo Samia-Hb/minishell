@@ -3,7 +3,6 @@
 t_envi	*create_new_node(const char *var, const char *vale, int had_equals)
 {
 	t_envi	*new_node;
-
 	new_node = (t_envi *)malloc(sizeof(t_envi));
 	if (!new_node)
 	{
@@ -14,9 +13,13 @@ t_envi	*create_new_node(const char *var, const char *vale, int had_equals)
 	if (had_equals == 1)
 		new_node->vale = set_node_vale(vale);
 	else
+	{
 		new_node->vale = NULL;
+	}
 	if (!new_node->name || (had_equals && !new_node->vale))
 	{
+		printf("new_node->vale = %s\n", new_node->vale);
+		exit(0);
 		free_node_contents(new_node);
 		return (NULL);
 	}
