@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 00:02:59 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/13 17:50:50 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/13 20:41:41 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	red_builtin(t_cmd *token, int btn, t_envi *envi)
 {
 	files_redirections(token, 1);
-	if (g_var->exit_status)
+	if (g_var->exit_status == 1)
 		return ;
 	exec_builtin(btn, token, envi);
 }

@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 10:40:47 by szeroual          #+#    #+#             */
-/*   Updated: 2024/12/13 18:09:34 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/13 20:50:47 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,12 @@ void	child_process(t_cmd *token, int btn)
 		if (token->pipe_fd[1] > 2)
 			close(token->pipe_fd[1]);
 		handle_file_redirections(token, btn);
+		if (g_var->exit_status == 1)
+		{
+			close_open_file();
+			exit(1);
+		}
 		execs(token, btn, g_var->envp);
-		ft_free_envp(g_var->envp);
-		clean_gc();
-		exit(g_var->exit_status);
 	}
 }
 
