@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_1.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: szeroual <szeroual@student.42.fr>          +#+  +:+       +#+        */
+/*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/01 13:36:31 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/05 23:41:59 by szeroual         ###   ########.fr       */
+/*   Updated: 2024/12/13 19:01:34 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,14 +51,11 @@ int	handle_stat_error(char *path, int is_builtin)
 	perror(path);
 	if (is_builtin)
 	{
-		g_var->red_error = 1;
 		g_var->exit_status = 1;
 		return (0);
 	}
 	else
-	{
 		exit(1);
-	}
 }
 
 int	count_commands(t_cmd *cmd)

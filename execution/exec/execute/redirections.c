@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 00:03:12 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/12 23:54:37 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/13 18:35:39 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,11 @@ void	in_file_prep(char *path, int is_builtin)
 	if (fd == -1)
 	{
 		g_var->exit_status = 1;
-		g_var->red_error = 1;
 		ft_putstr_fd("minishell: ", 2);
 		perror(path);
 		if (!is_builtin || g_var->size > 1)
 		{
-			ft_free_envp(g_var->envp);
-			clean_gc();
+			close_open_file();
 			exit(1);
 		}
 	}
@@ -40,7 +38,6 @@ void	in_file_prep(char *path, int is_builtin)
 		if (fd > 2)
 			close(fd);
 	}
-	close(fd);
 }
 
 void	out_file_prep(char *path, int is_builtin)
@@ -51,13 +48,11 @@ void	out_file_prep(char *path, int is_builtin)
 	if (fd == -1)
 	{
 		g_var->exit_status = 1;
-		g_var->red_error = 1;
 		ft_putstr_fd("minishell: ", 2);
 		perror(path);
 		if (!is_builtin || g_var->size > 1)
 		{
-			ft_free_envp(g_var->envp);
-			clean_gc();
+			close_open_file();
 			exit(1);
 		}
 	}
@@ -73,22 +68,19 @@ void	out_file_prep(char *path, int is_builtin)
 	}
 }
 
-void	append_file_prep(t_cmd *token, char *path, int is_builtin)
+void	append_file_prep(char *path, int is_builtin)
 {
 	int	fd;
 
-	(void)token;
 	fd = open(path, O_CREAT | O_WRONLY | O_APPEND, 0644);
 	if (fd == -1)
 	{
 		g_var->exit_status = 1;
-		g_var->red_error = 1;
 		ft_putstr_fd("minishell: ", 2);
 		perror(path);
 		if (!is_builtin || g_var->size > 1)
 		{
-			ft_free_envp(g_var->envp);
-			clean_gc();
+			close_open_file();
 			exit(1);
 		}
 	}
@@ -113,8 +105,7 @@ void	append_heredoc_prep(char *filename)
 	if (fd == -1)
 	{
 		write(2, "Error up here\n", 15);
-		ft_free_envp(g_var->envp);
-		clean_gc();
+		close_open_file();
 		exit(g_var->exit_status);
 	}
 	dup2(fd, STDIN_FILENO);
@@ -137,7 +128,7 @@ void	files_redirections(t_cmd *cmd, int builtin)
 		else if (curr_red->type == 3)
 			append_heredoc_prep(curr_red->filename);
 		else if (curr_red->type == 4)
-			append_file_prep(cmd, curr_red->filename, builtin);
+			append_file_prep(curr_red->filename, builtin);
 		curr_red = curr_red->next;
 	}
 }

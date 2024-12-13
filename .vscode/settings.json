@@ -5,7 +5,8 @@
     "get_next_line.h": "c",
     "stdbool.h": "c",
     "stdio.h": "c",
-    "history.h": "c"
+    "history.h": "c",
+    "dirent.h": "c"
   },
   "C_Cpp_Runner.msvcBatchPath": "",
   "editor.fontSize": 9

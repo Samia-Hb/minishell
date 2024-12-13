@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 00:06:05 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/12 00:43:00 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/13 19:02:54 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,7 +135,8 @@ struct							s_global
 	int							pre_pipe_infd;
 	int							last_child_id;
 	int							out_fd;
-	int							red_error;
+	int							cpy_out_fd;
+	int							cpy_in_fd;
 	t_envi						*envp;
 	int							num;
 	int							size;
@@ -155,6 +156,7 @@ struct							s_global
 extern struct s_global			*g_var;
 
 char							*generate_name(int *i);
+void							close_open_file(void);
 t_token							**tokenize(char *input);
 char							*handle_quote(char *str);
 int								is_charactere(char c);
@@ -268,7 +270,6 @@ void							execute_arguments(t_cmd *token, t_envi *env);
 void							exec_builtin(int btn, t_cmd *cmd, t_envi *envi);
 void							execs(t_cmd *token, int btn, t_envi *env);
 void							files_redirections(t_cmd *cmd, int builtin);
-int								check_file_errors(char *path, int builtin);
 int								check_builtin(t_cmd *cmd);
 int								count_commands(t_cmd *cmd);
 void							close_files(t_cmd *token);
@@ -287,7 +288,7 @@ void							process_env_entry(char *env_entry,
 									t_envi **env_list);
 void							handle_file_redirections(t_cmd *cmd, int btn);
 void							files_redirections(t_cmd *cmd, int builtin);
-void							append_file_prep(t_cmd *token, char *path,
+void							append_file_prep(char *path,
 									int is_builtin);
 void							out_file_prep(char *path, int is_builtin);
 void							in_file_prep(char *path, int is_builtin);
@@ -305,9 +306,7 @@ void							handle_command_not_found(t_cmd *cmd);
 void							search_command_in_paths(t_cmd *cmd,
 									char **path_dirs);
 void							check_command_name(t_cmd *cmd);
-int								check_file_errors(char *path, int builtin);
 void							my_strncpy(char *dest, char *src, int n);
-int								check_path(char *path, int is_builtin);
 char							*get_cmd_path(char *cmd, char **dirs);
 void							lista_add_front(t_alst **lst, t_alst *new);
 t_alst							*lista_new(void *content);

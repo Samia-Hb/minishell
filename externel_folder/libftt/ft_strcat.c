@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 22:50:52 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/12 23:40:38 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/13 18:11:52 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ char	*ft_strcat(char *dest, const char *src)
 
 	i = 0;
 	size = ft_strlen(dest) + ft_strlen(src) + 1;
-	result = malloc(size * sizeof(char));
+	result = ft_malloc(size, sizeof(char));
 	if (!result)
 		return (NULL);
 	while (i < size && dest[i])

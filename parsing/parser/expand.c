@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 22:25:31 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/05 13:08:19 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/13 19:17:52 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,10 @@ int	handle_operator_expand(t_token **token)
 	{
 		if (get_size(tmp->expanded_value) > 1)
 		{
+			ft_putstr_fd("minishell: ", 2);
+			ft_putstr_fd(tmp->value, 2);
+			ft_putstr_fd(": ambiguous redirect\n", 2);
+			g_var->exit_status = 1;
 			return (0);
 		}
 	}
@@ -121,7 +125,7 @@ int	expand(t_token *tokens)
 			if (is_red(tokens))
 			{
 				if (!handle_operator_expand(&tokens))
-					return (printf("Error\n"), 0);
+					return (0);
 			}
 			if (!is_operator(tokens))
 			{

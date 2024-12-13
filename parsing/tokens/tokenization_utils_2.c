@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 13:37:34 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/05 13:08:36 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/13 19:19:53 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ t_token	*create_token(t_token_type type, const char *value)
 	token = ft_malloc(1, sizeof(t_token));
 	if (!token)
 	{
-		printf("Error: Memory allocation failed\n");
+		ft_putstr_fd("Memory allocation failed\n", 2);
 		exit(EXIT_FAILURE);
 	}
 	token->type = type;
@@ -74,7 +74,7 @@ char	*handle_parentheses(char *str, char c)
 	word = ft_malloc(j + 1, sizeof(char));
 	if (!word)
 	{
-		printf("Error: memory allocation failed\n");
+		ft_putstr_fd("Memory allocation failed\n", 2);
 		exit(EXIT_FAILURE);
 	}
 	word[0] = c;

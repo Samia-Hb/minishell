@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 13:36:28 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/07 19:24:43 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/13 19:20:32 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ char	*char_to_string(char c, char c2)
 		string = ft_malloc(2, sizeof(char));
 		if (!string)
 		{
-			printf("Error: memory allocation failed\n");
+			ft_putstr_fd("Memory allocation failed\n", 2);
 			exit(EXIT_FAILURE);
 		}
 		string[0] = c;
@@ -68,7 +68,7 @@ char	*char_to_string(char c, char c2)
 	string = ft_malloc(3, sizeof(char));
 	if (!string)
 	{
-		printf("Error: memory allocation failed\n");
+		ft_putstr_fd("Memory allocation failed\n", 2);
 		exit(EXIT_FAILURE);
 	}
 	string[0] = c;
@@ -86,7 +86,7 @@ int	ft_strschr(char *string, char *delimiteur, int *l)
 	i = 0;
 	if (!splited)
 	{
-		printf("Error\n");
+		ft_putstr_fd("Error\n", 2);
 		return (0);
 	}
 	while (splited[i])

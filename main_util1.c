@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 22:29:05 by szeroual          #+#    #+#             */
-/*   Updated: 2024/12/13 00:07:19 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/13 18:34:43 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,9 @@ void	initiale_global(t_envi *env)
 		exit(EXIT_FAILURE);
 	}
 	g_var->envp = env;
+	g_var->cpy_in_fd = -1;
+	g_var->cpy_out_fd = -1;
 	g_var->exit_status = 0;
-	g_var->red_error = 0;
 	g_var->flag = 0;
 	g_var->pid_size = 0;
 }
@@ -89,6 +90,7 @@ void	shell_loop(t_envi *envp)
 			ft_free_envp(envp);
 			close(STDOUT_FILENO);
 			close(STDIN_FILENO);
+			close(STDERR_FILENO);
 			exit(exit_status);
 		}
 		handle_input(input, envp);

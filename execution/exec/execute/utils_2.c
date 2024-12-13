@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/01 13:37:08 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/12 17:45:06 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/13 18:36:55 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,4 +51,17 @@ void	ft_free_array(char **array)
 		i++;
 	}
 	free(array);
+}
+
+void	close_open_file(void)
+{
+	ft_free_envp(g_var->envp);
+	close(STDERR_FILENO);
+	close(STDOUT_FILENO);
+	close(STDIN_FILENO);
+	if (g_var->cpy_in_fd != -1)
+		close(g_var->cpy_in_fd);
+	if (g_var->cpy_out_fd != -1)
+		close(g_var->cpy_out_fd);
+	clean_gc();
 }

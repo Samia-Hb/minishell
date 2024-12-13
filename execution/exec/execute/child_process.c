@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 10:40:47 by szeroual          #+#    #+#             */
-/*   Updated: 2024/12/12 23:29:29 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/13 18:09:34 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,6 @@ void	sig(int sig)
 
 void	child_process(t_cmd *token, int btn)
 {
-	int	status;
-
 	g_var->last_child_id = fork();
 	signal(SIGINT, sig);
 	signal(SIGQUIT, sig);
@@ -46,13 +44,6 @@ void	child_process(t_cmd *token, int btn)
 		if (token->pipe_fd[1] > 2)
 			close(token->pipe_fd[1]);
 		handle_file_redirections(token, btn);
-		if (g_var->exit_status == 1)
-		{
-			status = g_var->exit_status;
-			ft_free_envp(g_var->envp);
-			clean_gc();
-			exit(status);
-		}
 		execs(token, btn, g_var->envp);
 		ft_free_envp(g_var->envp);
 		clean_gc();

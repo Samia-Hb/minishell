@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 13:36:37 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/05 13:08:57 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/13 19:20:14 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ t_token	**tokenize(char *input)
 	tokens = (t_token **)ft_malloc(1, sizeof(t_token *));
 	if (!tokens)
 	{
-		printf("Error: Memory allocation failed\n");
+		ft_putstr_fd("Memory allocation failed\n", 2);
 		exit(EXIT_FAILURE);
 	}
 	*tokens = NULL;

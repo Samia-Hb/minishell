@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 00:02:59 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/12 23:53:12 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/13 17:50:50 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,8 @@ void	execute_pipes(t_cmd *token, int pipe_nb, t_envi *env)
 
 	original_stdin = dup(STDIN_FILENO);
 	original_stdout = dup(STDOUT_FILENO);
+	g_var->cpy_in_fd = original_stdin;
+	g_var->cpy_out_fd = original_stdout;
 	if (g_var->size == 1 && check_builtin(token) != -1)
 	{
 		red_builtin(token, check_builtin(token), env);
