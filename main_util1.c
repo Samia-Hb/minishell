@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_util1.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sanaa <sanaa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 22:29:05 by szeroual          #+#    #+#             */
-/*   Updated: 2024/12/07 14:42:19 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/13 14:41:20 by sanaa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,5 @@ void	shell_loop(t_envi *envp)
 		}
 		handle_input(input, envp);
 	}
-	// ft_free_envp(envp);
+	ft_free_envp(envp);
 }
-//3271 in 142block

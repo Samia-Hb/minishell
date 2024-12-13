@@ -6,7 +6,7 @@
 /*   By: sanaa <sanaa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 00:06:05 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/12 23:33:50 by sanaa            ###   ########.fr       */
+/*   Updated: 2024/12/13 14:42:58 by sanaa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -336,4 +336,6 @@ void	handle_invalid_identifier(const char *cmd);
 void	ft_export(t_envi **env, char **cmd);
 int	is_valid_identifier(const char *str);
 void	ft_export(t_envi **env, char **cmd);
+void	free_env_array(char **env_array);
+void	free_env(t_envi *env);
 #endif

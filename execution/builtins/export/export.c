@@ -1,6 +1,34 @@
 
 #include "../../../minishell.h"
 
+void	free_env(t_envi *env)
+{
+	t_envi	*temp;
+
+	while (env != NULL)
+	{
+		temp = env;
+		env = env->next;
+		free(temp->name);
+		free(temp->vale);
+		free(temp);
+	}
+}
+void	free_env_array(char **env_array)
+{
+	int	i;
+
+	if (!env_array)
+		return ;
+	i = 0;
+	while (env_array[i])
+	{
+		free(env_array[i]);
+		i++;
+	}
+	free(env_array);
+} 
+
 t_envi	*create_and_init_node(const char *var, const char *vale,
 		int had_equals)
 {
@@ -175,11 +203,7 @@ static int	count_valid_env_entries(t_envi *env)
 	}
 	return (count);
 }
-// static void	init_copy_env(t_envi **new_env, t_envi **last_node)
-// {
-// 	*new_env = NULL;
-// 	*last_node = NULL;
-// }
+
 static char	*create_env_string(t_envi *env_node)
 {
 	char	*env_str;
@@ -223,7 +247,7 @@ char	**env_to_array(t_envi *env)
 {
 	int		count;
 	char	**env_array;
-	// int		i;
+	int		i;
 
 	count = count_valid_env_entries(env);
 	env_array = (char **)malloc(sizeof(char *) * (count + 1));
@@ -231,10 +255,10 @@ char	**env_to_array(t_envi *env)
 		return (NULL);
 	if (!populate_env_array(env_array, env, count))
 	{
-		// i = 0;
-		// while (env_array[i])
-		// 	free(env_array[i++]);
-		// free(env_array);
+		i = 0;
+		while (env_array[i])
+			free(env_array[i++]);
+		free(env_array);
 		return (NULL);
 	}
 	return (env_array);
@@ -246,7 +270,7 @@ void	sync_env_array(t_envi *env)
 	new_env = env_to_array(env);
 	if (!new_env)
 		return ;
-	// free_env_array(g_var->en);
+	free_env_array(g_var->en);
 	g_var->en= new_env;
 }
 static void	init_copy_env(t_envi **new_env, t_envi **last_node)
@@ -286,7 +310,7 @@ t_envi	*copy_env(t_envi *env)
 		new_node = process_env_node(current, &last_node);
 		if (!new_node)
 		{
-			// free_env(new_env);
+			free_env(new_env);
 			return (NULL);
 		}
 		if (!new_env)
@@ -366,7 +390,7 @@ void	handle_no_cmd(t_envi **env)
 	if (!env_copy)
 		return ;
 	print_export(env_copy);
-	// free_env(env_copy);
+	free_env(env_copy);
 }
 
 void	ft_export(t_envi **env, char **cmd)
