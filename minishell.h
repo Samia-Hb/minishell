@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sanaa <sanaa@student.42.fr>                +#+  +:+       +#+        */
+/*   By: szeroual <szeroual@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 00:06:05 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/13 14:42:58 by sanaa            ###   ########.fr       */
+/*   Updated: 2024/12/14 22:15:23 by szeroual         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -338,4 +338,29 @@ int	is_valid_identifier(const char *str);
 void	ft_export(t_envi **env, char **cmd);
 void	free_env_array(char **env_array);
 void	free_env(t_envi *env);
+int	populate_env_array(char **env_array, t_envi *env, int count);
+t_envi	*bubble_sort_env(t_envi *env);
+void	print_export(t_envi *env);
+void	handle_no_cmd(t_envi **env);
+char	**env_to_array(t_envi *env);
+void	sync_env_array(t_envi *env);
+t_envi	*process_env_node(t_envi *current, t_envi **last_node);
+t_envi	*copy_env(t_envi *env);
+char	*set_node_vale(const char *vale);
+void	free_node_contents(t_envi *node);
+void	update_existing_node(t_envi *current, const char *vale, int had_equals);
+int	count_valid_env_entries(t_envi *env);
+char	*create_env_string(t_envi *env_node);
+int	is_valid_identifier(const char *str);
+void	process_cmd(t_envi **env, char **cmd, int i);
+void	handle_invalid_identifier(const char *cmd);
+t_envi	*create_new_node(const char *var, const char *vale, int had_equals);
+void	free_env(t_envi *env);
+void	free_env_array(char **env_array);
+t_envi	*create_and_init_node(const char *var, const char *vale,
+		int had_equals);
+		void	update_or_add_env_part1(t_envi **env, const char *var, t_envi **prev,
+		t_envi **current);
+		void	update_or_add_env(t_envi **env, const char *var, const char *vale,
+		int had_equals);
 #endif
