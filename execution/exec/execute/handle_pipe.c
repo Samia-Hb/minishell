@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_pipe.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sanaa <sanaa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 00:02:59 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/07 11:03:50 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/14 11:22:16 by sanaa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ void	execute_pipes(t_cmd *token, int pipe_nb, t_envi *env)
 	}
 	else
 	{
-		if (g_var->size != pipe_nb + 1)
+		if (g_var->size != pipe_nb + 1 && token->next)
 		{
 			if (pipe(token->pipe_fd) == -1)
 				write(2, "Error\n", 6);
