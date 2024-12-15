@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
+/*   By: szeroual <szeroual@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 19:03:34 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/05 13:08:26 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/15 17:42:33 by szeroual         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,13 @@ char	*find_command_path(char **dir, char *command)
 	int		i;
 
 	i = 0;
+
 	while (dir[i])
 	{
 		full_path = ft_malloc(ft_strlen(dir[i])
 				+ ft_strlen(command) + 2, sizeof(char));
+		printf("full path: %s\n", full_path);
+		exit(1);
 		if (!full_path)
 		{
 			perror("malloc");
@@ -45,6 +48,8 @@ char	*get_executable(char *command)
 	char	*path;
 
 	path = getenv("PATH");
+	if(!path)
+		return NULL;
 	arr = ft_split(command, ' ');
 	if (access(arr[0], X_OK) == 0)
 	{
