@@ -6,7 +6,7 @@
 /*   By: szeroual <szeroual@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 00:06:05 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/14 22:15:23 by szeroual         ###   ########.fr       */
+/*   Updated: 2024/12/15 18:38:56 by szeroual         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -318,7 +318,7 @@ void	free_node_contents(t_envi *node);
 void	update_existing_node(t_envi *current, const char *vale, int had_equals);
 void	handle_invalid_identifier(const char *cmd);
 void	process_cmd(t_envi **env, char **cmd, int i);
-t_envi	*copy_env(t_envi *env);
+t_envi	*copy_list(t_envi *env);
 void	update_or_add_env(t_envi **env, const char *var, const char *vale,
 		int had_equals);
 void	update_or_add_env_part1(t_envi **env, const char *var, t_envi **prev,

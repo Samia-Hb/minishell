@@ -53,7 +53,7 @@ t_envi	*process_env_node(t_envi *current, t_envi **last_node)
 	return (new_node);
 }
 
-t_envi	*copy_env(t_envi *env)
+t_envi	*copy_list(t_envi *env)
 {
 	t_envi	*new_env;
 	t_envi	*current;

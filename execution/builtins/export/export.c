@@ -90,7 +90,7 @@ void	handle_no_cmd(t_envi **env)
 {
 	t_envi	*env_copy;
 
-	env_copy = copy_env(*env);
+	env_copy = copy_list(*env);
 	if (!env_copy)
 		return ;
 	print_export(env_copy);
