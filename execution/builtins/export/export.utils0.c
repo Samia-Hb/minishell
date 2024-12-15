@@ -28,7 +28,7 @@ void	free_env_array(char **env_array)
 	free(env_array);
 } 
 
-t_envi	*create_and_init_node(const char *var, const char *vale,
+t_envi	*add_new_var(const char *var, const char *vale,
 		int had_equals)
 {
 	t_envi	*new_node;
@@ -80,7 +80,7 @@ void	update_or_add_env(t_envi **env, const char *var, const char *vale,
 		update_existing_node(current, vale, had_equals);
 		return ;
 	}
-	new_node = create_and_init_node(var, vale, had_equals);
+	new_node = add_new_var(var, vale, had_equals);
 	if (!new_node)
 		return ;
 	if (prev)

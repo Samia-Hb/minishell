@@ -6,7 +6,7 @@
 /*   By: szeroual <szeroual@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 00:06:05 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/15 18:38:56 by szeroual         ###   ########.fr       */
+/*   Updated: 2024/12/15 20:08:30 by szeroual         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -357,7 +357,7 @@ void	handle_invalid_identifier(const char *cmd);
 t_envi	*create_new_node(const char *var, const char *vale, int had_equals);
 void	free_env(t_envi *env);
 void	free_env_array(char **env_array);
-t_envi	*create_and_init_node(const char *var, const char *vale,
+t_envi	*add_new_var(const char *var, const char *vale,
 		int had_equals);
 		void	update_or_add_env_part1(t_envi **env, const char *var, t_envi **prev,
 		t_envi **current);
