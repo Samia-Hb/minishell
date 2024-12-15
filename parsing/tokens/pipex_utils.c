@@ -6,7 +6,7 @@
 /*   By: szeroual <szeroual@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 19:03:34 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/15 17:42:33 by szeroual         ###   ########.fr       */
+/*   Updated: 2024/12/15 18:15:57 by szeroual         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,7 @@ char	*find_command_path(char **dir, char *command)
 	{
 		full_path = ft_malloc(ft_strlen(dir[i])
 				+ ft_strlen(command) + 2, sizeof(char));
-		printf("full path: %s\n", full_path);
-		exit(1);
+	
 		if (!full_path)
 		{
 			perror("malloc");
