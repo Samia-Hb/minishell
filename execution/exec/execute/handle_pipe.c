@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 00:02:59 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/13 20:41:41 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/15 02:35:50 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,11 @@ void	parent_process(void)
 			g_var->exit_status = 131;
 	}
 	else if (WEXITSTATUS(status))
+	{
 		g_var->exit_status = WEXITSTATUS(status);
+		if (status == 256)
+			g_var->exit_status = 1;
+	}
 }
 
 void	save_retrive(int original_stdin, int original_stdout, int nbr)

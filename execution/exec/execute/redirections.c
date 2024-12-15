@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 00:03:12 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/13 21:16:50 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/15 02:44:22 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,7 @@ void	in_file_prep(char *path, int is_builtin)
 	if (fd == -1)
 	{
 		g_var->exit_status = 1;
-		ft_putstr_fd("minishell: ", 2);
-		perror(path);
+		perror(ft_strjoin("minishell: ", path));
 		if (!is_builtin || g_var->size > 1)
 		{
 			close_open_file();
@@ -48,8 +47,7 @@ void	out_file_prep(char *path, int is_builtin)
 	if (fd == -1)
 	{
 		g_var->exit_status = 1;
-		ft_putstr_fd("minishell: ", 2);
-		perror(path);
+		perror(ft_strjoin("minishell: ", path));
 		if (!is_builtin || g_var->size > 1)
 		{
 			close_open_file();
@@ -76,8 +74,7 @@ void	append_file_prep(char *path, int is_builtin)
 	if (fd == -1)
 	{
 		g_var->exit_status = 1;
-		ft_putstr_fd("minishell: ", 2);
-		perror(path);
+		perror(ft_strjoin("minishell: ", path));
 		if (!is_builtin || g_var->size > 1)
 		{
 			close_open_file();
@@ -104,7 +101,6 @@ void	append_heredoc_prep(char *filename)
 	fd = open(filename, O_RDONLY, 0777);
 	if (fd == -1)
 	{
-		write(2, "Error up here\n", 15);
 		close_open_file();
 		exit(g_var->exit_status);
 	}
@@ -121,14 +117,19 @@ void	files_redirections(t_cmd *cmd, int builtin)
 	curr_red = cmd->file;
 	while (curr_red)
 	{
-		if (curr_red->type == 1)
-			out_file_prep(curr_red->filename, builtin);
-		else if (curr_red->type == 2)
-			in_file_prep(curr_red->filename, builtin);
-		else if (curr_red->type == 3)
-			append_heredoc_prep(curr_red->filename);
-		else if (curr_red->type == 4)
-			append_file_prep(curr_red->filename, builtin);
-		curr_red = curr_red->next;
+		if (file_expansion_null(&curr_red->filename))
+			curr_red = curr_red->next;
+		else
+		{
+			if (curr_red->type == 1)
+				out_file_prep(curr_red->filename, builtin);
+			else if (curr_red->type == 2)
+				in_file_prep(curr_red->filename, builtin);
+			else if (curr_red->type == 3)
+				append_heredoc_prep(curr_red->filename);
+			else if (curr_red->type == 4)
+				append_file_prep(curr_red->filename, builtin);
+			curr_red = curr_red->next;
+		}
 	}
 }

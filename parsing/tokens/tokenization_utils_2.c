@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 13:37:34 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/13 19:19:53 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/15 03:25:10 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,15 +93,15 @@ char	*handle_quote(char *str)
 	i = 0;
 	j = 0;
 	word = ft_malloc(ft_strlen(str) + 1, sizeof(char));
-	quote = str[i];
 	while (str[i] && !ft_is_separator(str[i]))
 	{
-		if (str[i] == quote)
+		if (str[i] == '"' || str[i] == '\'')
 		{
+			quote = str[i];
 			word[j++] = str[i++];
 			while (str[i] && str[i] != quote)
 				word[j++] = str[i++];
-			if (str[i] == quote)
+			if (str[i] && str[i] == quote)
 				word[j++] = str[i++];
 		}
 		else

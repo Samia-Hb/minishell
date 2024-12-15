@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/01 13:35:43 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/13 20:42:41 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/15 03:36:47 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	execs(t_cmd *token, int btn, t_envi *env)
 		if (execve(token->cmd_path, token->arguments, g_var->en) == -1)
 		{
 			ft_putstr_fd("minishell: ", 2);
-			ft_putstr_fd("\n", 2);
+			perror(token->arguments[0]);
 			exit(g_var->exit_status);
 		}
 	}

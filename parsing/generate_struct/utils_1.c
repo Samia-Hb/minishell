@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 21:39:01 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/11 22:45:28 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/14 23:20:40 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	fill_up_node(t_cmd **node, t_token **tokens, t_file **head)
 	if ((*tokens)->next)
 	{
 		*tokens = (*tokens)->next;
-		(*node)->file->filename = ft_strdup((*tokens)->expanded_value[0]);
+		(*node)->file->filename = ft_strdup((*tokens)->value);
 		(*node)->file->next = NULL;
 		push_t_file(head, (*node)->file);
 		*tokens = (*tokens)->next;

@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 20:25:49 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/05 13:08:23 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/15 03:48:42 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,12 @@ int	handle_consecutive_operator(t_token *tokens)
 				&& prev->type == TOKEN_REDIR_HERE_DOC && !strcmp(current->value,
 					"") && current->next->type == TOKEN_REDIR_HERE_DOC)
 			|| (prev->type == TOKEN_REDIR_HERE_DOC && !strcmp(current->value,
-					"")) || (is_red(prev) && current->type == TOKEN_PIPE)
-			|| (is_red(current) && is_red(prev)) || (prev->type == TOKEN_PIPE
+					"")) || (is_red(prev) && current->type == TOKEN_PIPE
+				&& prev->type != 7 && lst_size(tokens) == 2) || (is_red(current)
+				&& is_red(prev)) || (prev->type == TOKEN_PIPE
 				&& current->type == TOKEN_PIPE))
 		{
-			printf("minishell: syntax error near unexpected token\n");
+			printf("mminishell: syntax error near unexpected token\n");
 			return (1);
 		}
 		prev = current;

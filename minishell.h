@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 00:06:05 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/13 19:02:54 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/15 03:49:09 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,6 +164,7 @@ char							*ft_strdup_1(const char *s1);
 void							case_function(char *input, char **result,
 									int *j);
 int								is_special(char c);
+int								lst_size(t_token *stack);
 int								check_quote(char *str);
 int								is_number(char c);
 int								one_dollar_test_case(int dollar_count,
@@ -195,7 +196,7 @@ char							**result_traitement(char *input);
 char							*get_string(char *input, int *i);
 int								get_size(char **arr);
 int								get_size_arr(char *input);
-int								file_expansion_null(t_token *tokens);
+int								file_expansion_null(char **filename);
 char							*parse_line(char *input);
 char							**handle_that_shit(char *input);
 char							**unquoted_result(char **input);
@@ -288,8 +289,7 @@ void							process_env_entry(char *env_entry,
 									t_envi **env_list);
 void							handle_file_redirections(t_cmd *cmd, int btn);
 void							files_redirections(t_cmd *cmd, int builtin);
-void							append_file_prep(char *path,
-									int is_builtin);
+void							append_file_prep(char *path, int is_builtin);
 void							out_file_prep(char *path, int is_builtin);
 void							in_file_prep(char *path, int is_builtin);
 void							print_perror(char *str, int exitt);

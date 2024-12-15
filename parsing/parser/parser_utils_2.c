@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 14:00:16 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/13 21:06:03 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/15 01:31:45 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,31 +65,22 @@ int	check_symbol_nbr(char *str)
 	return (0);
 }
 
-int	file_expansion_null(t_token *tokens)
+int	file_expansion_null(char **filename)
 {
 	char	**value;
 	char	*result;
 
-	while (tokens)
+	result = expand_non_operator(*filename);
+	value = result_traitement(result);
+	if (!ft_strlen(result) || !value[0] || value[1])
 	{
-		if (tokens->type == TOKEN_REDIR_HERE_DOC)
-		{
-			if (check_symbol_nbr(tokens->value))
-				return (1);
-		}
-		if (is_red(tokens) && tokens->type != TOKEN_REDIR_HERE_DOC)
-		{
-			result = expand_non_operator(tokens->next->value);
-			value = result_traitement(result);
-			if (!ft_strlen(result) || !value[0])
-			{
-				ft_putstr_fd("minishell: ", 1);
-				ft_putstr_fd(tokens->next->value, 1);
-				ft_putstr_fd(": ambiguous redirect\n", 1);
-				return (1);
-			}
-		}
-		tokens = tokens->next;
+		g_var->exit_status = 1;
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(*filename, 2);
+		ft_putstr_fd(": ambiguous redirect\n", 2);
+		return (1);
 	}
+	else
+		*filename = value[0];
 	return (0);
 }
