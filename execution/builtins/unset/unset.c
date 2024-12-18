@@ -1,41 +1,69 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   unset.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: szeroual <szeroual@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/18 10:19:24 by szeroual          #+#    #+#             */
+/*   Updated: 2024/12/18 10:19:28 by szeroual         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../../minishell.h"
-#include "../../../externel_folder/libftt/libft.h"
 
-void ft_remove(t_mini *box)
+void	clear_memory(t_envi *curr)
 {
-	t_envi *curr;
-	t_envi *prv;
-	char **av = box->ptr;
-	int i = 0;
+	free(curr->name);
+	free(curr->vale);
+	free(curr);
+}
 
-	while(av[i])
+void	ft_remove(char **ptr, t_envi **envi, int i)
+{
+	t_envi	*curr;
+	t_envi	*prev;
+	char	**av;
+
+	av = ptr;
+	while (av[i])
 	{
-		curr= box->env;
-		prv = NULL;
-		while(curr && ft_strcmp(curr->name, av[i]) != 0)
+		curr = *envi;
+		prev = NULL;
+		while (curr)
 		{
-			prv = curr;
+			if (!ft_strcmp(curr->name, av[i]))
+			{
+				if (prev)
+					prev->next = curr->next;
+				else
+					*envi = curr->next;
+				clear_memory(curr);
+				break ;
+			}
+			prev = curr;
 			curr = curr->next;
-		}
-		if(curr && ft_strcmp(curr->name, "_") != 0)
-		{
-			if(prv)
-				prv->next = curr->next;
-			else
-				box->env = curr->next;
-			free(curr->name);
-			free(curr->vale);
-			free(curr);
 		}
 		i++;
 	}
 }
 
-int	ft_unset(char **ptr, t_mini *box)
+int	ft_unset(char **ptr, t_envi **envi)
 {
-	if (ptr[1])
-		ft_remove(box);
-	else
+	int	j;
+	int	i;
+
+	j = 1;
+	i = 1;
+	if (!ptr || !ptr[1] || !envi)
 		return (0);
+	while (ptr[i])
+	{
+		if (ptr[1])
+			ft_remove(ptr, envi, j);
+		else
+			printf("unset: '%s': not a valid identifier\n", ptr[i]);
+		i++;
+	}
 	return (0);
 }

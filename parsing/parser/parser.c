@@ -6,32 +6,44 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 13:46:11 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/02 16:11:30 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/16 22:52:13 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-void	update_tokens(Token **tokens)
+int	dollar_counter(char *input)
 {
-	Token	*current;
-	char	quote;
+	int	i;
+	int	count;
 
-	current = *tokens;
-	while (current)
+	count = 0;
+	i = 0;
+	while (input[i] == '$')
 	{
-		if (current->type == TOKEN_DOUBLE_QUOTED
-			|| current->type == TOKEN_SINGLE_QUOTED)
-		{
-			quote = quote_type(current->value);
-			if (check_token(current->value, quote))
-			{
-				current->value = ft_strtrim(current->value,
-											char_to_string(quote, 0));
-			}
-		}
-		current = current->next;
+		count++;
+		i++;
 	}
+	return (count);
+}
+
+int	get_size_arr(char *input)
+{
+	int		i;
+	char	*word;
+	int		size;
+	char	*n_strimmed;
+
+	i = 0;
+	size = 0;
+	while (input[i])
+	{
+		n_strimmed = get_string(input, &i);
+		word = ft_strtrim(n_strimmed, " ");
+		if (ft_strlen(word) > 0)
+			size++;
+	}
+	return (size);
 }
 
 int	ft_strchr_sec(char *string, char c)
@@ -48,7 +60,7 @@ int	ft_strchr_sec(char *string, char c)
 	return (0);
 }
 
-int	random_case(Token *tokens)
+int	random_case(t_token *tokens)
 {
 	while (tokens)
 	{
@@ -56,7 +68,7 @@ int	random_case(Token *tokens)
 			&& (ft_strchr_sec(tokens->next->value, '(')
 				|| ft_strchr_sec(tokens->next->value, ')')))
 		{
-			printf("Syntax Error.\n");
+			printf("minishell: syntax error near unexpected token.\n");
 			return (1);
 		}
 		tokens = tokens->next;
@@ -64,17 +76,22 @@ int	random_case(Token *tokens)
 	return (0);
 }
 
-int	check_syntax_errors(Token *tokens)
+int	check_syntax_errors(t_token *tokens)
 {
+	int	tmp;
+
+	tmp = 0;
 	if (handle_quotes(tokens))
-		return (1);
-	if (handle_paren(tokens))
-		return (2);
-	if (handle_operators_bg_en(tokens))
-		return (5);
-	if (handle_consecutive_operator(tokens))
-		return (4);
-	if (random_case(tokens))
-		return (2);
-	return (0);
+		tmp = 1;
+	else if (handle_paren(tokens))
+		tmp = 1;
+	else if (handle_operators_bg_en(tokens))
+		tmp = 1;
+	else if (handle_consecutive_operator(tokens))
+		tmp = 1;
+	else if (random_case(tokens))
+		tmp = 1;
+	if (tmp == 1)
+		g_var->exit_status = 2;
+	return (tmp);
 }

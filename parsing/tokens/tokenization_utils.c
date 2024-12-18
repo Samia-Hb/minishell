@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 13:36:28 by shebaz            #+#    #+#             */
-/*   Updated: 2024/10/31 15:37:34 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/16 02:33:14 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,6 @@ int	get_token_type(const char *token, char c)
 	}
 	if (built_in_checker(token))
 		return (TOKEN_BUILT_IN);
-	if (path)
-		return (free(path), TOKEN_COMMAND);
 	if (!ft_strcmp(token, "<<"))
 		return (TOKEN_REDIR_HERE_DOC);
 	if (!ft_strcmp(token, ">"))
@@ -46,6 +44,8 @@ int	get_token_type(const char *token, char c)
 		return (TOKEN_REDIR_APPEND);
 	if (!ft_strcmp(token, "|"))
 		return (TOKEN_PIPE);
+	if (path)
+		return (TOKEN_COMMAND);
 	return (TOKEN_UNKNOWN);
 }
 
@@ -55,20 +55,20 @@ char	*char_to_string(char c, char c2)
 
 	if (!c2)
 	{
-		string = malloc(2 * sizeof(char));
+		string = ft_malloc(2, sizeof(char));
 		if (!string)
 		{
-			printf("Error: memory allocation failed\n");
+			ft_putstr_fd("Memory allocation failed\n", 2);
 			exit(EXIT_FAILURE);
 		}
 		string[0] = c;
 		string[1] = '\0';
 		return (string);
 	}
-	string = malloc(3 * sizeof(char));
+	string = ft_malloc(3, sizeof(char));
 	if (!string)
 	{
-		printf("Error: memory allocation failed\n");
+		ft_putstr_fd("Memory allocation failed\n", 2);
 		exit(EXIT_FAILURE);
 	}
 	string[0] = c;
@@ -86,7 +86,7 @@ int	ft_strschr(char *string, char *delimiteur, int *l)
 	i = 0;
 	if (!splited)
 	{
-		printf("Error\n");
+		ft_putstr_fd("Error\n", 2);
 		return (0);
 	}
 	while (splited[i])
@@ -107,30 +107,9 @@ char	*handle_dollar(char *str)
 	i = 0;
 	while (str[i] && !isspace(str[i]))
 		i++;
-	word = (char *)malloc(i + 1);
+	word = ft_malloc(i + 1, sizeof(char));
 	if (!word)
 		return (NULL);
 	word = strncpy(word, str, i);
 	return (word);
 }
-// int	find_delimiter_in_lines(char *string, char *delimiter, int *l)
-// {
-// 	int		i;
-// 	char	**splitted;
-
-// 	splitted = ft_split(string, '\n');
-// 	if (!splitted)
-// 	{
-// 		printf("Allocation Failed\n");
-// 		exit(0);
-// 	}
-// 	i = 0;
-// 	while (splitted[i])
-// 	{
-// 		*l = *l + strlen(splitted[i]);
-// 		if (!ft_strcmp(splitted[i], delimiter))
-// 			return (1);
-// 		i++;
-// 	}
-// 	return (0);
-// }

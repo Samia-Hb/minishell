@@ -6,64 +6,81 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 19:05:46 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/02 16:57:43 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/18 00:28:39 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-void	heredoc_process(t_cmd **node, t_file **head ,Token **tokens)
+void	child_proces(char *token, char *processed_del, int fd)
+{
+	char	*line;
+
+	line = NULL;
+	signal(SIGINT, ctrl_c);
+	while (1)
+	{
+		line = readline("heredoc > ");
+		if (!line)
+			break ;
+		if (!ft_strcmp(line, processed_del))
+			break ;
+		if (!is_quoted(token))
+			line = parse_line(line);
+		write(fd, line, ft_strlen(line));
+		write(fd, "\n", 1);
+	}
+	if (!line)
+		printf("minishell : warning: heredoc delimited by EOF \n");
+	close(fd);
+	close(STDERR_FILENO);
+	close(STDOUT_FILENO);
+	close(STDIN_FILENO);
+	ft_free_envp(g_var->envp);
+	clean_gc();
+	exit(0);
+}
+
+void	heredoc_process(t_cmd **node, t_file **head, t_token **tokens)
 {
 	int		fd;
 	char	*processed_del;
-	char	*line;
+	int		pid;
+	int		status;
 
+	status = 0;
 	(*tokens) = (*tokens)->next;
-	processed_del = process_delimiter((*tokens)->value);  
-	fd = open((*tokens)->value, O_CREAT | O_TRUNC | O_RDWR, 0777);
-	while(1)
-	{
-		line = readline("heredoc > ");
-		if (!ft_strncmp(line, processed_del, ft_strlen(processed_del)))
-			break ;
-		if (!is_quoted((*tokens)->value))
-			line = parse_line(line);
-		write(fd, line, ft_strlen(line));
-	}
-	(*node)->file = malloc(sizeof(t_file));
+	processed_del = process_delimiter((*tokens)->value);
+	(*node)->file = ft_malloc(1, sizeof(t_file));
 	(*node)->file->type = RE_HEREDOC;
-	(*node)->file->filename = ft_strdup((*tokens)->value);
-	(*tokens) = (*tokens)->next;
+	(*node)->file->filename = generate_name(&g_var->i);
+	fd = open((*node)->file->filename, O_CREAT | O_TRUNC | O_RDWR, 0777);
+	signal(SIGINT, SIG_IGN);
+	pid = fork();
+	if (!pid)
+		child_proces((*tokens)->value, processed_del, fd);
+	else
+		waitpid(pid, &status, 0);
 	push_t_file(head, (*node)->file);
+	(*tokens) = (*tokens)->next;
 	close(fd);
-	free(line);
-	free(processed_del);
+	exit_status(status, (*node)->file->filename);
 }
 
-void	red_process(Token **tokens, t_cmd **node, int *i)
+void	red_process(t_token **tokens, t_cmd **node, int *i)
 {
 	t_file	*head;
 
-	head = malloc(sizeof(t_file));
+	head = ft_malloc(1, sizeof(t_file));
 	head = NULL;
 	while ((*tokens) && (*tokens)->type != TOKEN_PIPE)
 	{
 		if ((*tokens)->type == TOKEN_REDIR_HERE_DOC)
 			heredoc_process(node, &head, tokens);
-		if (is_red(*tokens) && (*tokens)->type != TOKEN_REDIR_HERE_DOC)
-		{			
-			(*node)->file = malloc(sizeof(t_file));
-			(*node)->file->type = get_red_type(*tokens);
-			if ((*tokens)->next)
-			{
-				*tokens = (*tokens)->next;
-				(*node)->file->filename = ft_strdup((*tokens)->value);
-				(*node)->file->next = NULL;
-				*tokens = (*tokens)->next;
-				push_t_file(&head, (*node)->file);
-			}
-		}
-		while ((*tokens) && !is_red(*tokens))
+		if ((*tokens) && is_red(*tokens)
+			&& (*tokens)->type != TOKEN_REDIR_HERE_DOC)
+			fill_up_node(node, tokens, &head);
+		while ((*tokens) && !is_red(*tokens) && (*tokens)->type != TOKEN_PIPE)
 		{
 			(*node)->arguments[(*i)++] = ft_strdup((*tokens)->value);
 			(*tokens) = (*tokens)->next;
@@ -72,122 +89,31 @@ void	red_process(Token **tokens, t_cmd **node, int *i)
 	(*node)->file = head;
 }
 
-void	print_node(t_cmd *node)
-{
-	int	i;
-
-	while (node)
-	{
-		if (node->arguments)
-		{
-			i = 0;
-			while (node->arguments[i])
-			{
-				printf("arg[%d] = %s\n", i, node->arguments[i]);
-				i++;
-			}
-		}
-		if (node->file)
-		{
-			while (node->file)
-			{
-				node->file = node->file->next;
-				node = node->next;
-			}
-		}
-	}
-}
-int is_quoted(char *input)
-{
-	int i;
-
-	i = 0;
-	while(input[i])
-	{
-		if(input[i] == '"' || input[i] == '\'')
-			return (1);
-		i++;
-	}
-	return (0);
-}
-
-char *parse_line(char *input)
-{
-	char	*result;
-
-	result = expand_non_operator(input);
-	return (result);
-}
-
-char	*process_delimiter(char *tmp)
-{
-	int		i;
-	int		j;
-	char	c;
-	char	*result;
-	char	*hp;
-	char	*temp;
-
-	i = 0;
-	result = ft_strdup("");
-	while (tmp[i])
-	{
-		j = i;
-		if (tmp[i] == '"' || tmp[i] == '\'')
-		{
-			c = tmp[i++];
-			while (tmp[i] && tmp[i] != c)
-				i++;
-			if (tmp[i] == c)
-				i++;
-			hp = ft_strndup(tmp + j + 1, i - j - 2);
-		}
-		else
-		{
-			while (tmp[i] && tmp[i] != '"' && tmp[i] != '\'')
-				i++;
-			hp = ft_strndup(tmp + j, i - j);
-		}
-		temp = result;
-		result = ft_strjoin(result, hp);
-		free(temp);
-		free(hp);
-	}
-	return (result);
-}
-
-void	create_node_arguments(t_cmd **node, Token **tokens)
+void	create_node_arguments(t_cmd **node, t_token **tokens)
 {
 	int	i;
 	int	j;
 
 	i = 0;
-	(*node)->arguments = malloc((nbr_argument(*tokens) + 1) * sizeof(char *));
-	if ((*tokens)->expanded_value)
-	{
-		(*node)->arguments[i++] = ft_strdup((*tokens)->expanded_value[0]);
-		(*tokens) = (*tokens)->next;
-	}
+	(*node)->arguments = ft_malloc(nbr_argument(*tokens) + 1, sizeof(char *));
 	while (*tokens && (*tokens)->type != TOKEN_PIPE)
 	{
 		j = 0;
-		// if ((*tokens)->type == TOKEN_REDIR_HERE_DOC)
-		// 	heredoc_process(node, tokens);
 		if (*tokens && !is_red(*tokens))
 		{
 			while ((*tokens)->expanded_value[j])
-				(*node)->arguments[i++] = ft_strdup((*tokens)->expanded_value[j++]);
+				(*node)->arguments[i++]
+					= ft_strdup((*tokens)->expanded_value[j++]);
 			(*tokens) = (*tokens)->next;
 		}
 		else
 			red_process(tokens, node, &i);
 	}
-	if (*tokens && (*tokens)->type == TOKEN_PIPE)
-		(*tokens) = (*tokens)->next;
+	go_to_next(tokens);
 	(*node)->arguments[i] = NULL;
 }
 
-t_cmd	*analyse_tokens(Token **tokens)
+t_cmd	*analyse_tokens(t_token **tokens)
 {
 	t_cmd	*head;
 	t_cmd	*node;
@@ -195,7 +121,7 @@ t_cmd	*analyse_tokens(Token **tokens)
 	head = NULL;
 	while (*tokens)
 	{
-		node = malloc(sizeof(t_cmd));
+		node = ft_malloc(1, sizeof(t_cmd));
 		node->arguments = NULL;
 		node->file = NULL;
 		if ((*tokens)->type == TOKEN_COMMAND

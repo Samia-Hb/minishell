@@ -6,140 +6,68 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 22:25:31 by shebaz            #+#    #+#             */
-/*   Updated: 2024/11/02 16:38:13 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/16 22:23:57 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-char	*double_quote_expansion(char *input, int *i)
+char	*get_unquoted_word(char **input, char **result, int *i, int *j)
 {
-	char	*expanded_value;
-	char	*result;
+	char	*str;
+	char	c;
 
-	expanded_value = ft_strdup("");
-	if (!expanded_value)
-		return (NULL);
-	if (input[*i] == '"')
-		add_quote(input + (*i), &expanded_value, i);
-	while (input[*i] && input[*i] != '"')
+	*result = ft_strdup("");
+	while (input[*i][*j])
 	{
-		if (input[*i] == '$')
-			result = dollar_expand(input, i);
+		if (input[*i][*j] == '"' || input[*i][*j] == '\'')
+		{
+			c = input[*i][*j];
+			(*j)++;
+			while (input[*i][*j] != c)
+			{
+				str = char_to_string(input[*i][*j], 0);
+				*result = ft_strjoin(*result, str);
+				(*j)++;
+			}
+		}
 		else
 		{
-			result = char_to_string(input[*i], 0);
-			(*i)++;
+			str = char_to_string(input[*i][*j], 0);
+			*result = ft_strjoin(*result, str);
 		}
-		expanded_value = ft_strjoin(expanded_value, result);
+		(*j)++;
 	}
-	if (input[*i] == '"')
-		add_quote(input + (*i), &expanded_value, i);
-	return (expanded_value);
-}
-
-char	*single_quote_expansion(char *input, int *i)
-{
-	char	*expanded_value;
-	char	*result;
-
-	expanded_value = ft_strdup("");
-	if (!expanded_value)
-		return (NULL);
-	if (input[*i] == '\'')
-		add_quote(input + (*i), &expanded_value, i);
-	while (input[*i] && input[*i] != '\'')
-	{
-		result = char_to_string(input[*i], 0);
-		expanded_value = ft_strjoin(expanded_value, result);
-		(*i)++;
-	}
-	if (input[*i] == '\'')
-		add_quote(input + (*i), &expanded_value, i);
-	return (expanded_value);
-}
-
-char	**handle_that_shit(char *input)
-{
-	char	**result;
-	char	*n_strimmed;
-	int		size;
-	int		i;
-	int		j;
-
-	i = 0;
-	j = 0;
-	size = get_size_arr(input);
-	result = malloc((size + 1) * sizeof(char *));
-	if (!result)
-		printf("Allocation Failed\n");
-	while (input[i])
-	{
-		n_strimmed = get_string(input, &i);
-		result[j] = ft_strtrim(n_strimmed, " ");
-		free(n_strimmed);
-		j++;
-	}
-	result[size] = NULL;
-	return (result);
+	return (*result);
 }
 
 char	**unquoted_result(char **input)
 {
 	char	**output;
-	char	*str;
 	int		i;
 	int		j;
-	char	c;
 
 	i = 0;
 	j = 0;
-	output = malloc((get_size(input) + 1) * sizeof(char *));
+	output = ft_malloc(get_size(input) + 1, sizeof(char *));
 	while (input[i])
 	{
 		j = 0;
 		output[i] = ft_strdup("");
-		while (input[i][j])
-		{
-			if (input[i][j] == '"' || input[i][j] == '\'')
-			{
-				c = input[i][j];
-				j++;
-				while (input[i][j] != c)
-				{
-					str = char_to_string(input[i][j], 0);
-					output[i] = ft_strjoin(output[i], str);
-					j++;
-				}
-				j++;
-			}
-			else
-			{
-				str = char_to_string(input[i][j], 0);
-				output[i] = ft_strjoin(output[i], str);
-				j++;
-			}
-		}
+		output[i] = get_unquoted_word(input, &output[i], &i, &j);
 		i++;
 	}
 	output[i] = NULL;
 	return (output);
 }
 
-int	handle_operator_expand(Token **token)
+int	handle_operator_expand(t_token **token)
 {
-	Token	*tmp;
+	t_token	*tmp;
 
 	(*token) = (*token)->next;
 	tmp = *token;
 	expand(tmp);
-	if (tmp->expanded_value)
-	{
-		if (get_size(tmp->expanded_value) > 1)
-		{
-			return (0);
-		}
-	}
 	return (1);
 }
 
@@ -168,11 +96,10 @@ char	*expand_non_operator(char *token)
 		}
 		result = ft_strjoin(result, tmp);
 	}
-	free(tmp);
 	return (result);
 }
 
-int	expand(Token *tokens)
+int	expand(t_token *tokens)
 {
 	char	*result;
 
@@ -187,18 +114,14 @@ int	expand(Token *tokens)
 			if (is_red(tokens))
 			{
 				if (!handle_operator_expand(&tokens))
-					return (printf("Error\n"), 0);
+					return (0);
 			}
 			if (!is_operator(tokens))
 			{
-				// printf("token_value = %s\n", tokens->value);
 				result = expand_non_operator(tokens->value);
-				// printf("expand_result ========> %s\n", result);
-				// exit(1);
 				tokens->expanded_value = result_traitement(result);
 			}
 		}
-		free(result);
 		tokens = tokens->next;
 	}
 	return (1);

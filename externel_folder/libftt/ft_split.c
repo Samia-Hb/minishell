@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 19:09:51 by szeroual          #+#    #+#             */
-/*   Updated: 2024/10/20 03:40:42 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/05 13:07:24 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,19 +28,19 @@ static int	separate_string(char const *s, char c)
 	return (wc);
 }
 
-static int	ft_free(char **ptr, int size)
-{
-	int	i;
+// static int	ft_free(char **ptr, int size)
+// {
+// 	int	i;
 
-	i = 0;
-	while (i < size)
-	{
-		free(ptr[i]);
-		i++;
-	}
-	free(ptr);
-	return (0);
-}
+// 	i = 0;
+// 	while (i < size)
+// 	{
+// 		free(ptr[i]);
+// 		i++;
+// 	}
+// 	free(ptr);
+// 	return (0);
+// }
 
 static void	str_cpy(char *d, const char *src, char c)
 {
@@ -72,9 +72,7 @@ static int	allocate_substr(char **ar, const char *str, char c)
 			j = 0;
 			while (str[i + j] != c && str[i + j])
 				j++;
-			ar[k] = malloc(j + 1);
-			if (!ar[k])
-				return (ft_free(ar, k));
+			ar[k] = ft_malloc(j + 1, sizeof(char));
 			str_cpy(ar[k], str + i, c);
 			i += j;
 			k++;
@@ -91,7 +89,7 @@ char	**ft_split(char const *s, char c)
 	if (!s)
 		return (NULL);
 	wc = separate_string(s, c);
-	ar = malloc(sizeof(char *) * (wc + 1));
+	ar = ft_malloc((wc + 1), sizeof(char *));
 	if (!ar)
 		return (NULL);
 	if (allocate_substr(ar, s, c) == 0)

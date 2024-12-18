@@ -6,59 +6,83 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 13:39:34 by shebaz            #+#    #+#             */
-/*   Updated: 2024/10/28 12:13:54 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/12 16:52:02 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-// void	free_tokens(Token *tokens)
-// {
-// 	Token	*tmp;
-// 	int		i;
+void	add_node(void *data)
+{
+	t_gc	*node;
 
-// 	tmp = tokens;
-// 	while (tokens)
-// 	{
-// 		tokens = tokens->next;
-// 		if (tmp->value)
-// 			free(tmp->value);
-// 		if (tmp->expanded_value)
-// 		{
-// 			i = 0;
-// 			while (tmp->expanded_value[i])
-// 			{
-// 				free(tmp->expanded_value[i]);
-// 				i++;
-// 			}
-// 			free(tmp->expanded_value);
-// 		}
-// 		free(tmp);
-// 	}
-// }
+	node = malloc(1 * sizeof(t_gc));
+	if (!node)
+		return ;
+	node->ptr = data;
+	node->next = NULL;
+	if (!g_var)
+	{
+		if (!g_var)
+		{
+			free(node);
+			return ;
+		}
+		g_var->head = node;
+	}
+	else
+	{
+		node->next = g_var->head;
+		g_var->head = node;
+	}
+}
 
-// void	free_token(Token *token)
-// {
-// 	int	i;
+void	*ft_malloc(int ele_nbr, size_t size)
+{
+	void	*ptr;
 
-// 	if (token)
-// 	{
-// 		printf("yes\n");
-// 		while (token)
-// 		{
-// 			if (token->value)
-// 				free(token->value);
-// 			if (token->expanded_value)
-// 			{
-// 				i = 0;
-// 				while (token->expanded_value[i])
-// 				{
-// 					free(token->expanded_value[i]);
-// 					i++;
-// 				}
-// 				free(token->expanded_value);
-// 			}
-// 			token = token->next;
-// 		}
-// 	}
-// }
+	ptr = malloc(ele_nbr * size);
+	if (ptr != NULL)
+		ft_memset(ptr, 0, ele_nbr * size);
+	add_node(ptr);
+	return (ptr);
+}
+
+void	ft_free_envp(t_envi *envp)
+{
+	t_envi	*current;
+	t_envi	*next;
+
+	current = envp;
+	while (current)
+	{
+		next = current->next;
+		if (current->name)
+			free(current->name);
+		if (current->vale)
+			free(current->vale);
+		free(current);
+		current = next;
+	}
+}
+
+void	clean_gc(void)
+{
+	t_gc	*current;
+	t_gc	*next;
+
+	if (!g_var)
+		return ;
+	if (g_var->en)
+		ft_free_array(g_var->en);
+	current = g_var->head;
+	while (current)
+	{
+		next = current->next;
+		if (current->ptr)
+			free(current->ptr);
+		free(current);
+		current = next;
+	}
+	free(g_var);
+}

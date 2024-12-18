@@ -6,14 +6,13 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/12 00:49:26 by szeroual          #+#    #+#             */
-/*   Updated: 2024/10/26 20:36:53 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/12 22:59:04 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
 void	ft_bzero(void *s, size_t n)
-
 {
 	unsigned char	*p;
 

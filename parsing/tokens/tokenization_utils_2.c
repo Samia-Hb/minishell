@@ -6,20 +6,20 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 13:37:34 by shebaz            #+#    #+#             */
-/*   Updated: 2024/10/28 12:07:48 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/15 03:25:10 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-Token	*create_token(TokenType type, const char *value)
+t_token	*create_token(t_token_type type, const char *value)
 {
-	Token	*token;
+	t_token	*token;
 
-	token = malloc(sizeof(Token));
+	token = ft_malloc(1, sizeof(t_token));
 	if (!token)
 	{
-		printf("Error: Memory allocation failed\n");
+		ft_putstr_fd("Memory allocation failed\n", 2);
 		exit(EXIT_FAILURE);
 	}
 	token->type = type;
@@ -28,10 +28,10 @@ Token	*create_token(TokenType type, const char *value)
 	return (token);
 }
 
-void	add_token(Token **tokens, TokenType type, char *value, int *k)
+void	add_token(t_token **tokens, t_token_type type, char *value, int *k)
 {
-	Token	*new_node;
-	Token	*ptr;
+	t_token	*new_node;
+	t_token	*ptr;
 
 	ptr = *tokens;
 	new_node = create_token(type, value);
@@ -71,10 +71,10 @@ char	*handle_parentheses(char *str, char c)
 			i++;
 		j++;
 	}
-	word = malloc(j + 1);
+	word = ft_malloc(j + 1, sizeof(char));
 	if (!word)
 	{
-		printf("Error: memory allocation failed\n");
+		ft_putstr_fd("Memory allocation failed\n", 2);
 		exit(EXIT_FAILURE);
 	}
 	word[0] = c;
@@ -92,16 +92,16 @@ char	*handle_quote(char *str)
 
 	i = 0;
 	j = 0;
-	word = malloc(ft_strlen(str) + 1);
-	quote = str[i];
+	word = ft_malloc(ft_strlen(str) + 1, sizeof(char));
 	while (str[i] && !ft_is_separator(str[i]))
 	{
-		if (str[i] == quote)
+		if (str[i] == '"' || str[i] == '\'')
 		{
+			quote = str[i];
 			word[j++] = str[i++];
 			while (str[i] && str[i] != quote)
 				word[j++] = str[i++];
-			if (str[i] == quote)
+			if (str[i] && str[i] == quote)
 				word[j++] = str[i++];
 		}
 		else

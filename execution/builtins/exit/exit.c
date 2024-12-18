@@ -1,69 +1,55 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exit.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sanaa <sanaa@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/16 01:00:05 by shebaz            #+#    #+#             */
+/*   Updated: 2024/12/18 23:48:54 by sanaa            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../../minishell.h"
-#include "../../../externel_folder/libftt/libft.h"
 
-
-// void ft_putstr_fd(char *str, int fd)
-// {
-//     if(!str)
-//         return;
-//     write(fd, str, strlen(str));
-// }
-
-int is_numeric(const char *str)
+static long	validate_and_convert_exit_code(char *arg)
 {
-    if (!str || *str == '\0')
-        return 0;
-    if (*str == '+' || *str == '-')
-        str++;
-    if (*str == '\0')
-        return 0;
-    while (*str)
-    {
-        if (!isdigit(*str))
-            return 0;
-        str++;
-    }
-    return 1;
+	long	exit_code;
+
+	if (!is_numeric(arg) || ft_strcmp(arg, "") == 0)
+	{
+		printf("in the convert function\n");
+		exit(grr(arg));
+	}
+	exit_code = atoi_long(arg);
+	if (exit_code == LONG_MAX || exit_code == LONG_MIN)
+	{
+		ft_putstr_fd("exit\n", 2);
+		ft_putstr_fd("minishell: exit: ", 2);
+		ft_putstr_fd(arg, 2);
+		ft_putstr_fd(": numeric argument required\n", 2);
+		exit(2);
+	}
+	return (exit_code);
 }
 
-int	ft_exit(t_shell *shell)
+void	ft_exit(char **args)
 {
-    int exit_status = shell->exit_status;
-	ft_putstr_fd("exit\n", 1);
-	if (shell->args[1])
+	long	exit_code;
+	int		i;
+
+	i = 0;
+	while (args[i])
+		i++;
+	if (i == 1)
+		exit(0);
+	exit_code = validate_and_convert_exit_code(args[1]);
+	if (i > 2)
 	{
-		if(!is_numeric(shell->args[1]))
-			return 1;
-		exit_status = atoll(shell->args[1]);
+		ft_putstr_fd("exit\n", 2);
+		ft_putstr_fd("minishell: exit: too many arguments\n", 2);
+		g_var->exit_status = 1;
+		return ;
 	}
-	else
-    {
-		exit_status = 0;
-        return 0;
-    }
-	if (exit_status < INT_MIN || exit_status > INT_MAX)
-		ft_putstr_fd("exit: numeric argument required", 2);
-	else if (shell->args[1] && shell->args[2])
-	{
-		ft_putstr_fd("bash: exit: too many arguments\n", 2);
-		return (1);
-	}
-	else if (shell->args[1] && !is_numeric(shell->args[1]))
-		ft_putstr_fd("exit: numeric argument required\n",  2);
-	if (!is_numeric(shell->args[1]) || exit_status < INT_MIN || exit_status > INT_MAX)
-		exit_status = 2;
-	exit(exit_status);
-	return (0);
+	exit((int)exit_code);
 }
-
-
-// int main(int argc, char *argv[])
-// {
-//     t_shell shell = {0, argv, 0};  
-
-//     int exit_code;
-//     exit_code = ft_exit(&shell);
-//          return shell.exit_status;
-//     return 0;
-// }
-

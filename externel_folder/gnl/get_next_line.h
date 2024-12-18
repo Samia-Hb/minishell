@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 01:45:43 by szeroual          #+#    #+#             */
-/*   Updated: 2024/10/23 13:48:56 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/12 22:56:35 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@
 #  define BUFFER_SIZE 42
 # endif
 
-void	ft_strcat(char *dest, char *src);
 char	*extarct_line(char *str);
 char	*get_rest(char *save);
 char	*get_next_line(int fd);

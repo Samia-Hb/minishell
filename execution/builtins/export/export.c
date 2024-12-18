@@ -1,266 +1,113 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   export.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/18 10:18:44 by szeroual          #+#    #+#             */
+/*   Updated: 2024/12/18 23:08:26 by shebaz           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../../minishell.h"
-#include "../../../externel_folder/libftt/libft.h"
 
-void	swap_nodes(t_envi *a, t_envi *b)
+int	populate_env_array(char **env_array, t_envi *env, int count)
 {
-	char	*tmp_name;
-	char	*tmp_vale;
-
-	tmp_name = a->name;
-	tmp_vale = a->vale;
-	a->name = b->name;
-	a->vale = b->vale;
-	b->name = tmp_name;
-	b->vale = tmp_vale;
-}
-
-int	f__plus(char *r)
-{
-	int	i;
-	int	count;
+	int		i;
+	t_envi	*current;
 
 	i = 0;
-	count = 0;
-	while (r[i])
+	current = env;
+	while (current && i < count)
 	{
-		if (r[i] == '+')
+		if (current->vale != NULL)
 		{
-			count++;
-			if (r[i + 1] != '=')
-				count++;
+			env_array[i] = create_env_string(current);
+			if (!env_array[i])
+				return (0);
+			i++;
 		}
-		i++;
+		current = current->next;
 	}
-	if (count > 1)
-		return (0);
+	env_array[i] = NULL;
 	return (1);
 }
 
-int	ft_utils(char *ptr)
+t_envi	*bubble_sort_env(t_envi *env)
 {
-	int	i;
+	int		swapped;
+	t_envi	*ptr1;
+	t_envi	*lptr;
 
-	i = 0;
-	if (!isalpha(ptr[0]) && ptr[0] != '_')
-		return (0);
-	while (ptr[++i] && ptr[i] != '=')
-	{
-		if (ptr[i] == '+')
-			break ;
-		else if (!isalnum(ptr[i]) && ptr[i] != '_')
-			return (0);
-	}
-	if (ptr[i] && ptr[i] == '+' && ptr[i + 1] != '=')
-		return (0);
-	return (1);
-}
-
-void	add_back(t_envi **node, t_envi *new)
-{
-	t_envi	*last;
-
-	if (!*node)
-	{
-		*node = new;
-		return ;
-	}
-	last = *node;
-	while (last->next)
-		last = last->next;
-	last->next = new;
-	new->prv = last;
-}
-
-t_envi	*add_new_var(char *name, char *vale)
-{
-	t_envi	*lst;
-
-	lst = malloc(sizeof(t_envi));
-	if (!lst)
-	{
-		perror("allocation error");
+	if (!env)
 		return (NULL);
-	}
-	lst->name = ft_strdup(name);
-	lst->vale = ft_strdup(vale);
-	lst->next = NULL;
-	lst->prv = NULL;
-	return (lst);
-}
-
-t_envi	*cpy_list(t_envi *env)
-{
-	t_envi	*new_list;
-
-	new_list = NULL;
-	while (env)
-	{
-		add_back(&new_list, add_new_var(env->name, env->vale));
-		env = env->next;
-	}
-	return (new_list);
-}
-
-void	use_while_env(t_envi *new_env)
-{
-	int		is_swap;
-	t_envi	*curr;
-
+	lptr = NULL;
 	while (1)
 	{
-		is_swap = 0;
-		curr = new_env;
-		while (curr->next != NULL)
+		swapped = 0;
+		ptr1 = env;
+		while (ptr1->next != lptr)
 		{
-			if (ft_strncmp(curr->name, curr->next->name, ft_strlen(curr->name)) > 0)
+			if (ft_strcmp(ptr1->name, ptr1->next->name) > 0)
 			{
-				swap_nodes(curr, curr->next);
-				is_swap = 1;
+				swap_nodes(ptr1, ptr1->next);
+				swapped = 1;
 			}
-			curr = curr->next;
+			ptr1 = ptr1->next;
 		}
-		if (!is_swap)
+		lptr = ptr1;
+		if (!swapped)
 			break ;
 	}
+	return (env);
 }
 
-t_envi	*sort_env(t_envi *env)
+void	print_export(t_envi *env)
 {
-	t_envi	*new_env;
+	t_envi	*current;
 
-	new_env = cpy_list(env);
-	if (!new_env)
-		return (NULL);
-	use_while_env(new_env);
-	return (new_env);
-}
-
-t_envi	*create_env_node(char *name, char *value)
-{
-	t_envi	*new_node;
-
-	if (!name)
-		return (NULL);
-	new_node = malloc(sizeof(t_envi));
-	if (!new_node)
+	current = bubble_sort_env(env);
+	while (current)
 	{
-		perror("error");
-		exit(0);
-	}
-	new_node->name = ft_strdup(name);
-	new_node->vale = ft_strdup(value);
-	new_node->next = NULL;
-	return (new_node);
-}
-
-t_envi	*find_last_node(t_envi *env)
-{
-	t_envi	*curr = env;
-	while (curr->next)
-		curr = curr->next;
-	return (curr);
-}
-
-void	add_env_variable(t_envi *env, char *name, char *value)
-{
-	t_envi	*new_node = create_env_node(name, value);
-	t_envi	*last = find_last_node(env);
-	last->next = new_node;
-}
-
-int	check_plus(char *str, int size_name)
-{
-	if (str[size_name] == '+' && str[size_name + 1] == '=')
-		return (1);
-	return (0);
-}
-
-void	process_existing_env(t_envi *new, char *ptr_i, char *arr[2])
-{
-	if (check_plus(ptr_i, ft_strlen(arr[0])))
-	{
-		char *joined_val = malloc(ft_strlen(new->vale) + ft_strlen(arr[1]) + 1);
-		strcpy(joined_val, new->vale);
-		strcat(joined_val, arr[1]);
-		free(new->vale);
-		new->vale = joined_val;
-	}
-	else if (arr[1])
-	{
-		free(new->vale);
-		new->vale = ft_strdup(arr[1]);
+		ft_putstr_fd("declare -x ", 1);
+		ft_putstr_fd(current->name, 1);
+		if (current->vale != NULL)
+		{
+			ft_putstr_fd("=\"", 1);
+			ft_putstr_fd(current->vale, 1);
+			ft_putstr_fd("\"", 1);
+		}
+		ft_putstr_fd("\n", 1);
+		current = current->next;
 	}
 }
 
-t_envi *search_env(t_envi *env, char *name)
+void	handle_no_cmd(t_envi **env)
 {
-	while (env)
-	{
-		if (ft_strcmp(env->name, name) == 0)
-			return (env);
-		env = env->next;
-	}
-	return (NULL);
+	t_envi	*env_copy;
+
+	env_copy = copy_list(*env);
+	if (!env_copy)
+		return ;
+	print_export(env_copy);
 }
 
-int	process_single_env(char *ptr_i, t_envi *env)
+void	ft_export(char **cmd)
 {
-	char	*arr[2];
-	t_envi	*new;
-	int		status = 0;
+	int	i;
 
-	arr[0] = strtok(ptr_i, "=");
-	arr[1] = strtok(NULL, "=");
-	if (ft_utils(arr[0]))
+	g_var->exit_status = 0;
+	if (cmd[1] == NULL)
 	{
-		new = search_env(env, arr[0]);
-		if (new != NULL)
-			process_existing_env(new, ptr_i, arr);
-		else
-			add_env_variable(env, arr[0], arr[1]);
+		handle_no_cmd(&g_var->envp);
+		return ;
 	}
-	else
+	i = 1;
+	while (cmd[i])
 	{
-		printf("export: `%s': not a valid identifier\n", ptr_i);
-		status = 1;
-	}
-	return (status);
-}
-
-int	add_one(char **ptr, t_envi *env)
-{
-	int	i = 1;
-	int	status = 0;
-	int	result;
-
-	while (ptr[i])
-	{
-		result = process_single_env(ptr[i], env);
-		if (result)
-			status = result;
+		process_cmd(&g_var->envp, cmd, i);
 		i++;
 	}
-	return (status);
+	sync_env_array(g_var->envp);
 }
-
-int	ft_export(char **ptr, t_envi *env)
-{
-	t_envi	*newenv;
-	int		status = 0;
-
-	status = add_one(ptr, env);
-	if (!ptr[1])
-	{
-		newenv = sort_env(env);
-		while (newenv)
-		{
-			printf("declare -x %s", newenv->name);
-			if (newenv->vale)
-				printf("=\"%s\"", newenv->vale);
-			printf("\n");
-			newenv = newenv->next;
-		}
-	}
-	return (status);
-}
-
