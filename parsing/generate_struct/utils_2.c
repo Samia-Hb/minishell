@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 17:12:31 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/18 00:11:36 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/20 09:00:47 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,8 @@ char	*process_delimiter(char *tmp)
 	result = ft_strdup("");
 	while (tmp[i])
 	{
-		if (tmp[i] == '$' && tmp[i + 1]
-			&& (tmp[i + 1] == '"' || tmp[i + 1] == '\''))
+		if (tmp[i] == '$' && tmp[i + 1] && (tmp[i + 1] == '"' || tmp[i
+					+ 1] == '\''))
 			i++;
 		j = i;
 		if (tmp[i] == '"' || tmp[i] == '\'')

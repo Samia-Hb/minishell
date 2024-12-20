@@ -3,16 +3,16 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: sanaa <sanaa@student.42.fr>                +#+  +:+       +#+         #
+#    By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/25 00:05:54 by shebaz            #+#    #+#              #
-#    Updated: 2024/12/18 23:49:22 by sanaa            ###   ########.fr        #
+#    Updated: 2024/12/20 08:51:36 by shebaz           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CFLAGS = -Wall -Wextra -Werror 
 
-CC = cc #-fsanitize=address -g3
+CC = cc -fsanitize=address -g3
 LFLAGS = -lreadline
 NAME = minishell
 

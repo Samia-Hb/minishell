@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 22:25:31 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/16 22:23:57 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/20 01:58:11 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ char	*get_unquoted_word(char **input, char **result, int *i, int *j)
 	*result = ft_strdup("");
 	while (input[*i][*j])
 	{
-		if (input[*i][*j] == '"' || input[*i][*j] == '\'')
+		if (input[*i][*j] == '"')
 		{
 			c = input[*i][*j];
 			(*j)++;

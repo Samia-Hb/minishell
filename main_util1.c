@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 22:29:05 by szeroual          #+#    #+#             */
-/*   Updated: 2024/12/19 00:41:59 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/20 09:03:32 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,8 @@ void	initiale_global(t_envi *env)
 	g_var->flag = 0;
 	g_var->pid_size = 0;
 	g_var->i = 0;
+	g_var->status = 0;
+	g_var->stop = 0;
 }
 
 void	handle_input(char *input, t_envi *envp)
@@ -69,6 +71,7 @@ void	handle_input(char *input, t_envi *envp)
 	cmd = analyse_tokens(tokens);
 	if (g_var->flag == 7)
 		return ;
+	g_var->status = g_var->exit_status;
 	g_var->exit_status = 0;
 	execute_arguments(cmd, envp);
 }
@@ -96,5 +99,6 @@ void	shell_loop(t_envi *envp)
 			exit(exit_status);
 		}
 		handle_input(input, envp);
+		g_var->stop = 0;
 	}
 }

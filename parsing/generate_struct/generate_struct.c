@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 19:05:46 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/18 00:28:39 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/20 09:00:04 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,8 @@ void	heredoc_process(t_cmd **node, t_file **head, t_token **tokens)
 		child_proces((*tokens)->value, processed_del, fd);
 	else
 		waitpid(pid, &status, 0);
+	if (WEXITSTATUS(status))
+		g_var->stop = 1;
 	push_t_file(head, (*node)->file);
 	(*tokens) = (*tokens)->next;
 	close(fd);
@@ -76,7 +78,11 @@ void	red_process(t_token **tokens, t_cmd **node, int *i)
 	while ((*tokens) && (*tokens)->type != TOKEN_PIPE)
 	{
 		if ((*tokens)->type == TOKEN_REDIR_HERE_DOC)
+		{
 			heredoc_process(node, &head, tokens);
+			if (g_var->stop == 1)
+				break ;
+		}
 		if ((*tokens) && is_red(*tokens)
 			&& (*tokens)->type != TOKEN_REDIR_HERE_DOC)
 			fill_up_node(node, tokens, &head);
@@ -107,7 +113,11 @@ void	create_node_arguments(t_cmd **node, t_token **tokens)
 			(*tokens) = (*tokens)->next;
 		}
 		else
+		{
 			red_process(tokens, node, &i);
+			if (g_var->stop == 1)
+				break ;
+		}
 	}
 	go_to_next(tokens);
 	(*node)->arguments[i] = NULL;
@@ -133,6 +143,8 @@ t_cmd	*analyse_tokens(t_token **tokens)
 		else
 			(*tokens) = (*tokens)->next;
 		push_back(&head, node);
+		if (g_var->stop)
+			break ;
 	}
 	return (head);
 }

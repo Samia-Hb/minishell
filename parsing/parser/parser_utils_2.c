@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 14:00:16 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/17 21:35:49 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/20 03:56:12 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,14 @@ char	*ft_getenv(char *word)
 	t_envi	*tmp;
 
 	tmp = g_var->envp;
-	while (tmp)
+	if (tmp)
 	{
-		if (!ft_strcmp(tmp->name, word))
-			return (ft_strdup(tmp->vale));
-		tmp = tmp->next;
+		while (tmp)
+		{
+			if (tmp->name && !ft_strcmp(tmp->name, word))
+				return (ft_strdup(tmp->vale));
+			tmp = tmp->next;
+		}
 	}
 	return (NULL);
 }

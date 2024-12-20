@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   child_process.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sanaa <sanaa@student.42.fr>                +#+  +:+       +#+        */
+/*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 10:19:37 by szeroual          #+#    #+#             */
-/*   Updated: 2024/12/19 23:35:01 by sanaa            ###   ########.fr       */
+/*   Updated: 2024/12/20 09:04:55 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,7 @@
 void	sig(int sig)
 {
 	if (sig == SIGINT)
-	{
-		printf("\n");
 		g_var->exit_status = 130;
-	}
 	if (sig == SIGQUIT)
 	{
 		printf("Quit (core dumped)\n");
@@ -48,6 +45,11 @@ void	child_process(t_cmd *token, int btn)
 		{
 			close_open_file();
 			exit(1);
+		}
+		if (!token->arguments[0])
+		{
+			close_open_file();
+			exit(0);
 		}
 		execs(token, btn, g_var->envp);
 	}
@@ -87,49 +89,35 @@ char	**fill_up_envi(t_envi *env, char **the_env)
 	return (the_env);
 }
 
-int count_env_with_value(t_envi *env)
+char	**separate_env(t_envi *env)
 {
-    int count = 0;
-    t_envi *current = env;
+	int		count;
+	char	**env_array;
+	int		i;
+	t_envi	*current;
 
-    while (current)
-    {
-        if (current->vale != NULL)
-            count++;
-        current = current->next;
-    }
-    return count;
-}
-
-char **separate_env(t_envi *env)
-{
-    int count;
-    char **env_array;
-    int i;
-    t_envi *current;
-
-    count = count_env_with_value(env);
-    env_array = (char **)malloc(sizeof(char *) * (count + 1));
-    if (!env_array)
-        return (NULL);
-    i = 0;
-    current = env;
-    while (current)
-    {
-        if (current->vale != NULL)
-        {
-            env_array[i] = create_env_string(current);
-            if (!env_array[i])
-            {
-                while (i > 0)
-                    free(env_array[--i]);
-                free(env_array);
-                return (NULL);
-            }
-            i++;
-        }
-        current = current->next;
-    }
-    env_array[i] = NULL;
-    return (env_array);
+	count = count_env_with_value(env);
+	env_array = (char **)malloc(sizeof(char *) * (count + 1));
+	if (!env_array)
+		return (NULL);
+	i = 0;
+	current = env;
+	while (current)
+	{
+		if (current->vale != NULL)
+		{
+			env_array[i] = create_env_string(current);
+			if (!env_array[i])
+			{
+				while (i > 0)
+					free(env_array[--i]);
+				free(env_array);
+				return (NULL);
+			}
+			i++;
+		}
+		current = current->next;
+	}
+	env_array[i] = NULL;
+	return (env_array);
 }

@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 10:19:44 by szeroual          #+#    #+#             */
-/*   Updated: 2024/12/18 11:03:04 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/20 08:51:15 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,8 @@ void	handle_parent_process(t_cmd *token)
 void	execute_arguments(t_cmd *token, t_envi *env)
 {
 	(void)env;
+	if (g_var->stop == 1)
+		return ;
 	if (!token)
 		return ;
 	initialize_execution(token);

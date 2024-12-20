@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: szeroual <szeroual@student.42.fr>          +#+  +:+       +#+        */
+/*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 10:19:24 by szeroual          #+#    #+#             */
-/*   Updated: 2024/12/18 10:19:28 by szeroual         ###   ########.fr       */
+/*   Updated: 2024/12/20 04:48:27 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,19 +48,19 @@ void	ft_remove(char **ptr, t_envi **envi, int i)
 	}
 }
 
-int	ft_unset(char **ptr, t_envi **envi)
+int	ft_unset(char **ptr)
 {
 	int	j;
 	int	i;
 
 	j = 1;
 	i = 1;
-	if (!ptr || !ptr[1] || !envi)
+	if (!ptr || !ptr[1] || !g_var->envp)
 		return (0);
 	while (ptr[i])
 	{
 		if (ptr[1])
-			ft_remove(ptr, envi, j);
+			ft_remove(ptr, &g_var->envp, j);
 		else
 			printf("unset: '%s': not a valid identifier\n", ptr[i]);
 		i++;

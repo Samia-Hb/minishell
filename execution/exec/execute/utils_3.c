@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_3.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: szeroual <szeroual@student.42.fr>          +#+  +:+       +#+        */
+/*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 10:20:21 by szeroual          #+#    #+#             */
-/*   Updated: 2024/12/18 10:20:27 by szeroual         ###   ########.fr       */
+/*   Updated: 2024/12/20 06:37:59 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,8 @@ t_alst	*lista_new(void *content)
 
 void	validate_cmd(t_cmd *token)
 {
+	if (!token->arguments[0])
+		return ;
 	if (ft_strchr(token->arguments[0], '/'))
 		check_cmd_path(token);
 	else

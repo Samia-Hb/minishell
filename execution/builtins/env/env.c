@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 10:18:32 by szeroual          #+#    #+#             */
-/*   Updated: 2024/12/18 11:04:19 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/20 09:02:42 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	ft_env(t_envi *env)
 	tmp = env;
 	while (tmp)
 	{
-		if (tmp->vale)
+		if (tmp && tmp->vale)
 		{
 			ft_putstr_fd(tmp->name, 1);
 			ft_putstr_fd("=", 1);

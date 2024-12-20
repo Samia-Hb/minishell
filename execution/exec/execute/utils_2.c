@@ -3,14 +3,30 @@
 /*                                                        :::      ::::::::   */
 /*   utils_2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: szeroual <szeroual@student.42.fr>          +#+  +:+       +#+        */
+/*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 10:20:15 by szeroual          #+#    #+#             */
-/*   Updated: 2024/12/18 10:20:18 by szeroual         ###   ########.fr       */
+/*   Updated: 2024/12/20 09:05:06 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../minishell.h"
+
+int	count_env_with_value(t_envi *env)
+{
+	int		count;
+	t_envi	*current;
+
+	count = 0;
+	current = env;
+	while (current)
+	{
+		if (current->vale != NULL)
+			count++;
+		current = current->next;
+	}
+	return (count);
+}
 
 void	check_cmd_path(t_cmd *token)
 {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sanaa <sanaa@student.42.fr>                +#+  +:+       +#+        */
+/*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 00:06:05 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/18 23:51:12 by sanaa            ###   ########.fr       */
+/*   Updated: 2024/12/20 09:05:33 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,7 @@ typedef struct s_cmd
 	int							pid;
 	int							in_fd;
 	int							out_fd;
+	int							stop;
 }								t_cmd;
 
 typedef struct s_var
@@ -153,16 +154,20 @@ struct							s_global
 	int							interactive;
 	int							*pid_array;
 	int							i;
+	int							status;
+	int							stop;
 };
 
 extern struct s_global			*g_var;
 
 int								file_expansion_null(char **filename);
 int								lst_size(t_token *stack);
+int								count_env_with_value(t_envi *env);
 char							*generate_name(int *i);
 t_token							**tokenize(char *input);
 char							*handle_quote(char *str);
 int								is_charactere(char c);
+void							print_env(t_envi *envp);
 void							case_function(char *input, char **result,
 									int *j);
 int								is_special(char c);
@@ -250,7 +255,7 @@ int								first_non_option(char **args);
 int								ft_echo(char **args);
 int								ft_pwd(char **args);
 void							ft_exit(char **args);
-int								ft_unset(char **ptr, t_envi **envi);
+int								ft_unset(char **ptr);
 void							ft_export(char **cmd);
 int								ft_env(t_envi *env);
 void							swap_nodes(t_envi *a, t_envi *b);
