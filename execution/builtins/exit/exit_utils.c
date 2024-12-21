@@ -6,7 +6,7 @@
 /*   By: sanaa <sanaa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 23:48:40 by sanaa             #+#    #+#             */
-/*   Updated: 2024/12/20 00:02:51 by sanaa            ###   ########.fr       */
+/*   Updated: 2024/12/21 03:14:19 by sanaa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ int	grr(char *str)
 	ft_putstr_fd("minishell: exit: ", 2);
 	ft_putstr_fd(str, 2);
 	ft_putstr_fd(": numeric argument required\n", 2);
-	return (2);
+	exit(2);
 }
 
 int	is_numeric(char *str)

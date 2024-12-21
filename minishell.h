@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sanaa <sanaa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 00:06:05 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/21 00:59:53 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/21 03:27:03 by sanaa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -370,4 +370,5 @@ long							atoi_long(const char *str);
 int								grr(char *str);
 long							convert_to_long(const char *str, int sign);
 int								handle_sign_and_whitespace(const char **str);
+void	setup_signals_and_fork();
 #endif

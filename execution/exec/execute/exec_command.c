@@ -3,16 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   exec_command.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sanaa <sanaa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 10:19:44 by szeroual          #+#    #+#             */
-/*   Updated: 2024/12/20 18:59:50 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/21 03:31:43 by sanaa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../minishell.h"
-
-extern char	**environ;
 
 void	execs(t_cmd *token, int btn, t_envi *env)
 {
