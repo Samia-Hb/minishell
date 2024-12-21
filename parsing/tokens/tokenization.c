@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 13:36:37 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/15 02:59:25 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/20 19:58:56 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ void	processing_data(t_token **tokens, char *input, int *i, int *k)
 			|| input[*i] == '\''))
 	{
 		word = handle_quote(input + (*i));
+		// printf("word === %s\n", word);
 		add_token(tokens, get_token_type(word, input[*i]), word, i);
 	}
 	else if (input[*i] == '<' && input[(*i) + 1] && input[(*i) + 1] == '<')

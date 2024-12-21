@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 22:25:31 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/20 01:58:11 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/21 01:57:09 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ char	*get_unquoted_word(char **input, char **result, int *i, int *j)
 	*result = ft_strdup("");
 	while (input[*i][*j])
 	{
-		if (input[*i][*j] == '"')
+		if (input[*i][*j] == '"' || input[*i][*j] == '\'')
 		{
 			c = input[*i][*j];
 			(*j)++;
@@ -30,7 +30,7 @@ char	*get_unquoted_word(char **input, char **result, int *i, int *j)
 				*result = ft_strjoin(*result, str);
 				(*j)++;
 			}
-		}
+		}	
 		else
 		{
 			str = char_to_string(input[*i][*j], 0);
@@ -98,6 +98,43 @@ char	*expand_non_operator(char *token)
 	}
 	return (result);
 }
+char *handle_quote_v2(char *str)
+{
+	int		i;
+	int		j;
+	char	quote;
+	char	*word;
+
+	i = 0;
+	j = 0;
+	word = ft_malloc(ft_strlen(str) + 1, sizeof(char));
+	while (str[i] && !ft_is_separator(str[i]))
+	{
+		if (str[i] == '"' || str[i] == '\'')
+		{
+			quote = str[i];
+			i++;
+			while (str[i] && str[i] != quote)
+				word[j++] = str[i++];
+			if (str[i] && str[i] == quote)
+				i++;
+		}
+		else
+			word[j++] = str[i++];
+	}
+	word[j] = '\0';
+	return (word);
+}
+
+char **normal(char *token)
+{
+	char **result;
+
+	result = ft_malloc(2, sizeof(char));
+	result[0] =  handle_quote_v2(token);
+	result[1] = NULL;
+	return result;
+}
 
 int	expand(t_token *tokens)
 {
@@ -118,8 +155,19 @@ int	expand(t_token *tokens)
 			}
 			if (!is_operator(tokens))
 			{
-				result = expand_non_operator(tokens->value);
-				tokens->expanded_value = result_traitement(result);
+				if (!ft_strchr(tokens->value, '"') && !ft_strchr(tokens->value, '\''))
+				{
+							result = expand_non_operator(tokens->value);
+							tokens->expanded_value = ft_split(result, ' ');
+				}
+				else if (ft_strchr(tokens->value, '$'))
+				{
+					result = handle_quote_v2(tokens->value);
+					result = expand_non_operator(result);
+					tokens->expanded_value = handle_that_shit(result);
+				}
+				else
+					tokens->expanded_value = normal(tokens->value);
 			}
 		}
 		tokens = tokens->next;

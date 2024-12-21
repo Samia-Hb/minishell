@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 19:05:46 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/20 09:00:04 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/20 18:43:33 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,10 @@ void	heredoc_process(t_cmd **node, t_file **head, t_token **tokens)
 	else
 		waitpid(pid, &status, 0);
 	if (WEXITSTATUS(status))
+	{
+		unlink((*node)->file->filename);
 		g_var->stop = 1;
+	}
 	push_t_file(head, (*node)->file);
 	(*tokens) = (*tokens)->next;
 	close(fd);

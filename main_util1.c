@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 22:29:05 by szeroual          #+#    #+#             */
-/*   Updated: 2024/12/20 09:03:32 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/21 01:42:08 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,21 @@ void	handle_input(char *input, t_envi *envp)
 		return ;
 	if (!expand(*tokens))
 		return ;
+	// while (*tokens)
+	// {
+	// 	printf("value_here = %s\n", (*tokens)->value);
+	// 	if ((*tokens)->expanded_value)
+	// 	{
+	// 		int i = 0;
+	// 		while ((*tokens)->expanded_value[i])
+	// 		{
+	// 			printf("==>arg[%d] = %s\n",i ,(*tokens)->expanded_value[i]);
+	// 			i++;
+	// 		}
+	// 	}
+	// 	(*tokens) = (*tokens)->next;
+	// }
+	// exit(1);
 	cmd = analyse_tokens(tokens);
 	if (g_var->flag == 7)
 		return ;

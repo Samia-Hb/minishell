@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 00:06:05 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/20 09:05:33 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/21 00:59:53 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,6 +171,7 @@ void							print_env(t_envi *envp);
 void							case_function(char *input, char **result,
 									int *j);
 int								is_special(char c);
+char							*handle_quote_v2(char *str);
 int								check_quote(char *str);
 int								is_number(char c);
 int								one_dollar_test_case(int dollar_count,
