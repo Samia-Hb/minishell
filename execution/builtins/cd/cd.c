@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 10:18:12 by szeroual          #+#    #+#             */
-/*   Updated: 2024/12/18 23:21:45 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/21 05:10:49 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	update_env(t_envi *envi)
 
 	pwd = search_env(envi, "PWD");
 	old_pwd = search_env(envi, "OLDPWD");
-	if (old_pwd)
+	if (old_pwd && pwd)
 	{
 		if (old_pwd->vale)
 			free(old_pwd->vale);

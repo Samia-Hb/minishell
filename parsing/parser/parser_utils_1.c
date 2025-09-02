@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 20:25:49 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/18 09:19:19 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/22 01:57:23 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ int	handle_consecutive_operator(t_token *tokens)
 	t_token	*current;
 	t_token	*prev;
 
+	if (!tokens)
+		return (0);
 	current = tokens->next;
 	prev = tokens;
 	while (current)
@@ -56,10 +58,11 @@ int	handle_operators_bg_en(t_token *tokens)
 	t_token	*last_node;
 
 	last_node = get_last_token(tokens);
-	if ((is_operator(tokens) && lst_size(tokens) == 1
-			&& tokens->type != TOKEN_REDIR_HERE_DOC) || (is_operator(last_node)
-			&& last_node->type != TOKEN_REDIR_HERE_DOC
-			&& last_node->type != DELIMITER) || tokens->type == TOKEN_PIPE)
+	if (tokens && ((is_operator(tokens) && lst_size(tokens) == 1
+				&& tokens->type != TOKEN_REDIR_HERE_DOC)
+			|| (is_operator(last_node)
+				&& last_node->type != TOKEN_REDIR_HERE_DOC
+				&& last_node->type != DELIMITER) || tokens->type == TOKEN_PIPE))
 	{
 		printf("minishell: syntax error near unexpected token.\n");
 		return (1);

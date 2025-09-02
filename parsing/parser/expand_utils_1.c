@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 20:13:54 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/21 01:06:35 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/21 03:18:28 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,14 +95,26 @@ char	*dollar_expand(char *input, int *i)
 	return (ft_strdup(result));
 }
 
-char	**result_traitement(char *input)
+char	**handle_that_shit(char *input)
 {
 	char	**result;
+	char	*n_strimmed;
+	int		size;
+	int		i;
+	int		j;
 
-	if (!ft_strchr(input, '"') && !ft_strchr(input, '\''))
-		result = ft_split(input, ' ');
-	else
-		result = handle_that_shit(input);
-	result = unquoted_result(result);
+	i = 0;
+	j = 0;
+	size = get_size_arr(input);
+	result = ft_malloc((size + 1), sizeof(char *));
+	if (!result)
+		printf("Allocation Failed\n");
+	while (input[i])
+	{
+		n_strimmed = get_string(input, &i);
+		result[j] = ft_strtrim(n_strimmed, " ");
+		j++;
+	}
+	result[size] = NULL;
 	return (result);
 }

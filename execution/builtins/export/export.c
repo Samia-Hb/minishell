@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sanaa <sanaa@student.42.fr>                +#+  +:+       +#+        */
+/*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 10:18:44 by szeroual          #+#    #+#             */
-/*   Updated: 2024/12/19 23:12:22 by sanaa            ###   ########.fr       */
+/*   Updated: 2024/12/23 23:10:29 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,7 @@ void	handle_no_cmd(t_envi **env)
 	if (!env_copy)
 		return ;
 	print_export(env_copy);
+	ft_free_envp(env_copy);
 }
 
 void	ft_export(char **cmd)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   child_process_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sanaa <sanaa@student.42.fr>                +#+  +:+       +#+        */
+/*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 15:51:11 by szeroual          #+#    #+#             */
-/*   Updated: 2024/12/21 03:31:31 by sanaa            ###   ########.fr       */
+/*   Updated: 2024/12/21 05:53:37 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,7 @@
 void	sig(int sig)
 {
 	if (sig == SIGINT)
-    {
-        printf("\n");
 		g_var->exit_status = 130;
-    }
 	if (sig == SIGQUIT)
 	{
 		printf("Quit (core dumped)\n");
@@ -26,65 +23,58 @@ void	sig(int sig)
 	}
 }
 
-void	handle_file_redirections(t_cmd *cmd, int btn)
+char	**allocate_env_array(int count)
 {
-	files_redirections(cmd, btn != -1);
-	if (btn == -1)
-		validate_cmd(cmd);
+	char	**env_array;
+
+	env_array = (char **)malloc(sizeof(char *) * (count + 1));
+	if (!env_array)
+		return (NULL);
+	return (env_array);
 }
 
-char **allocate_env_array(int count)
+int	fill_env_array(t_envi *env, char **env_array)
 {
-    char **env_array = (char **)malloc(sizeof(char *) * (count + 1));
-    if (!env_array)
-        return NULL;
-    return env_array;
+	int		i;
+	t_envi	*current;
+
+	i = 0;
+	current = env;
+	while (current)
+	{
+		if (current->vale != NULL)
+		{
+			env_array[i] = create_env_string(current);
+			if (!env_array[i])
+			{
+				while (i > 0)
+					free(env_array[--i]);
+				free(env_array);
+				return (-1);
+			}
+			i++;
+		}
+		current = current->next;
+	}
+	env_array[i] = NULL;
+	return (0);
 }
 
-int fill_env_array(t_envi *env, char **env_array)
+char	**create_env_array(t_envi *env, int count)
 {
-    int i = 0;
-    t_envi *current = env;
+	char	**env_array;
 
-    while (current)
-    {
-        if (current->vale != NULL)
-        {
-            env_array[i] = create_env_string(current);
-            if (!env_array[i])
-            {
-                while (i > 0)
-                    free(env_array[--i]);
-                free(env_array);
-                return -1;
-            }
-            i++;
-        }
-        current = current->next;
-    }
-    env_array[i] = NULL;
-    return 0;
+	env_array = allocate_env_array(count);
+	if (!env_array)
+		return (NULL);
+	if (fill_env_array(env, env_array) == -1)
+		return (NULL);
+	return (env_array);
 }
 
-char **create_env_array(t_envi *env, int count)
+void	setup_signals_and_fork(void)
 {
-    char **env_array = allocate_env_array(count);
-    if (!env_array)
-        return NULL;
-    if (fill_env_array(env, env_array) == -1)
-        return NULL;
-    return env_array;
-}
-
-char **separate_env(t_envi *env)
-{
-    int count = count_env_with_value(env);
-    return create_env_array(env, count);
-}
-
-void setup_signals_and_fork()
-{
-    g_var->last_child_id = fork();
-    signal(SIGINT, sig);
-    signal(SIGQUIT, sig);
+	g_var->last_child_id = fork();
+	signal(SIGINT, sig);
+	signal(SIGQUIT, SIG_IGN);
 }

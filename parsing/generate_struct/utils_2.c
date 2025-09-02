@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 17:12:31 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/20 09:00:47 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/21 05:45:24 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,14 @@ void	ctrl_c(int nb)
 {
 	if (nb == SIGINT)
 	{
+		if (g_var->fd_here_doc != -1)
+		{
+			close(g_var->fd_here_doc);
+			g_var->fd_here_doc = -1;
+		}
+		close(STDERR_FILENO);
+		close(STDOUT_FILENO);
+		close(STDIN_FILENO);
 		printf("\n");
 		ft_free_envp(g_var->envp);
 		clean_gc();
@@ -98,8 +106,9 @@ char	*generate_name(int *i)
 	return (filename);
 }
 
-void	exit_status(int status, char *filename)
+void	exit_status(int status, char *filename, int fd)
 {
+	(void)fd;
 	if (WEXITSTATUS(status) == 7)
 	{
 		g_var->exit_status = 130;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sanaa <sanaa@student.42.fr>                +#+  +:+       +#+        */
+/*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 00:06:05 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/21 03:27:03 by sanaa            ###   ########.fr       */
+/*   Updated: 2024/12/21 05:40:54 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,6 +156,7 @@ struct							s_global
 	int							i;
 	int							status;
 	int							stop;
+	int							fd_heredoc;
 };
 
 extern struct s_global			*g_var;
@@ -244,7 +245,10 @@ void							close_open_file(void);
 char							*expand_heredoc(char *token);
 char							*ft_strdup_1(const char *s1);
 void							append_file_prep(char *path, int is_builtin);
-void							exit_status(int status, char *filename);
+void							exit_status(int status, char *filename, int fd);
+int								handle_operator_expand(t_token **token);
+void							check_heredoc_sign(int status, char *filename,
+									int fd);
 /////////////////////////////builtins///////////////////////////
 
 void							ft_putstr_fd(char *str, int fd);
@@ -263,6 +267,7 @@ void							swap_nodes(t_envi *a, t_envi *b);
 void							ft_remove(char **ptr, t_envi **envi, int i);
 void							ft_free_array(char **array);
 /////////////////////////////execution///////////////////////////
+char							**create_env_array(t_envi *env, int count);
 void							append_heredoc_prep(char *filename);
 void							validate_cmd(t_cmd *cmd);
 char							*allocate_folders(char *path, int i);
@@ -370,5 +375,5 @@ long							atoi_long(const char *str);
 int								grr(char *str);
 long							convert_to_long(const char *str, int sign);
 int								handle_sign_and_whitespace(const char **str);
-void	setup_signals_and_fork();
+void							setup_signals_and_fork(void);
 #endif

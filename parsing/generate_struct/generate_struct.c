@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 19:05:46 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/20 18:43:33 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/23 00:43:03 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 void	child_proces(char *token, char *processed_del, int fd)
 {
 	char	*line;
+	char	*result;
 
 	line = NULL;
 	signal(SIGINT, ctrl_c);
@@ -26,18 +27,15 @@ void	child_proces(char *token, char *processed_del, int fd)
 		if (!ft_strcmp(line, processed_del))
 			break ;
 		if (!is_quoted(token))
-			line = parse_line(line);
-		write(fd, line, ft_strlen(line));
+			result = parse_line(line);
+		write(fd, result, ft_strlen(result));
 		write(fd, "\n", 1);
+		free(line);
 	}
 	if (!line)
 		printf("minishell : warning: heredoc delimited by EOF \n");
 	close(fd);
-	close(STDERR_FILENO);
-	close(STDOUT_FILENO);
-	close(STDIN_FILENO);
-	ft_free_envp(g_var->envp);
-	clean_gc();
+	close_open_file();
 	exit(0);
 }
 
@@ -56,20 +54,17 @@ void	heredoc_process(t_cmd **node, t_file **head, t_token **tokens)
 	(*node)->file->filename = generate_name(&g_var->i);
 	fd = open((*node)->file->filename, O_CREAT | O_TRUNC | O_RDWR, 0777);
 	signal(SIGINT, SIG_IGN);
+	g_var->fd_here_doc = fd;
 	pid = fork();
 	if (!pid)
 		child_proces((*tokens)->value, processed_del, fd);
 	else
 		waitpid(pid, &status, 0);
-	if (WEXITSTATUS(status))
-	{
-		unlink((*node)->file->filename);
-		g_var->stop = 1;
-	}
+	close(fd);
+	check_heredoc_sign(status, (*node)->file->filename, fd);
 	push_t_file(head, (*node)->file);
 	(*tokens) = (*tokens)->next;
-	close(fd);
-	exit_status(status, (*node)->file->filename);
+	exit_status(status, (*node)->file->filename, fd);
 }
 
 void	red_process(t_token **tokens, t_cmd **node, int *i)

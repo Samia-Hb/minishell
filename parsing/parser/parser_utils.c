@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 20:24:14 by shebaz            #+#    #+#             */
-/*   Updated: 2024/12/15 02:57:33 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/22 01:46:59 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,9 +77,9 @@ int	handle_paren(t_token *token)
 	}
 	current = token;
 	open_parentheses = 0;
-	if (current->type == TOKEN_OPEN_PARENTH)
+	if (current && current->type == TOKEN_OPEN_PARENTH)
 		open_parentheses++;
-	else if (current->type == TOKEN_CLOSE_PARENTH)
+	else if (current && current->type == TOKEN_CLOSE_PARENTH)
 		open_parentheses--;
 	if (open_parentheses < 0)
 	{
@@ -87,4 +87,14 @@ int	handle_paren(t_token *token)
 		return (1);
 	}
 	return (0);
+}
+
+int	handle_operator_expand(t_token **token)
+{
+	t_token	*tmp;
+
+	(*token) = (*token)->next;
+	tmp = *token;
+	expand(tmp);
+	return (1);
 }

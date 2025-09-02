@@ -6,7 +6,7 @@
 /*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 22:29:05 by szeroual          #+#    #+#             */
-/*   Updated: 2024/12/21 01:42:08 by shebaz           ###   ########.fr       */
+/*   Updated: 2024/12/23 00:43:22 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ void	initiale_global(t_envi *env)
 	g_var->i = 0;
 	g_var->status = 0;
 	g_var->stop = 0;
+	g_var->fd_here_doc = -1;
 }
 
 void	handle_input(char *input, t_envi *envp)
@@ -68,21 +69,6 @@ void	handle_input(char *input, t_envi *envp)
 		return ;
 	if (!expand(*tokens))
 		return ;
-	// while (*tokens)
-	// {
-	// 	printf("value_here = %s\n", (*tokens)->value);
-	// 	if ((*tokens)->expanded_value)
-	// 	{
-	// 		int i = 0;
-	// 		while ((*tokens)->expanded_value[i])
-	// 		{
-	// 			printf("==>arg[%d] = %s\n",i ,(*tokens)->expanded_value[i]);
-	// 			i++;
-	// 		}
-	// 	}
-	// 	(*tokens) = (*tokens)->next;
-	// }
-	// exit(1);
 	cmd = analyse_tokens(tokens);
 	if (g_var->flag == 7)
 		return ;
@@ -115,5 +101,6 @@ void	shell_loop(t_envi *envp)
 		}
 		handle_input(input, envp);
 		g_var->stop = 0;
+		free(input);
 	}
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.utils1.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sanaa <sanaa@student.42.fr>                +#+  +:+       +#+        */
+/*   By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 10:18:53 by szeroual          #+#    #+#             */
-/*   Updated: 2024/12/20 00:02:38 by sanaa            ###   ########.fr       */
+/*   Updated: 2024/12/23 23:11:37 by shebaz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ t_envi	*create_new_node(const char *var, const char *vale, int had_equals)
 		perror("malloc");
 		return (NULL);
 	}
-	new_node->name = ft_strdup(var);
+	new_node->name = ft_strdup_1(var);
 	if (had_equals == 1)
 		new_node->vale = set_node_vale(vale);
 	else

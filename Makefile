@@ -6,13 +6,13 @@
 #    By: shebaz <shebaz@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/25 00:05:54 by shebaz            #+#    #+#              #
-#    Updated: 2024/12/20 18:51:13 by shebaz           ###   ########.fr        #
+#    Updated: 2024/12/21 05:55:47 by shebaz           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CFLAGS = -Wall -Wextra -Werror 
 
-CC = cc #-fsanitize=address -g3
+CC = cc
 LFLAGS = -lreadline
 NAME = minishell
 
